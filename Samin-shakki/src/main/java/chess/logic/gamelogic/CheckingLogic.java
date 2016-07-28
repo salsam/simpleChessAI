@@ -34,6 +34,16 @@ public class CheckingLogic {
     }
 
     /**
+     * Checks if player is both checked and checkmated.
+     *
+     * @param player player whose game situation is being checked
+     * @return true if player is both checked and checkmated
+     */
+    public boolean checkIfCheckedAndMated(Player player) {
+        return checkIfChecked(player) && checkMate(player);
+    }
+
+    /**
      * Updates set containing all squares that opponent threatens and then
      * checks if player's king is on one of those.
      *

@@ -1,9 +1,13 @@
 package chess.logic.ailogic;
 
 import chess.domain.GameSituation;
+import chess.domain.Move;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
+import chess.domain.pieces.King;
+import chess.domain.pieces.Knight;
 import chess.domain.pieces.Pawn;
+import chess.domain.pieces.Queen;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import chess.logic.chessboardinitializers.EmptyBoardInitializer;
 import chess.logic.movementlogic.MovementLogic;
@@ -19,7 +23,7 @@ import org.junit.Test;
  */
 public class AILogicTest {
 
-    private static GameSituation game;
+    private static GameSituation situation;
     private static AILogic ai;
 
     public AILogicTest() {
@@ -27,29 +31,45 @@ public class AILogicTest {
 
     @BeforeClass
     public static void setUpClass() {
-        game = new GameSituation(new EmptyBoardInitializer(), new MovementLogic());
+        situation = new GameSituation(new EmptyBoardInitializer(), new MovementLogic());
         ai = new AILogic();
     }
 
     @Before
     public void setUp() {
-        game.reset();
+        situation.reset();
     }
 
     @Test
-    public void findBestMoveAlwaysChoosesAMove() {
+    public void findBestMoveChoosesAMove() {
         Pawn pawn = new Pawn(1, 1, Player.WHITE, "wp1");
-        putPieceOnBoard(game.getChessBoard(), pawn);
-        ai.findBestMove(game);
+        putPieceOnBoard(situation.getChessBoard(), pawn);
+        ai.findBestMove(situation);
         assertFalse(ai.getBestMove() == null);
     }
 
     @Test
     public void bestMoveCorrectWithOnePiece() {
         Pawn pawn = new Pawn(1, 1, Player.WHITE, "wp1");
-        putPieceOnBoard(game.getChessBoard(), pawn);
-        ai.findBestMove(game);
+        putPieceOnBoard(situation.getChessBoard(), pawn);
+        ai.findBestMove(situation);
         assertEquals(new Square(1, 2), ai.getBestMove().getTarget());
         assertEquals(pawn, ai.getBestMove().getPiece());
+    }
+
+    @Test
+    public void checkMateIsBetterThanTakingKnight() {
+        King bk = new King(0, 7, Player.BLACK, "bk");
+        Knight bn = new Knight(1, 0, Player.BLACK, "bn");
+        Queen wq = new Queen(1, 3, Player.WHITE, "wq");
+        King wk = new King(2, 5, Player.WHITE, "wk");
+
+        putPieceOnBoard(situation.getChessBoard(), wk);
+        putPieceOnBoard(situation.getChessBoard(), bk);
+        putPieceOnBoard(situation.getChessBoard(), bn);
+        putPieceOnBoard(situation.getChessBoard(), wq);
+
+        ai.findBestMove(situation);
+        assertEquals(new Move(wq, new Square(1, 6)), ai.getBestMove());
     }
 }

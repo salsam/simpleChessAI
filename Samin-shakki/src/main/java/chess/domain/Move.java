@@ -2,6 +2,7 @@ package chess.domain;
 
 import chess.domain.board.Square;
 import chess.domain.pieces.Piece;
+import java.util.Objects;
 
 /**
  *
@@ -31,6 +32,27 @@ public class Move {
 
     public void setTarget(Square target) {
         this.target = target;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Move other = (Move) obj;
+        if (!Objects.equals(this.piece, other.piece)) {
+            return false;
+        }
+        if (!Objects.equals(this.target, other.target)) {
+            return false;
+        }
+        return true;
     }
 
 }
