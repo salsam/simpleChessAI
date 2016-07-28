@@ -42,6 +42,9 @@ public class CheckingLogic {
      */
     public boolean checkIfChecked(Player player) {
         King playersKing = game.getChessBoard().getKings().get(player);
+        if (playersKing == null) {
+            return false;
+        }
         game.getChessBoard().updateThreatenedSquares(getOpponent(player));
         return game.getChessBoard().threatenedSquares(getOpponent(player)).contains(game.getChessBoard().getSquare(playersKing.getColumn(), playersKing.getRow()));
     }
