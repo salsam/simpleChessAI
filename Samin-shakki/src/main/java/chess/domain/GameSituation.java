@@ -23,8 +23,7 @@ public class GameSituation {
      */
     private ChessBoard board;
     /**
-     * initializer that is used to initialize board when starting a new
-     * game.
+     * initializer that is used to initialize board when starting a new game.
      */
     private ChessBoardInitializer init;
     /**
@@ -44,6 +43,10 @@ public class GameSituation {
      * continues tells if this game has ended or not.
      */
     private boolean continues;
+
+    private boolean whiteIsAI;
+
+    private boolean blackIsAI;
 
     /**
      * Creates a new game with given movement logic and chessboard initializer.
@@ -112,7 +115,7 @@ public class GameSituation {
     /**
      * Updates the squares that current player threatens and adds 1 to turn
      * counter in field turn. Thus changing the player whose turn is now. After
-     * turn has changed also makes new player's pawns no longer possible to
+     * turn has changed also makes next player's pawns no longer possible to
      * capture en passant as one turn has passed.
      */
     public void nextTurn() {
@@ -143,6 +146,22 @@ public class GameSituation {
         init.initialize(board);
         turn = 1;
         continues = true;
+    }
+
+    public boolean isWhiteIsAI() {
+        return whiteIsAI;
+    }
+
+    public void setWhiteIsAI(boolean whiteIsAI) {
+        this.whiteIsAI = whiteIsAI;
+    }
+
+    public boolean isBlackIsAI() {
+        return blackIsAI;
+    }
+
+    public void setBlackIsAI(boolean blackIsAI) {
+        this.blackIsAI = blackIsAI;
     }
 
 }
