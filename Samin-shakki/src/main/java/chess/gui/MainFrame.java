@@ -1,6 +1,5 @@
 package chess.gui;
 
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -44,9 +43,22 @@ public class MainFrame extends JFrame {
         start.setMaximumSize(new Dimension(250, 200));
         start.setAlignmentX(CENTER_ALIGNMENT);
         start.addActionListener(new GameStarter(this));
+
+        JButton startVsAi = new JButton("New game vs AI");
+        startVsAi.setMaximumSize(new Dimension(250, 200));
+        startVsAi.setAlignmentX(CENTER_ALIGNMENT);
+        startVsAi.addActionListener(new GameVsAiStarter(this));
+
+        JButton startAiVsAi = new JButton("New game vs AI");
+        startAiVsAi.setMaximumSize(new Dimension(250, 200));
+        startAiVsAi.setAlignmentX(CENTER_ALIGNMENT);
+        startAiVsAi.addActionListener(new AiVsAiGameStarter(this));
+
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         container.add(head);
         container.add(start);
+        container.add(startVsAi);
+        container.add(startAiVsAi);
     }
 
 }

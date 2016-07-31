@@ -5,6 +5,7 @@ import chess.domain.board.ChessBoard;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import chess.domain.board.Player;
 import chess.domain.pieces.Pawn;
+import chess.logic.ailogic.AILogic;
 import chess.logic.gamelogic.CheckingLogic;
 import chess.logic.gamelogic.LegalityChecker;
 
@@ -44,9 +45,13 @@ public class GameSituation {
      */
     private boolean continues;
 
-    private boolean whiteIsAI;
+    /**
+     * Keeps track of which players are ais. ais[0] is black and ais[1] is
+     * white. If ais[0]=1, then black is ai etc.
+     */
+    private boolean[] ais;
 
-    private boolean blackIsAI;
+    private AILogic ai;
 
     /**
      * Creates a new game with given movement logic and chessboard initializer.
@@ -62,6 +67,8 @@ public class GameSituation {
         legalityChecker = new LegalityChecker(board);
         checkLogic = new CheckingLogic(this);
         continues = true;
+        ais = new boolean[2];
+        ai = new AILogic();
     }
 
     /**
@@ -97,6 +104,22 @@ public class GameSituation {
         return checkLogic;
     }
 
+    public boolean getBlackAi() {
+        return this.ais[0];
+    }
+
+    public void setBlackAI(boolean isAi) {
+        this.ais[0] = isAi;
+    }
+
+    public boolean getWhiteAi() {
+        return this.ais[1];
+    }
+
+    public void setWhiteAI(boolean isAi) {
+        this.ais[1] = isAi;
+    }
+
     public void setCheckLogic(CheckingLogic checkLogic) {
         this.checkLogic = checkLogic;
     }
@@ -122,6 +145,12 @@ public class GameSituation {
         board.updateThreatenedSquares(whoseTurn());
         turn++;
         makePawnsUnEnPassantable(whoseTurn());
+        if (ais[turn % 2]) {
+            ai.findBestMove(this);
+            Move move = ai.getBestMove();
+            board.getMovementLogic().move(move.getPiece(), move.getTarget(), board);
+            nextTurn();
+        }
     }
 
     /**
@@ -146,22 +175,6 @@ public class GameSituation {
         init.initialize(board);
         turn = 1;
         continues = true;
-    }
-
-    public boolean isWhiteIsAI() {
-        return whiteIsAI;
-    }
-
-    public void setWhiteIsAI(boolean whiteIsAI) {
-        this.whiteIsAI = whiteIsAI;
-    }
-
-    public boolean isBlackIsAI() {
-        return blackIsAI;
-    }
-
-    public void setBlackIsAI(boolean blackIsAI) {
-        this.blackIsAI = blackIsAI;
     }
 
 }
