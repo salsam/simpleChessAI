@@ -13,6 +13,8 @@ import chess.logic.chessboardinitializers.EmptyBoardInitializer;
 import chess.logic.movementlogic.MovementLogic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -53,7 +55,9 @@ public class AILogicTest {
         Pawn pawn = new Pawn(1, 1, Player.WHITE, "wp1");
         putPieceOnBoard(situation.getChessBoard(), pawn);
         ai.findBestMove(situation);
-        assertEquals(new Square(1, 2), ai.getBestMove().getTarget());
+        System.out.println(ai.getBestMove().getTarget());
+        assertTrue(ai.getBestMove().getTarget().equals(situation.getChessBoard().getSquare(1, 2))
+                || ai.getBestMove().getTarget().equals(situation.getChessBoard().getSquare(1, 3)));
         assertEquals(pawn, ai.getBestMove().getPiece());
     }
 
@@ -70,6 +74,23 @@ public class AILogicTest {
         putPieceOnBoard(situation.getChessBoard(), wq);
 
         ai.findBestMove(situation);
-        assertEquals(new Move(wq, new Square(1, 6)), ai.getBestMove());
+        System.out.println(ai.getBestMove().getTarget());
+        System.out.println(ai.getBestMove().getPiece());
+        assertEquals(new Move(wq, situation.getChessBoard().getSquare(1, 6)), ai.getBestMove());
+    }
+
+    @Test
+    public void aiWillNotInitiateLosingTrades() {
+        King bk = new King(0, 1, Player.BLACK, "bk");
+        Knight bn = new Knight(1, 0, Player.BLACK, "bn");
+        Queen wq = new Queen(1, 3, Player.WHITE, "wq");
+
+        putPieceOnBoard(situation.getChessBoard(), bk);
+        putPieceOnBoard(situation.getChessBoard(), bn);
+        putPieceOnBoard(situation.getChessBoard(), wq);
+
+        ai.findBestMove(situation);
+        System.out.println(ai.getBestMove().getTarget());
+        assertNotEquals(new Move(wq, new Square(1, 0)), ai.getBestMove());
     }
 }

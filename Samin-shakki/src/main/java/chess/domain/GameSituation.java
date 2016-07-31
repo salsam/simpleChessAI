@@ -51,8 +51,6 @@ public class GameSituation {
      */
     private boolean[] ais;
 
-    private AILogic ai;
-
     /**
      * Creates a new game with given movement logic and chessboard initializer.
      *
@@ -68,7 +66,6 @@ public class GameSituation {
         checkLogic = new CheckingLogic(this);
         continues = true;
         ais = new boolean[2];
-        ai = new AILogic();
     }
 
     /**
@@ -104,16 +101,16 @@ public class GameSituation {
         return checkLogic;
     }
 
-    public boolean getBlackAi() {
-        return this.ais[0];
+    public boolean[] getAis() {
+        return this.ais;
+    }
+
+    public int getTurn() {
+        return this.turn;
     }
 
     public void setBlackAI(boolean isAi) {
         this.ais[0] = isAi;
-    }
-
-    public boolean getWhiteAi() {
-        return this.ais[1];
     }
 
     public void setWhiteAI(boolean isAi) {
@@ -145,12 +142,6 @@ public class GameSituation {
         board.updateThreatenedSquares(whoseTurn());
         turn++;
         makePawnsUnEnPassantable(whoseTurn());
-        if (ais[turn % 2]) {
-            ai.findBestMove(this);
-            Move move = ai.getBestMove();
-            board.getMovementLogic().move(move.getPiece(), move.getTarget(), board);
-            nextTurn();
-        }
     }
 
     /**

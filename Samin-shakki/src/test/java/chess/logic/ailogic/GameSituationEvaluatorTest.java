@@ -71,6 +71,21 @@ public class GameSituationEvaluatorTest {
     }
 
     @Test
+    public void takenPiecesAreNotAccountedFor() {
+        Rook brook = new Rook(0, 7, Player.BLACK, "br");
+        Queen bqueen = new Queen(2, 7, Player.BLACK, "bq");
+        Pawn wpawn = new Pawn(1, 6, Player.WHITE, "wp");
+
+        putPieceOnBoard(situation.getChessBoard(), wpawn);
+        putPieceOnBoard(situation.getChessBoard(), brook);
+        putPieceOnBoard(situation.getChessBoard(), bqueen);
+
+        situation.getChessBoard().getMovementLogic()
+                .move(wpawn, situation.getChessBoard().getSquare(2, 7), situation.getChessBoard());
+        assertEquals(-4, evaluateGameSituation(situation, Player.WHITE));
+    }
+
+    @Test
     public void checkMateIsValued123456789() {
         King bk = new King(0, 7, Player.BLACK, "bk");
         Queen wq = new Queen(1, 6, Player.WHITE, "wq");

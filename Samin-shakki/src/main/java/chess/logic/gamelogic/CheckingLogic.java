@@ -76,13 +76,13 @@ public class CheckingLogic {
                 game.getChessBoard().getMovementLogic().move(piece, possibility, game.getChessBoard());
                 game.getChessBoard().updateThreatenedSquares(getOpponent(player));
                 if (!checkIfChecked(player)) {
-                    ChessBoardCopier.makeFirstChessBoardDeeplyEqualToSecond(game.getChessBoard(), backUp);
+                    ChessBoardCopier.revertOldSituation(game.getChessBoard(), backUp);
                     return false;
                 }
-                ChessBoardCopier.makeFirstChessBoardDeeplyEqualToSecond(game.getChessBoard(), backUp);;
+                ChessBoardCopier.revertOldSituation(game.getChessBoard(), backUp);;
             }
         }
-        ChessBoardCopier.makeFirstChessBoardDeeplyEqualToSecond(game.getChessBoard(), backUp);;
+        ChessBoardCopier.revertOldSituation(game.getChessBoard(), backUp);;
         game.setContinues(false);
 
         return true;
@@ -95,10 +95,11 @@ public class CheckingLogic {
      * @return true player has no legal moves otherwise false.
      */
     public boolean stalemate(Player player) {
-        for (Piece piece : game.getChessBoard().getPieces(player)) {
-            if (!game.getChessBoard().getMovementLogic().possibleMoves(piece, game.getChessBoard()).isEmpty()) {
-                return false;
-            }
+        if (game.getChessBoard().getPieces(player).stream()
+                .filter((piece) -> !(piece.isTaken()))
+                .anyMatch((piece) -> (!game.getChessBoard().getMovementLogic()
+                        .possibleMoves(piece, game.getChessBoard()).isEmpty()))) {
+            return false;
         }
         game.setContinues(false);
         return true;

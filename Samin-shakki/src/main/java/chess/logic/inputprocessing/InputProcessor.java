@@ -7,9 +7,11 @@ import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceO
 import static chess.domain.board.Player.getOpponent;
 import chess.domain.board.Square;
 import chess.domain.GameSituation;
+import chess.domain.Move;
 import chess.domain.pieces.Pawn;
 import chess.domain.pieces.Piece;
 import chess.domain.pieces.Queen;
+import chess.logic.ailogic.AILogic;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.JFrame;
@@ -42,10 +44,13 @@ public class InputProcessor {
      */
     private Set<Square> possibilities;
 
+    private AILogic ai;
+
     /**
      * Creates a new GUILogic-object.
      */
     public InputProcessor() {
+        this.ai = new AILogic();
     }
 
     public Piece getChosen() {
@@ -85,14 +90,22 @@ public class InputProcessor {
             return;
         }
 
-        if (game.getChessBoard().withinTable(column, row)) {
-            if (chosen != null && possibilities.contains(game.getChessBoard().getSquare(column, row))) {
-                moveToTargetLocation(column, row, game);
-            } else if (game.getChecker().checkPlayerOwnsPieceOnTargetSquare(game.whoseTurn(), column, row)) {
-                setChosen(game.getChessBoard().getSquare(column, row).getPiece());
-            }
-            if (chosen != null) {
-                possibilities = game.getChessBoard().getMovementLogic().possibleMoves(chosen, game.getChessBoard());
+        if (game.getAis()[game.getTurn() % 2]) {
+            ai.findBestMove(game);
+            Move move = ai.getBestMove();
+            setChosen(move.getPiece());
+            possibilities = game.getChessBoard().getMovementLogic().possibleMoves(chosen, game.getChessBoard());
+            moveToTargetLocation(move.getTarget().getColumn(), move.getTarget().getRow(), game);
+        } else {
+            if (game.getChessBoard().withinTable(column, row)) {
+                if (chosen != null && possibilities.contains(game.getChessBoard().getSquare(column, row))) {
+                    moveToTargetLocation(column, row, game);
+                } else if (game.getChecker().checkPlayerOwnsPieceOnTargetSquare(game.whoseTurn(), column, row)) {
+                    setChosen(game.getChessBoard().getSquare(column, row).getPiece());
+                }
+                if (chosen != null) {
+                    possibilities = game.getChessBoard().getMovementLogic().possibleMoves(chosen, game.getChessBoard());
+                }
             }
         }
     }
@@ -106,7 +119,7 @@ public class InputProcessor {
         possibilities = null;
 
         if (game.getCheckLogic().checkIfChecked(game.whoseTurn())) {
-            ChessBoardCopier.makeFirstChessBoardDeeplyEqualToSecond(game.getChessBoard(), backUp);
+            ChessBoardCopier.revertOldSituation(game.getChessBoard(), backUp);
             return;
         }
 

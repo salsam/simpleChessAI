@@ -17,13 +17,13 @@ import chess.domain.pieces.Rook;
  * @author sami
  */
 public class GameSituationEvaluator {
-    
+
     private static final int pawnValue = 1;
     private static final int knightValue = 3;
     private static final int bishopValue = 3;
     private static final int rookValue = 5;
     private static final int queenValue = 9;
-    
+
     private static int getValue(Piece piece) {
         if (piece.getClass() == Pawn.class) {
             return pawnValue;
@@ -38,21 +38,18 @@ public class GameSituationEvaluator {
         }
         return 0;
     }
-    
+
     public static int evaluateGameSituation(GameSituation situation, Player player) {
-        int value = 0;
         if (situation.getCheckLogic().checkIfCheckedAndMated(player)) {
             return -123456789;
         }
-        
+
         if (situation.getCheckLogic().checkIfCheckedAndMated(getOpponent(player))) {
             return 123456789;
         }
-        
-        value = calculateMaterialValueForGameSituation(situation, player);
-        return value;
+        return calculateMaterialValueForGameSituation(situation, player);
     }
-    
+
     private static int calculateMaterialValueForGameSituation(GameSituation situation, Player player) {
         int value;
         value = situation.getChessBoard().getPieces(player).stream().

@@ -1,12 +1,12 @@
 package chess.logic.movementlogic.piecemovers;
 
 import chess.domain.board.ChessBoard;
-import static chess.logic.chessboardinitializers.ChessBoardInitializer.removePieceFromOwner;
 import java.util.HashSet;
 import java.util.Set;
 import chess.domain.board.Square;
 import chess.domain.pieces.Pawn;
 import chess.domain.pieces.Piece;
+import chess.logic.chessboardinitializers.ChessBoardInitializer;
 
 /**
  * This class is responsible for containing all pawn-related movement logic.
@@ -39,7 +39,7 @@ public class PawnMover extends PieceMover {
         if (piece == null || piece.getClass() != Pawn.class) {
             return;
         }
-        
+
         Pawn pawn = (Pawn) piece;
         pawn.setHasBeenMoved(true);
 
@@ -50,7 +50,7 @@ public class PawnMover extends PieceMover {
         if (!target.containsAPiece() && target.getColumn() != piece.getColumn()) {
             Square enpassanted = board.getSquare(target.getColumn(), target.getRow() - piece.getOwner().getDirection());
             Piece enpassantedPiece = enpassanted.getPiece();
-            removePieceFromOwner(enpassantedPiece, board);
+            ChessBoardInitializer.setPieceAsTaken(enpassantedPiece, board);
             enpassanted.setPiece(null);
         }
 

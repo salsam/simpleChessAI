@@ -59,7 +59,7 @@ public class ChessBoardCopier {
      * @param board ChessBoard to be changed to deeply equal second one
      * @param chessboard ChessBoard to be 'copied'
      */
-    public static void makeFirstChessBoardDeeplyEqualToSecond(ChessBoard board, ChessBoard chessboard) {
+    public static void revertOldSituation(ChessBoard board, ChessBoard chessboard) {
         clearBoardOfPieces(board);
         makePieceListsEqual(board, chessboard);
         putAllPiecesOnBoard(board);
