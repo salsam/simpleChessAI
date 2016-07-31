@@ -2,14 +2,18 @@ package chess.logic.ailogic;
 
 import chess.domain.GameSituation;
 import chess.domain.Move;
+import chess.domain.board.ChessBoard;
+import static chess.domain.board.ChessBoardCopier.copy;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
 import chess.domain.pieces.King;
 import chess.domain.pieces.Knight;
 import chess.domain.pieces.Pawn;
+import chess.domain.pieces.Piece;
 import chess.domain.pieces.Queen;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import chess.logic.chessboardinitializers.EmptyBoardInitializer;
+import chess.logic.chessboardinitializers.StandardBoardInitializer;
 import chess.logic.movementlogic.MovementLogic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -64,7 +68,7 @@ public class AILogicTest {
     @Test
     public void checkMateIsBetterThanTakingKnight() {
         King bk = new King(0, 7, Player.BLACK, "bk");
-        Knight bn = new Knight(1, 0, Player.BLACK, "bn");
+        Knight bn = new Knight(7, 3, Player.BLACK, "bn");
         Queen wq = new Queen(1, 3, Player.WHITE, "wq");
         King wk = new King(2, 5, Player.WHITE, "wk");
 
@@ -93,4 +97,43 @@ public class AILogicTest {
         System.out.println(ai.getBestMove().getTarget());
         assertNotEquals(new Move(wq, new Square(1, 0)), ai.getBestMove());
     }
+
+    @Test
+    public void findBestMoveDoesNotChangeChessBoard() {
+        situation = new GameSituation(new StandardBoardInitializer(), new MovementLogic());
+        ChessBoard backUp = copy(situation.getChessBoard());
+        ai.findBestMove(situation);
+
+        for (Player player : Player.values()) {
+            backUp.getPieces(player).stream().forEach((piece) -> {
+                assertTrue(situation.getChessBoard().getPieces(player).contains(piece));
+            });
+        }
+        situation = new GameSituation(new EmptyBoardInitializer(), new MovementLogic());
+
+    }
+
+    @Test
+    public void findBestMoveDoesNotChangePawns() {
+        situation = new GameSituation(new StandardBoardInitializer(), new MovementLogic());
+        MovementLogic ml = situation.getChessBoard().getMovementLogic();
+        ChessBoard cb = situation.getChessBoard();
+        ml.move(cb.getSquare(1, 1).getPiece(), cb.getSquare(1, 3), cb);
+        ChessBoard backUp = copy(situation.getChessBoard());
+        ai.findBestMove(situation);
+
+        for (Player player : Player.values()) {
+            for (Piece p : backUp.getPieces(player)) {
+                for (Piece newP : situation.getChessBoard().getPieces(player)) {
+                    if (p.equals(newP) && p.getClass() == Pawn.class) {
+                        Pawn np = (Pawn) newP;
+                        Pawn op = (Pawn) p;
+                        assertEquals(op.getHasBeenMoved(), np.getHasBeenMoved());
+                    }
+                }
+            }
+        }
+        situation = new GameSituation(new EmptyBoardInitializer(), new MovementLogic());
+    }
+
 }

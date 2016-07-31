@@ -94,7 +94,6 @@ public class InputProcessor {
             ai.findBestMove(game);
             Move move = ai.getBestMove();
             setChosen(move.getPiece());
-            possibilities = game.getChessBoard().getMovementLogic().possibleMoves(chosen, game.getChessBoard());
             moveToTargetLocation(move.getTarget().getColumn(), move.getTarget().getRow(), game);
         } else {
             if (game.getChessBoard().withinTable(column, row)) {

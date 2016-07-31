@@ -110,7 +110,7 @@ public class AILogic {
     }
 
     public void findBestMove(GameSituation situation) {
-        System.out.println(tryAllPossibleMoves(0, situation, situation.whoseTurn()));
+        tryAllPossibleMoves(0, situation, situation.whoseTurn());
     }
 
 }
