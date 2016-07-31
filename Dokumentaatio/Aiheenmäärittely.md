@@ -1,0 +1,5 @@
+###Aihe
+
+Työn aiheena on luoda tekoäly JavaLabra-kurssillä luotuun [shakkiin](https://github.com/salsam/Samin-shakki). Tekoälyn toteutuksessa käytetään evaluaatiofunktiota, jolla annetaan jokaiselle pelitilanteelle arvo kyseisen tekoälyn kannalta. Tätä evaluaatiofunktiota sovelletaan sitten, pelissä vähintään pari vuoroa eteenpäin niin, että oletetaan vastustajan valitsevan aina ne siirrot, joilla saadaan mahdollisimman huono tilanteen arvo. Näitä saatuja arvoja vastaavista siirroista suoritetaan se, jolle saadaan tällä maxi-min-algoritmilla kaikkein suurin arvo. Lisäksi, jottei tekoälyjen välinen peli etenisi aina täsmälleen samalla tavalla, jos useat eri siirrot saavat saman arvon, arvotaan niistä yksi ja toteutetaan se.
+
+Aluksi käytetään evaluaatiofunktiona vain klassista 1-3-3-5-9 arvostelua shakkinappuloille, mutta jos aikaa jää, niin tarkoituksenani on monimutkaistaa evaluaatiofunktiota huomioiden esimerkiksi nappulan sijainnin laudalla (keskikohta arvokkaampi) ja pelin vaihe. Luonnollisesti evaluaatiofunktio laskee matituksen arvoksi äärettömän (123456789), sillä se lopettaa pelin.
