@@ -29,12 +29,31 @@ public class AILogic {
         bestMoves = new ArrayList();
     }
 
+    /**
+     * Returns a random move with highest associated value.
+     *
+     * @return random best move
+     */
     public Move getBestMove() {
         Random rnd = new Random();
         return bestMoves.get(rnd.nextInt(bestMoves.size()));
     }
 
-    public int tryAllPossibleMoves(int depth, GameSituation situation, Player maxingPlayer) {
+    /**
+     * This method is used to calculate best move for player in given game
+     * situation using maximin-algorithm. Helper function
+     * playerChoosesMoveWithHighestValue is called for when it's player's turn
+     * and he'll choose move with highest associated value. On the other hand
+     * helper function opponentChoosesMoveToMinimizePlayersValue is called when
+     * it's opponents turn and opponent will choose move with lowest associated
+     * value that is best move after player's movement.
+     *
+     * @param depth Recursion depth in turns
+     * @param situation Game situation before move.
+     * @param maxingPlayer player whose best move is being figured out
+     * @return highest value associated with any move.
+     */
+    private int tryAllPossibleMoves(int depth, GameSituation situation, Player maxingPlayer) {
         if (depth == plies) {
             return evaluateGameSituation(situation, maxingPlayer);
         }
@@ -42,30 +61,34 @@ public class AILogic {
         if (depth % 2 == 0) {
             if (situation.getCheckLogic().checkIfCheckedAndMated(maxingPlayer)) {
                 return -123456789;
+            } else if (situation.getCheckLogic().stalemate(maxingPlayer)) {
+                return 0;
             }
             playerChoosesMoveWithHighestValue(situation, depth, maxingPlayer);
         } else {
             if (situation.getCheckLogic().checkIfCheckedAndMated(getOpponent(maxingPlayer))) {
                 return 123456789;
+            } else if (situation.getCheckLogic().stalemate(getOpponent(maxingPlayer))) {
+                return 0;
             }
             opponentChoosesMoveToMinimizePlayersValue(situation, depth, maxingPlayer);
         }
         return bestValues[depth];
     }
 
-    private void playerChoosesMoveWithHighestValue(GameSituation situation, int depth, Player player) {
-        ChessBoard backUp = copy(situation.getChessBoard());
-        MovementLogic ml = situation.getChessBoard().getMovementLogic();
+    private void playerChoosesMoveWithHighestValue(GameSituation sit, int depth, Player player) {
+        ChessBoard backUp = copy(sit.getChessBoard());
+        MovementLogic ml = sit.getChessBoard().getMovementLogic();
         bestValues[depth] = -123456790;
 
-        situation.getChessBoard().getPieces(player).stream()
+        sit.getChessBoard().getPieces(player).stream()
                 .filter(piece -> !piece.isTaken())
                 .forEach(piece -> {
-                    ml.possibleMoves(piece, situation.getChessBoard()).stream()
+                    ml.possibleMoves(piece, sit.getChessBoard()).stream()
                             .forEach(possibility -> {
-                                ml.move(piece, possibility, situation.getChessBoard());
-                                if (!situation.getCheckLogic().checkIfChecked(player)) {
-                                    int value = tryAllPossibleMoves(depth + 1, situation, player);
+                                ml.move(piece, possibility, sit.getChessBoard());
+                                if (!sit.getCheckLogic().checkIfChecked(player)) {
+                                    int value = tryAllPossibleMoves(depth + 1, sit, player);
                                     if (value >= bestValues[depth]) {
                                         if (depth == 0) {
                                             if (value > bestValues[depth]) {
@@ -76,8 +99,8 @@ public class AILogic {
                                         bestValues[depth] = value;
                                     }
                                 }
-                                revertOldSituation(situation.getChessBoard(), backUp);
-                                situation.setContinues(true);
+                                revertOldSituation(sit.getChessBoard(), backUp);
+                                sit.setContinues(true);
                             });
                 });
     }
@@ -111,6 +134,13 @@ public class AILogic {
                 });
     }
 
+    /**
+     * This method is used to calculate best move for player whose turn it is
+     * now in given game situation. @See tryAllPossibleMoves for exact method
+     * used.
+     *
+     * @param situation game situation at the beginning of AI's turn.
+     */
     public void findBestMove(GameSituation situation) {
         tryAllPossibleMoves(0, situation, situation.whoseTurn());
     }

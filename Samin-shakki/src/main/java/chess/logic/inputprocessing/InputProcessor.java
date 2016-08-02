@@ -91,22 +91,24 @@ public class InputProcessor {
         }
 
         if (game.getAis()[game.getTurn() % 2]) {
-            ai.findBestMove(game);
-            Move move = ai.getBestMove();
-            setChosen(move.getPiece());
-            moveToTargetLocation(move.getTarget().getColumn(), move.getTarget().getRow(), game);
-        } else {
-            if (game.getChessBoard().withinTable(column, row)) {
-                if (chosen != null && possibilities.contains(game.getChessBoard().getSquare(column, row))) {
-                    moveToTargetLocation(column, row, game);
-                } else if (game.getChecker().checkPlayerOwnsPieceOnTargetSquare(game.whoseTurn(), column, row)) {
-                    setChosen(game.getChessBoard().getSquare(column, row).getPiece());
-                }
-                if (chosen != null) {
-                    possibilities = game.getChessBoard().getMovementLogic().possibleMoves(chosen, game.getChessBoard());
-                }
+            makeBestMoveAccordingToAILogic(game);
+        } else if (game.getChessBoard().withinTable(column, row)) {
+            if (chosen != null && possibilities.contains(game.getChessBoard().getSquare(column, row))) {
+                moveToTargetLocation(column, row, game);
+            } else if (game.getChecker().checkPlayerOwnsPieceOnTargetSquare(game.whoseTurn(), column, row)) {
+                setChosen(game.getChessBoard().getSquare(column, row).getPiece());
+            }
+            if (chosen != null) {
+                possibilities = game.getChessBoard().getMovementLogic().possibleMoves(chosen, game.getChessBoard());
             }
         }
+    }
+
+    private void makeBestMoveAccordingToAILogic(GameSituation game) {
+        ai.findBestMove(game);
+        Move move = ai.getBestMove();
+        setChosen(move.getPiece());
+        moveToTargetLocation(move.getTarget().getColumn(), move.getTarget().getRow(), game);
     }
 
     private void moveToTargetLocation(int column, int row, GameSituation game) {

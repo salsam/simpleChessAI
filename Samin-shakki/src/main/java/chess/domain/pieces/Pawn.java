@@ -35,7 +35,7 @@ public class Pawn extends Piece {
         movedTwoSquaresLastTurn = false;
         hasBeenMoved = false;
     }
-
+    
     @Override
     public void makeDeeplyEqualTo(Piece piece) {
         if (piece.getClass() != Pawn.class) {
@@ -46,26 +46,27 @@ public class Pawn extends Piece {
         this.movedTwoSquaresLastTurn = pawn.getMovedTwoSquaresLastTurn();
         super.makeDeeplyEqualTo(piece);
     }
-
+    
     public boolean getHasBeenMoved() {
-        return hasBeenMoved;
+        return this.hasBeenMoved;
     }
-
+    
     public void setHasBeenMoved(boolean hasBeenMoved) {
         this.hasBeenMoved = hasBeenMoved;
     }
-
+    
     public boolean getMovedTwoSquaresLastTurn() {
         return movedTwoSquaresLastTurn;
     }
-
+    
     public void setMovedTwoSquaresLastTurn(boolean movedTwoSquaresLastTurn) {
         this.movedTwoSquaresLastTurn = movedTwoSquaresLastTurn;
     }
-
+    
     @Override
     public Piece clone() {
         Pawn clone = new Pawn(column, row, owner, pieceCode);
+        clone.setHasBeenMoved(hasBeenMoved);
         clone.setMovedTwoSquaresLastTurn(movedTwoSquaresLastTurn);
         clone.setTaken(taken);
         return clone;
