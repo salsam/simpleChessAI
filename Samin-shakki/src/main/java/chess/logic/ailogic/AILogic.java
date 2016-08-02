@@ -9,6 +9,8 @@ import static chess.domain.board.Player.getOpponent;
 import static chess.logic.ailogic.GameSituationEvaluator.evaluateGameSituation;
 import chess.logic.movementlogic.MovementLogic;
 import static chess.domain.board.ChessBoardCopier.revertOldSituation;
+import chess.domain.board.Square;
+import chess.domain.pieces.Piece;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -22,7 +24,9 @@ public class AILogic {
 
     private ArrayList<Move> bestMoves;
     private int[] bestValues;
-    private final int plies = 2;
+    private MovementLogic ml;
+    private Player maxingPlayer;
+    private final int plies = 3;
 
     public AILogic() {
         bestValues = new int[plies];
@@ -53,7 +57,7 @@ public class AILogic {
      * @param maxingPlayer player whose best move is being figured out
      * @return highest value associated with any move.
      */
-    private int tryAllPossibleMoves(int depth, GameSituation situation, Player maxingPlayer) {
+    private int tryAllPossibleMoves(int depth, GameSituation situation) {
         if (depth == plies) {
             return evaluateGameSituation(situation, maxingPlayer);
         }
@@ -64,74 +68,84 @@ public class AILogic {
             } else if (situation.getCheckLogic().stalemate(maxingPlayer)) {
                 return 0;
             }
-            playerChoosesMoveWithHighestValue(situation, depth, maxingPlayer);
+            playerChoosesMoveWithHighestValue(situation, depth);
         } else {
             if (situation.getCheckLogic().checkIfCheckedAndMated(getOpponent(maxingPlayer))) {
                 return 123456789;
             } else if (situation.getCheckLogic().stalemate(getOpponent(maxingPlayer))) {
                 return 0;
             }
-            opponentChoosesMoveToMinimizePlayersValue(situation, depth, maxingPlayer);
+            opponentChoosesMoveToMinimizePlayersValue(situation, depth);
         }
         return bestValues[depth];
     }
 
-    private void playerChoosesMoveWithHighestValue(GameSituation sit, int depth, Player player) {
+    private void playerChoosesMoveWithHighestValue(GameSituation sit, int depth) {
         ChessBoard backUp = copy(sit.getChessBoard());
-        MovementLogic ml = sit.getChessBoard().getMovementLogic();
         bestValues[depth] = -123456790;
 
-        sit.getChessBoard().getPieces(player).stream()
+        sit.getChessBoard().getPieces(maxingPlayer).stream()
                 .filter(piece -> !piece.isTaken())
                 .forEach(piece -> {
-                    ml.possibleMoves(piece, sit.getChessBoard()).stream()
-                            .forEach(possibility -> {
-                                ml.move(piece, possibility, sit.getChessBoard());
-                                if (!sit.getCheckLogic().checkIfChecked(player)) {
-                                    int value = tryAllPossibleMoves(depth + 1, sit, player);
-                                    if (value >= bestValues[depth]) {
-                                        if (depth == 0) {
-                                            if (value > bestValues[depth]) {
-                                                bestMoves.clear();
-                                            }
-                                            bestMoves.add(new Move(piece, possibility));
-                                        }
-                                        bestValues[depth] = value;
-                                    }
-                                }
-                                revertOldSituation(sit.getChessBoard(), backUp);
-                                sit.setContinues(true);
-                            });
+                    for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
+                        moveToTargetPositionAndCheckIfValueLargestSoFar(sit, depth, piece, possibility);
+                        revertOldSituation(sit.getChessBoard(), backUp);
+                        sit.setContinues(true);
+                        if (depth > 0 && bestValues[depth] > bestValues[depth - 1]) {
+                            return;
+                        }
+                    }
                 });
     }
 
-    private void opponentChoosesMoveToMinimizePlayersValue(GameSituation situation, int depth, Player player) {
-        ChessBoard backUp = copy(situation.getChessBoard());
-        MovementLogic ml = situation.getChessBoard().getMovementLogic();
+    private void moveToTargetPositionAndCheckIfValueLargestSoFar(GameSituation sit, int depth, Piece piece, Square possibility) {
+        ml.move(piece, possibility, sit.getChessBoard());
+        if (!sit.getCheckLogic().checkIfChecked(maxingPlayer)) {
+            int value = tryAllPossibleMoves(depth + 1, sit);
+            if (value >= bestValues[depth]) {
+                if (depth == 0) {
+                    if (value > bestValues[depth]) {
+                        bestMoves.clear();
+                    }
+                    bestMoves.add(new Move(piece, possibility));
+                }
+                bestValues[depth] = value;
+            }
+        }
+    }
+
+    private void opponentChoosesMoveToMinimizePlayersValue(GameSituation sit, int depth) {
+        ChessBoard backUp = copy(sit.getChessBoard());
         bestValues[depth] = 123456790;
 
-        situation.getChessBoard().getPieces(getOpponent(player)).stream()
+        sit.getChessBoard().getPieces(getOpponent(maxingPlayer)).stream()
                 .filter(piece -> !piece.isTaken())
                 .forEach(piece -> {
-                    ml.possibleMoves(piece, situation.getChessBoard()).stream()
-                            .forEach(possibility -> {
-                                ml.move(piece, possibility, situation.getChessBoard());
-                                if (!situation.getCheckLogic().checkIfChecked(getOpponent(player))) {
-                                    int value = tryAllPossibleMoves(depth + 1, situation, player);
-                                    if (value <= bestValues[depth]) {
-                                        if (depth == 0) {
-                                            if (value < bestValues[depth]) {
-                                                bestMoves.clear();
-                                            }
-                                            bestMoves.add(new Move(piece, possibility));
-                                        }
-                                        bestValues[depth] = value;
-                                    }
-                                }
-                                revertOldSituation(situation.getChessBoard(), backUp);
-                                situation.setContinues(true);
-                            });
+                    for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
+                        moveToTargetPositionAndCheckIfValueSmallestSoFar(sit, backUp, depth, piece, possibility);
+                        revertOldSituation(sit.getChessBoard(), backUp);
+                        sit.setContinues(true);
+                        if (bestValues[depth] < bestValues[depth - 1]) {
+                            return;
+                        }
+                    }
                 });
+    }
+
+    private void moveToTargetPositionAndCheckIfValueSmallestSoFar(GameSituation sit, ChessBoard backUp, int depth, Piece piece, Square possibility) {
+        ml.move(piece, possibility, sit.getChessBoard());
+        if (!sit.getCheckLogic().checkIfChecked(getOpponent(maxingPlayer))) {
+            int value = tryAllPossibleMoves(depth + 1, sit);
+            if (value <= bestValues[depth]) {
+                if (depth == 0) {
+                    if (value < bestValues[depth]) {
+                        bestMoves.clear();
+                    }
+                    bestMoves.add(new Move(piece, possibility));
+                }
+                bestValues[depth] = value;
+            }
+        }
     }
 
     /**
@@ -142,7 +156,9 @@ public class AILogic {
      * @param situation game situation at the beginning of AI's turn.
      */
     public void findBestMove(GameSituation situation) {
-        tryAllPossibleMoves(0, situation, situation.whoseTurn());
+        ml = situation.getChessBoard().getMovementLogic();
+        maxingPlayer = situation.whoseTurn();
+        tryAllPossibleMoves(0, situation);
     }
 
 }
