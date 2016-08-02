@@ -77,6 +77,7 @@ public class AILogic {
                                     }
                                 }
                                 revertOldSituation(situation.getChessBoard(), backUp);
+                                situation.setContinues(true);
                             });
                 });
     }
@@ -105,6 +106,7 @@ public class AILogic {
                                     }
                                 }
                                 revertOldSituation(situation.getChessBoard(), backUp);
+                                situation.setContinues(true);
                             });
                 });
     }

@@ -2,10 +2,10 @@ package chess.domain;
 
 import chess.logic.movementlogic.MovementLogic;
 import chess.domain.board.ChessBoard;
+import static chess.domain.board.ChessBoardCopier.revertOldSituation;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import chess.domain.board.Player;
 import chess.domain.pieces.Pawn;
-import chess.logic.ailogic.AILogic;
 import chess.logic.gamelogic.CheckingLogic;
 import chess.logic.gamelogic.LegalityChecker;
 
