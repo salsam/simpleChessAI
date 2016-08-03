@@ -26,7 +26,7 @@ public class AILogic {
     private int[] bestValues;
     private MovementLogic ml;
     private Player maxingPlayer;
-    private final int plies = 3;
+    private final int plies = 4;
 
     public AILogic() {
         bestValues = new int[plies];
@@ -63,18 +63,18 @@ public class AILogic {
         }
 
         if (depth % 2 == 0) {
-            if (situation.getCheckLogic().checkIfCheckedAndMated(maxingPlayer)) {
-                return -123456789;
-            } else if (situation.getCheckLogic().stalemate(maxingPlayer)) {
-                return 0;
-            }
+//            if (situation.getCheckLogic().checkIfCheckedAndMated(maxingPlayer)) {
+//                return -123456789;
+//            } else if (situation.getCheckLogic().stalemate(maxingPlayer)) {
+//                return 0;
+//            }
             playerChoosesMoveWithHighestValue(situation, depth);
         } else {
-            if (situation.getCheckLogic().checkIfCheckedAndMated(getOpponent(maxingPlayer))) {
-                return 123456789;
-            } else if (situation.getCheckLogic().stalemate(getOpponent(maxingPlayer))) {
-                return 0;
-            }
+//            if (situation.getCheckLogic().checkIfCheckedAndMated(getOpponent(maxingPlayer))) {
+//                return 123456789;
+//            } else if (situation.getCheckLogic().stalemate(getOpponent(maxingPlayer))) {
+//                return 0;
+//            }
             opponentChoosesMoveToMinimizePlayersValue(situation, depth);
         }
         return bestValues[depth];
