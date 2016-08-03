@@ -16,7 +16,8 @@ import java.util.Random;
 
 /**
  * This class is responsible for calculating AI's next move and then returning
- * it when asked for next move.
+ * it when asked for next move. All values are measured in centipawns that is
+ * one hundredth of pawn's value.
  *
  * @author sami
  */
@@ -26,7 +27,7 @@ public class AILogic {
     private int[] bestValues;
     private MovementLogic ml;
     private Player maxingPlayer;
-    private final int plies = 4;
+    private final int plies = 3;
 
     public AILogic() {
         bestValues = new int[plies];
