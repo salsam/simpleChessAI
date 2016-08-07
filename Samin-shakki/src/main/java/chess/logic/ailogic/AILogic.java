@@ -64,18 +64,8 @@ public class AILogic {
         }
 
         if (depth % 2 == 0) {
-//            if (situation.getCheckLogic().checkIfCheckedAndMated(maxingPlayer)) {
-//                return -123456789;
-//            } else if (situation.getCheckLogic().stalemate(maxingPlayer)) {
-//                return 0;
-//            }
             playerChoosesMoveWithHighestValue(situation, depth);
         } else {
-//            if (situation.getCheckLogic().checkIfCheckedAndMated(getOpponent(maxingPlayer))) {
-//                return 123456789;
-//            } else if (situation.getCheckLogic().stalemate(getOpponent(maxingPlayer))) {
-//                return 0;
-//            }
             opponentChoosesMoveToMinimizePlayersValue(situation, depth);
         }
         return bestValues[depth];
@@ -83,7 +73,7 @@ public class AILogic {
 
     private void playerChoosesMoveWithHighestValue(GameSituation sit, int depth) {
         ChessBoard backUp = copy(sit.getChessBoard());
-        bestValues[depth] = -123456790;
+        bestValues[depth] = -123456789;
 
         sit.getChessBoard().getPieces(maxingPlayer).stream()
                 .filter(piece -> !piece.isTaken())
@@ -117,7 +107,7 @@ public class AILogic {
 
     private void opponentChoosesMoveToMinimizePlayersValue(GameSituation sit, int depth) {
         ChessBoard backUp = copy(sit.getChessBoard());
-        bestValues[depth] = 123456790;
+        bestValues[depth] = 123456789;
 
         sit.getChessBoard().getPieces(getOpponent(maxingPlayer)).stream()
                 .filter(piece -> !piece.isTaken())

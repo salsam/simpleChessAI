@@ -9,6 +9,7 @@ import chess.domain.pieces.Knight;
 import chess.domain.pieces.Pawn;
 import chess.domain.pieces.Queen;
 import chess.domain.pieces.Rook;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +36,19 @@ public class GameSituationEvaluator {
     }
 
     private static void initPositionValues() {
-
+        positionValues = new HashMap();
+        Integer[][] dummy = new Integer[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                dummy[i][j] = 0;
+            }
+        }
+        positionValues.put(Pawn.class, Arrays.copyOf(dummy, 8));
+        positionValues.put(Knight.class, Arrays.copyOf(dummy, 8));
+        positionValues.put(Bishop.class, Arrays.copyOf(dummy, 8));
+        positionValues.put(Rook.class, Arrays.copyOf(dummy, 8));
+        positionValues.put(Queen.class, Arrays.copyOf(dummy, 8));
+        positionValues.put(King.class, Arrays.copyOf(dummy, 8));
     }
 
     /**

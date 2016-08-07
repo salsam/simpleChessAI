@@ -59,7 +59,6 @@ public class AILogicTest {
         Pawn pawn = new Pawn(1, 1, Player.WHITE, "wp1");
         putPieceOnBoard(situation.getChessBoard(), pawn);
         ai.findBestMove(situation);
-        System.out.println(ai.getBestMove().getTarget());
         assertTrue(ai.getBestMove().getTarget().equals(situation.getChessBoard().getSquare(1, 2))
                 || ai.getBestMove().getTarget().equals(situation.getChessBoard().getSquare(1, 3)));
         assertEquals(pawn, ai.getBestMove().getPiece());
@@ -78,8 +77,6 @@ public class AILogicTest {
         putPieceOnBoard(situation.getChessBoard(), wq);
 
         ai.findBestMove(situation);
-        System.out.println(ai.getBestMove().getTarget());
-        System.out.println(ai.getBestMove().getPiece());
         assertEquals(new Move(wq, situation.getChessBoard().getSquare(1, 6)), ai.getBestMove());
     }
 
@@ -94,7 +91,6 @@ public class AILogicTest {
         putPieceOnBoard(situation.getChessBoard(), wq);
 
         ai.findBestMove(situation);
-        System.out.println(ai.getBestMove().getTarget());
         assertNotEquals(new Move(wq, new Square(1, 0)), ai.getBestMove());
     }
 
@@ -135,5 +131,6 @@ public class AILogicTest {
         }
         situation = new GameSituation(new EmptyBoardInitializer(), new MovementLogic());
     }
+    
 
 }
