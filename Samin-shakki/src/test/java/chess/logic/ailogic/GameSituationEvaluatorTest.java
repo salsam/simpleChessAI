@@ -2,7 +2,9 @@ package chess.logic.ailogic;
 
 import chess.domain.GameSituation;
 import chess.domain.board.Player;
+import chess.domain.pieces.Bishop;
 import chess.domain.pieces.King;
+import chess.domain.pieces.Knight;
 import chess.domain.pieces.Pawn;
 import chess.domain.pieces.Queen;
 import chess.domain.pieces.Rook;
@@ -22,18 +24,22 @@ import org.junit.Test;
  */
 public class GameSituationEvaluatorTest {
 
-    private GameSituation situation;
+    private static GameSituation situation;
+    private static EmptyBoardInitializer init;
 
     public GameSituationEvaluatorTest() {
     }
 
     @BeforeClass
     public static void setUpClass() {
+        init = new EmptyBoardInitializer();
+        situation = new GameSituation(init, new MovementLogic());
     }
 
     @Before
     public void setUp() {
-        situation = new GameSituation(new EmptyBoardInitializer(), new MovementLogic());
+        situation.reset();
+        init.initialize(situation.getChessBoard());
     }
 
     @Test
@@ -93,5 +99,43 @@ public class GameSituationEvaluatorTest {
 
         assertEquals(40008, evaluateGameSituation(situation, Player.WHITE));
         assertEquals(-40008, evaluateGameSituation(situation, Player.BLACK));
+    }
+
+    @Test
+    public void kingsMobilityValueIsThreeInCorners() {
+        King wk = new King(0, 0, Player.WHITE, "wk");
+        putPieceOnBoard(situation.getChessBoard(), wk);
+        assertEquals(40003, evaluateGameSituation(situation, Player.WHITE));
+    }
+
+    @Test
+    public void knightsHaveMobilityValueEightInCenter() {
+        Knight wn = new Knight(3, 4, Player.WHITE, "wn");
+        putPieceOnBoard(situation.getChessBoard(), wn);
+        assertEquals(328, evaluateGameSituation(situation, Player.WHITE));
+    }
+
+    @Test
+    public void bishopsHaveMobilityValue13InCenter() {
+        Bishop wb = new Bishop(3, 4, Player.WHITE, "wb");
+        putPieceOnBoard(situation.getChessBoard(), wb);
+        assertEquals(346, evaluateGameSituation(situation, Player.WHITE));
+    }
+
+    @Test
+    public void queenHasMobilityValue27InCenter() {
+        Queen wq = new Queen(3, 4, Player.WHITE, "wq");
+        putPieceOnBoard(situation.getChessBoard(), wq);
+        assertEquals(907, evaluateGameSituation(situation, Player.WHITE));
+    }
+
+    @Test
+    public void pawnHasMobilityValueTwoOnFirstMovementButOneAfterWards() {
+        Pawn wp = new Pawn(3, 4, Player.WHITE, "wq");
+        putPieceOnBoard(situation.getChessBoard(), wp);
+        assertEquals(102, evaluateGameSituation(situation, Player.WHITE));
+        situation.getChessBoard().getMovementLogic()
+                .move(wp, situation.getChessBoard().getSquare(3, 6), situation.getChessBoard());
+        assertEquals(101, evaluateGameSituation(situation, Player.WHITE));
     }
 }
