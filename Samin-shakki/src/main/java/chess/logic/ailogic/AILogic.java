@@ -51,7 +51,7 @@ public class AILogic {
      * and he'll choose move with highest associated value. On the other hand
      * helper function opponentChoosesMoveToMinimizePlayersValue is called when
      * it's opponents turn and opponent will choose move with lowest associated
-     * value that is best move after player's movement.
+     * value, that is best move after player's movement according to heuristic.
      *
      * @param depth Recursion depth in turns
      * @param situation Game situation before move.
@@ -73,7 +73,7 @@ public class AILogic {
 
     private void playerChoosesMoveWithHighestValue(GameSituation sit, int depth) {
         ChessBoard backUp = copy(sit.getChessBoard());
-        bestValues[depth] = -123456789;
+        bestValues[depth] = -123456790;
 
         sit.getChessBoard().getPieces(maxingPlayer).stream()
                 .filter(piece -> !piece.isTaken())
@@ -107,7 +107,7 @@ public class AILogic {
 
     private void opponentChoosesMoveToMinimizePlayersValue(GameSituation sit, int depth) {
         ChessBoard backUp = copy(sit.getChessBoard());
-        bestValues[depth] = 123456789;
+        bestValues[depth] = 123456790;
 
         sit.getChessBoard().getPieces(getOpponent(maxingPlayer)).stream()
                 .filter(piece -> !piece.isTaken())

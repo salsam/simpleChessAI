@@ -120,14 +120,15 @@ public class GameSituationEvaluator {
      */
     public static int evaluateGameSituation(GameSituation sit, Player player) {
         int value = 0;
-//        if (situation.getCheckLogic().checkIfCheckedAndMated(player)) {
-//            return -123456789;
-//        }
-//
-//        if (situation.getCheckLogic().checkIfCheckedAndMated(getOpponent(player))) {
-//            return 123456789;
-//        }
-
+        if (sit.getCheckLogic().checkIfCheckedAndMated(player)) {
+            return -123456789;
+        } else if (sit.getCheckLogic().checkIfCheckedAndMated(getOpponent(player))) {
+            return 123456789;
+        } else if (sit.getCheckLogic().stalemate(player)
+                || sit.getCheckLogic().stalemate(getOpponent(player))) {
+            return 0;
+        }
+        
         value += materialValue(sit, player);
         value += mobilityValue(sit, player);
         return value;
@@ -140,19 +141,13 @@ public class GameSituationEvaluator {
 
         if (positionalValues == null) {
             initPositionValues();
-            for (Class c : positionalValues.keySet()) {
-                for (Integer[] i : positionalValues.get(c)) {
-                    if (i.length == 7) {
-                        System.out.println(c + " " + i.toString());
-                    }
-                }
-            }
         }
 
         int value = situation.getChessBoard().getPieces(player).stream()
                 .filter(piece -> !piece.isTaken())
                 .mapToInt(piece -> values.get(piece.getClass()) + getPositionalValue(piece))
                 .sum();
+        
         value -= situation.getChessBoard().getPieces(getOpponent(player)).stream()
                 .filter(piece -> !piece.isTaken())
                 .mapToInt(piece -> values.get(piece.getClass()) + getPositionalValue(piece))
@@ -165,6 +160,7 @@ public class GameSituationEvaluator {
                 .mapToInt(p -> {
                     return sit.getChessBoard().getMovementLogic().possibleMoves(p, sit.getChessBoard()).size();
                 }).sum();
+        
         value -= sit.getChessBoard().getPieces(getOpponent(player)).stream().filter(p -> !p.isTaken())
                 .mapToInt(p -> {
                     return sit.getChessBoard().getMovementLogic().possibleMoves(p, sit.getChessBoard()).size();
