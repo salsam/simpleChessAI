@@ -15,8 +15,9 @@ import java.util.Map;
 
 /**
  * This class offers method evaluateGameSituation which is used to evaluate the
- * value of given game situation for the player. All values are measured in
- * centipawns (one hundredth of pawn's value).
+ * value of given game situation for the player. Material values are based on
+ * Hans Berliner. All values are measured in centipawns (one hundredth of pawn's
+ * value).
  *
  * @author sami
  */
@@ -99,7 +100,7 @@ public class GameSituationEvaluator {
         positionalValues.put(Rook.class, rookValues);
     }
 
-    private static int getSituationalValue(Piece piece) {
+    private static int getPositionalValue(Piece piece) {
         if (piece.getOwner() == Player.WHITE) {
             return positionalValues.get(piece.getClass())[piece.getColumn()][piece.getRow()];
         }
@@ -150,11 +151,11 @@ public class GameSituationEvaluator {
 
         int value = situation.getChessBoard().getPieces(player).stream()
                 .filter(piece -> !piece.isTaken())
-                .mapToInt(piece -> values.get(piece.getClass()) + getSituationalValue(piece))
+                .mapToInt(piece -> values.get(piece.getClass()) + getPositionalValue(piece))
                 .sum();
         value -= situation.getChessBoard().getPieces(getOpponent(player)).stream()
                 .filter(piece -> !piece.isTaken())
-                .mapToInt(piece -> values.get(piece.getClass()) + getSituationalValue(piece))
+                .mapToInt(piece -> values.get(piece.getClass()) + getPositionalValue(piece))
                 .sum();
         return value;
     }
