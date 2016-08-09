@@ -24,3 +24,5 @@ Todellisuudessa aikavaativuus tulee kuitenkin olemaan huomattavasti pienempi, si
 [Amount of possible moves](https://www.chess.com/chessopedia/view/mathematics-and-chess)
 
 [Different material values for chess pieces](https://en.wikipedia.org/wiki/Chess_piece_relative_value)
+
+[Positional values for pieces of each class] (https://chessprogramming.wikispaces.com/Simplified+evaluation+function)
