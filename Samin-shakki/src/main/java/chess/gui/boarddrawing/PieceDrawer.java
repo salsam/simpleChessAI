@@ -1,6 +1,6 @@
 package chess.gui.boarddrawing;
 
-import chess.gui.Pair;
+import chess.domain.datastructures.Pair;
 import static chess.io.ImageLoader.getImage;
 import chess.domain.board.Player;
 import chess.domain.pieces.Bishop;

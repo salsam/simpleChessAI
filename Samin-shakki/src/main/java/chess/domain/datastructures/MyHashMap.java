@@ -16,7 +16,7 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
 
     private K[] keys;
     private V[] values;
-    private int[] indices;
+    private MyLinkedList<Pair>[] indices;
     private int capacity;
     private int size;
     private double loadFactor;
@@ -26,8 +26,15 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
         capacity = 16;
         keys = (K[]) new Object[capacity];
         values = (V[]) new Object[capacity];
-        indices = new int[capacity];
+        indices = new MyLinkedList[capacity];
+        initializeLinkedLists(indices);
         loadFactor = 0.75;
+    }
+
+    private void initializeLinkedLists(MyLinkedList[] linkedListTable) {
+        for (int i = 0; i < capacity; i++) {
+            linkedListTable[i] = new MyLinkedList();
+        }
     }
 
     @Override
@@ -42,16 +49,8 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
 
     @Override
     public boolean containsKey(Object o) {
-        int hash = o.hashCode() % capacity;
-
-        while (indices[hash] != 0) {
-            if (keys[indices[hash] - 1].equals(o)) {
-                return true;
-            }
-            hash++;
-        }
-
-        return false;
+        return indices[o.hashCode() % capacity].stream()
+                .anyMatch((p) -> (p.getFirst().equals(o)));
     }
 
     @Override
@@ -67,33 +66,23 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
     @Override
     public Object get(Object o) {
         int hash = o.hashCode() % capacity;
-
-        while (indices[hash] != 0) {
-            if (keys[indices[hash] - 1].equals(o)) {
-                return values[indices[hash] - 1];
-            }
-            hash++;
-        }
-
-        return null;
+        return indices[hash].stream()
+                .filter((pair) -> pair.getFirst().equals(o))
+                .map(p -> values[(int) p.getSecond()])
+                .findFirst()
+                .get();
     }
 
     @Override
     public Object put(Object k, Object v) {
-        if (size >= loadFactor * capacity) {
-            reserveMoreMemory();
-        }
+        ensureCapacity();
         int hash = k.hashCode() % capacity;
         int oldIndex = -1;
 
-        while (indices[hash] != 0) {
-            if (keys[indices[hash] - 1].equals(k)) {
-                oldIndex = indices[hash] - 1;
+        for (int i = 0; i < indices[hash].size(); i++) {
+            if (indices[hash].get(i).getFirst().equals(k)) {
+                oldIndex = i;
                 break;
-            }
-            hash++;
-            if (hash == capacity) {
-                hash = 0;
             }
         }
 
@@ -102,56 +91,50 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
         } else {
             keys[size] = (K) k;
             values[size] = (V) v;
-            indices[hash] = size + 1;
+            indices[hash].add(new Pair(k, size + 1));
             size++;
         }
         return true;
     }
 
-    private void reserveMoreMemory() {
-        capacity *= 2;
-        K[] newKeys = (K[]) new Object[capacity];
-        V[] newValues = (V[]) new Object[capacity];
-        int[] newIndices = new int[capacity];
-        int hash;
+    private void ensureCapacity() {
+        if (size >= loadFactor * capacity) {
+            capacity *= 2;
+            K[] newKeys = (K[]) new Object[capacity];
+            V[] newValues = (V[]) new Object[capacity];
+            MyLinkedList<Pair>[] newIndices = new MyLinkedList[capacity];
+            initializeLinkedLists(newIndices);
 
+            rehashToNewIndices(newKeys, newValues, newIndices);
+
+            indices = newIndices;
+            keys = newKeys;
+            values = newValues;
+        }
+    }
+
+    private void rehashToNewIndices(K[] newKeys, V[] newValues, MyLinkedList<Pair>[] newIndices) {
+        int hash;
         for (int i = 0; i < size; i++) {
             newKeys[i] = keys[i];
             newValues[i] = values[i];
             hash = keys[i].hashCode() % capacity;
-            while (newIndices[hash] != 0) {
-                hash++;
-                if (hash == capacity) {
-                    hash = 0;
-                }
-            }
-            newIndices[hash] = i;
+            newIndices[hash].add(new Pair(keys[i], i));
         }
-
-        indices = newIndices;
-        keys = newKeys;
-        values = newValues;
     }
 
     @Override
     public Object remove(Object o) {
         int hash = o.hashCode() % capacity;
-        int start = hash;
-
-        while (indices[hash] != 0) {
-            if (keys[indices[hash] - 1].equals(o)) {
-                keys[indices[hash] - 1] = null;
-                values[indices[hash] - 1] = null;
-                indices[hash] = 0;
+        for (Pair p : indices[hash]) {
+            if (p.getFirst().equals(o)) {
+                keys[(int) p.getSecond()] = null;
+                values[(int) p.getSecond()] = null;
+                indices[hash].remove(p);
                 return true;
             }
-            hash++;
-            if (hash == capacity) {
-                hash = 0;
-            } else if (hash == start) {
-                break;
-            }
         }
+
         return false;
     }
 
@@ -162,7 +145,9 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
 
     @Override
     public void clear() {
-        indices = new int[capacity];
+        capacity = 16;
+        size = 0;
+        indices = new MyLinkedList[capacity];
         keys = (K[]) new Object[capacity];
         values = (V[]) new Object[capacity];
     }
