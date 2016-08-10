@@ -36,7 +36,7 @@ public class MyArrayList<T extends Object> implements List<T> {
     @Override
     public boolean contains(Object o) {
         for (int i = 0; i < size; i++) {
-            if (array[i] != null && array[i].equals(o)) {
+            if (array[i].equals(o)) {
                 return true;
             }
         }

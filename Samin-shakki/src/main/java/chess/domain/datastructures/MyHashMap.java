@@ -1,6 +1,7 @@
 package chess.domain.datastructures;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,8 +14,8 @@ import java.util.Set;
  */
 public class MyHashMap<K extends Object, V extends Object> implements Map {
 
-    private Object[] keys;
-    private Object[] values;
+    private K[] keys;
+    private V[] values;
     private int[] indices;
     private int capacity;
     private int size;
@@ -22,9 +23,9 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
 
     public MyHashMap() {
         size = 0;
-        capacity = 1024;
-        keys = new Object[capacity];
-        values = new Object[capacity];
+        capacity = 16;
+        keys = (K[]) new Object[capacity];
+        values = (V[]) new Object[capacity];
         indices = new int[capacity];
         loadFactor = 0.75;
     }
@@ -80,7 +81,7 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
     @Override
     public Object put(Object k, Object v) {
         if (size >= loadFactor * capacity) {
-            reserveMoreMemoryForValuesAndIndices();
+            reserveMoreMemory();
         }
         int hash = k.hashCode() % capacity;
         int oldIndex = -1;
@@ -97,25 +98,38 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
         }
 
         if (oldIndex != -1) {
-            values[oldIndex] = v;
+            values[oldIndex] = (V) v;
         } else {
-            keys[size] = k;
-            values[size] = v;
+            keys[size] = (K) k;
+            values[size] = (V) v;
             indices[hash] = size + 1;
             size++;
         }
         return true;
     }
 
-    private void reserveMoreMemoryForValuesAndIndices() {
+    private void reserveMoreMemory() {
         capacity *= 2;
-        Object[] newValues = new Object[capacity];
-        int[] newIndexes = new int[capacity];
+        K[] newKeys = (K[]) new Object[capacity];
+        V[] newValues = (V[]) new Object[capacity];
+        int[] newIndices = new int[capacity];
+        int hash;
+
         for (int i = 0; i < size; i++) {
-            newIndexes[i] = indices[i];
+            newKeys[i] = keys[i];
             newValues[i] = values[i];
+            hash = keys[i].hashCode() % capacity;
+            while (newIndices[hash] != 0) {
+                hash++;
+                if (hash == capacity) {
+                    hash = 0;
+                }
+            }
+            newIndices[hash] = i;
         }
-        indices = newIndexes;
+
+        indices = newIndices;
+        keys = newKeys;
         values = newValues;
     }
 
@@ -149,13 +163,17 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
     @Override
     public void clear() {
         indices = new int[capacity];
-        keys = new Object[capacity];
-        values = new Object[capacity];
+        keys = (K[]) new Object[capacity];
+        values = (V[]) new Object[capacity];
     }
 
     @Override
     public Set keySet() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Set<K> ks = new HashSet();
+        for (int i = 0; i < size; i++) {
+            ks.add(keys[i]);
+        }
+        return ks;
     }
 
     @Override
