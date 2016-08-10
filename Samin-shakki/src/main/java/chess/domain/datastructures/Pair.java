@@ -3,10 +3,11 @@ package chess.domain.datastructures;
 import java.util.Objects;
 
 /**
+ * This class is used to save pairs formed of two objects.
  *
  * @author sami
- * @param <Type1>
- * @param <Type2>
+ * @param <Type1> type of first saved object.
+ * @param <Type2> type of second saved object.
  */
 public class Pair<Type1 extends Object, Type2 extends Object> {
 

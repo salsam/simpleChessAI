@@ -6,9 +6,10 @@
 package chess.domain.datastructures;
 
 /**
+ * Node used for my linked list implementation.
  *
  * @author sami
- * @param <T>
+ * @param <T> type of value saved in this node.
  */
 public class Node<T extends Object> {
 

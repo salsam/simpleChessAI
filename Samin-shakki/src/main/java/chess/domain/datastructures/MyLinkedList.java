@@ -11,9 +11,11 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
+ * My own implementation of linked list. Includes size and last node as
+ * attributes for faster modification and usage. Only linked in one direction.
  *
  * @author sami
- * @param <T>
+ * @param <T> type of values saved in this lilnked list.
  */
 public class MyLinkedList<T extends Object> implements List<T> {
 

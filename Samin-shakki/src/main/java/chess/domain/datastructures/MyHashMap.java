@@ -6,7 +6,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * My own take on Java's HashMap.
+ * My own take on Java's HashMap. LoadFactor and initial capacity set to Java's
+ * standard 0.75 and 16.
  *
  * @author sami
  * @param <K> Class of keys.
@@ -19,7 +20,7 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
     private MyLinkedList<Pair>[] indices;
     private int capacity;
     private int size;
-    private double loadFactor;
+    private final double loadFactor;
 
     public MyHashMap() {
         size = 0;

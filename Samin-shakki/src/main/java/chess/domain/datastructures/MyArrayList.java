@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * My own implementation of Java's ArrayList
+ * My own implementation of Java's ArrayList. Initial capacity set to Java
+ * standard 16.
  *
  * @author samisalo
  * @param <T> Type of object being stored in this list.

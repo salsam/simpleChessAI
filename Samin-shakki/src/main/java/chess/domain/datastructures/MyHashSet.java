@@ -10,14 +10,16 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * My own implementation of Java's HashsSet.
+ * My own implementation of Java's HashSet. LoadFactor of 0.75 is used as it's
+ * Java's standard and generally offers good balance between efficiency and
+ * memery usage. InitialCapacity set to 16 for for Java standard.
  *
  * @author sami
  * @param <T> type of object being stored in this set.
  */
 public class MyHashSet<T extends Object> implements Set<T> {
 
-    private double loadFactor;
+    private final double loadFactor;
     private int capacity;
     private int size;
     private MyLinkedList<T>[] values;
