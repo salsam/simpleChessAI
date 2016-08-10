@@ -128,7 +128,7 @@ public class GameSituationEvaluator {
                 || sit.getCheckLogic().stalemate(getOpponent(player))) {
             return 0;
         }
-        
+
         value += materialValue(sit, player);
         value += mobilityValue(sit, player);
         return value;
@@ -147,7 +147,7 @@ public class GameSituationEvaluator {
                 .filter(piece -> !piece.isTaken())
                 .mapToInt(piece -> values.get(piece.getClass()) + getPositionalValue(piece))
                 .sum();
-        
+
         value -= situation.getChessBoard().getPieces(getOpponent(player)).stream()
                 .filter(piece -> !piece.isTaken())
                 .mapToInt(piece -> values.get(piece.getClass()) + getPositionalValue(piece))
@@ -160,7 +160,7 @@ public class GameSituationEvaluator {
                 .mapToInt(p -> {
                     return sit.getChessBoard().getMovementLogic().possibleMoves(p, sit.getChessBoard()).size();
                 }).sum();
-        
+
         value -= sit.getChessBoard().getPieces(getOpponent(player)).stream().filter(p -> !p.isTaken())
                 .mapToInt(p -> {
                     return sit.getChessBoard().getMovementLogic().possibleMoves(p, sit.getChessBoard()).size();

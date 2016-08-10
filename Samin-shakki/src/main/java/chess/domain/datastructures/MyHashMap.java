@@ -56,7 +56,7 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
     @Override
     public boolean containsValue(Object o) {
         for (int i = 0; i < size; i++) {
-            if (values[i].equals(o)) {
+            if (values[i] != null && values[i].equals(o)) {
                 return true;
             }
         }
@@ -126,9 +126,9 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
 
         while (indices[hash] != 0) {
             if (keys[indices[hash] - 1].equals(o)) {
-                indices[hash] = 0;
                 keys[indices[hash] - 1] = null;
                 values[indices[hash] - 1] = null;
+                indices[hash] = 0;
                 return true;
             }
             hash++;

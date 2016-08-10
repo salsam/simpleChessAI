@@ -10,11 +10,11 @@ import java.awt.event.ActionListener;
 public class GameVsAiStarter implements ActionListener {
 
     private MainFrame main;
-    
+
     public GameVsAiStarter(MainFrame main) {
         this.main = main;
     }
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
         main.setVisible(false);
