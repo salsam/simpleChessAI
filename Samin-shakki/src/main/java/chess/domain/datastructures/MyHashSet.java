@@ -44,7 +44,7 @@ public class MyHashSet<T extends Object> implements Set<T> {
 
     @Override
     public boolean contains(Object o) {
-        return values[o.hashCode() % capacity].contains(o);
+        return values[Math.abs(o.hashCode() % capacity)].contains(o);
     }
 
     @Override
@@ -65,11 +65,12 @@ public class MyHashSet<T extends Object> implements Set<T> {
     @Override
     public boolean add(T e) {
         ensureCapacity();
-        int hash = e.hashCode() % capacity;
+        int hash = Math.abs(e.hashCode() % capacity);
         if (values[hash].contains(e)) {
             return false;
         }
         values[hash].add(e);
+        size++;
         return true;
     }
 
@@ -78,9 +79,13 @@ public class MyHashSet<T extends Object> implements Set<T> {
             capacity *= 2;
             MyLinkedList[] newValues = new MyLinkedList[capacity];
             initializeLinkedLists(newValues);
+            Node<T> node;
             for (int i = 0; i < capacity / 2; i++) {
-                for (T value : values[i]) {
-                    newValues[value.hashCode() % capacity].add(value);
+                node = values[i].getFirst();
+
+                while (node != null) {
+                    newValues[Math.abs(node.getValue().hashCode() % capacity)].add(node.getValue());
+                    node = node.getNext();
                 }
             }
 
@@ -96,7 +101,7 @@ public class MyHashSet<T extends Object> implements Set<T> {
 
     @Override
     public boolean remove(Object o) {
-        if (values[o.hashCode() % capacity].remove(o)) {
+        if (values[Math.abs(o.hashCode() % capacity)].remove(o)) {
             size--;
             return true;
         }

@@ -27,6 +27,14 @@ public class MyLinkedList<T extends Object> implements List<T> {
         size = 0;
     }
 
+    public Node<T> getFirst() {
+        return first;
+    }
+
+    public Node<T> getLast() {
+        return last;
+    }
+
     @Override
     public int size() {
         return size;
