@@ -17,7 +17,7 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
 
     private K[] keys;
     private V[] values;
-    private MyLinkedList<Pair>[] indices;
+    private MyLinkedList<Integer>[] indices;
     private int capacity;
     private int size;
     private final double loadFactor;
@@ -51,7 +51,7 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
     @Override
     public boolean containsKey(Object o) {
         return indices[o.hashCode() % capacity].stream()
-                .anyMatch((p) -> (p.getFirst().equals(o)));
+                .anyMatch((index) -> keys[index].equals(o));
     }
 
     @Override
@@ -68,8 +68,8 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
     public Object get(Object o) {
         int hash = o.hashCode() % capacity;
         return indices[hash].stream()
-                .filter((pair) -> pair.getFirst().equals(o))
-                .map(p -> values[(int) p.getSecond()])
+                .map(index -> keys[index])
+                .filter(key -> key.equals(o))
                 .findFirst()
                 .get();
     }
@@ -78,24 +78,28 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
     public Object put(Object k, Object v) {
         ensureCapacity();
         int hash = k.hashCode() % capacity;
-        int oldIndex = -1;
-
-        for (int i = 0; i < indices[hash].size(); i++) {
-            if (indices[hash].get(i).getFirst().equals(k)) {
-                oldIndex = i;
-                break;
-            }
-        }
+        int oldIndex = findOldIndex(hash, k);
 
         if (oldIndex != -1) {
             values[oldIndex] = (V) v;
         } else {
             keys[size] = (K) k;
             values[size] = (V) v;
-            indices[hash].add(new Pair(k, size + 1));
+            indices[hash].add(size);
             size++;
         }
         return true;
+    }
+
+    private int findOldIndex(int hash, Object k) {
+        int oldIndex = -1;
+        for (int i = 0; i < indices[hash].size(); i++) {
+            if (keys[indices[hash].get(i)].equals(k)) {
+                oldIndex = i;
+                break;
+            }
+        }
+        return oldIndex;
     }
 
     private void ensureCapacity() {
@@ -103,7 +107,7 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
             capacity *= 2;
             K[] newKeys = (K[]) new Object[capacity];
             V[] newValues = (V[]) new Object[capacity];
-            MyLinkedList<Pair>[] newIndices = new MyLinkedList[capacity];
+            MyLinkedList<Integer>[] newIndices = new MyLinkedList[capacity];
             initializeLinkedLists(newIndices);
 
             rehashToNewIndices(newKeys, newValues, newIndices);
@@ -114,24 +118,22 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
         }
     }
 
-    private void rehashToNewIndices(K[] newKeys, V[] newValues, MyLinkedList<Pair>[] newIndices) {
-        int hash;
+    private void rehashToNewIndices(K[] newKeys, V[] newValues, MyLinkedList<Integer>[] newIndices) {
         for (int i = 0; i < size; i++) {
             newKeys[i] = keys[i];
             newValues[i] = values[i];
-            hash = keys[i].hashCode() % capacity;
-            newIndices[hash].add(new Pair(keys[i], i));
+            newIndices[keys[i].hashCode() % capacity].add(i);
         }
     }
 
     @Override
     public Object remove(Object o) {
         int hash = o.hashCode() % capacity;
-        for (Pair p : indices[hash]) {
-            if (p.getFirst().equals(o)) {
-                keys[(int) p.getSecond()] = null;
-                values[(int) p.getSecond()] = null;
-                indices[hash].remove(p);
+        for (Integer index : indices[hash]) {
+            if (keys[index].equals(o)) {
+                keys[index] = null;
+                values[index] = null;
+                indices[hash].remove(index);
                 return true;
             }
         }
@@ -164,7 +166,11 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
 
     @Override
     public Collection values() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Collection<V> vals = new MyHashSet();
+        for (int i = 0; i < size; i++) {
+            vals.add(values[i]);
+        }
+        return vals;
     }
 
     @Override
