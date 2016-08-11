@@ -1,5 +1,6 @@
 package chess.domain.datastructures;
 
+import java.util.Iterator;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -142,14 +143,63 @@ public class MyHashSetTest {
 
     @Test
     public void setCanContainOver16Objects() {
-        for (int i = 0; i < 33; i++) {
+        for (int i = 0; i < 17; i++) {
             mhs.add(i);
         }
 
-        assertEquals(33, mhs.size());
+        assertEquals(17, mhs.size());
 
-        for (int i = 0; i < 33; i++) {
+        for (int i = 0; i < 17; i++) {
             assertTrue(mhs.contains(i));
         }
+    }
+
+    @Test
+    public void iteratorDoesNotHaveNextIfSetEmpty() {
+        Iterator<Integer> it = mhs.iterator();
+        assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void iteratorStartsFromFirstBucket() {
+        mhs.add(42);
+        mhs.add(101);
+        mhs.add(-273);
+        mhs.add(0);
+
+        Iterator<Integer> it = mhs.iterator();
+        assertEquals(0, (int) it.next());
+    }
+
+    @Test
+    public void iteratorHasNextUntilEndOfSet() {
+        mhs.add(42);
+        mhs.add(101);
+        mhs.add(-273);
+        mhs.add(0);
+
+        Iterator<Integer> it = mhs.iterator();
+
+        for (int i = 0; i < 4; i++) {
+            assertTrue(it.hasNext());
+            it.next();
+        }
+        assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void iteratorIteratesOverWholeSet() {
+        for (int i = 0; i < 31; i++) {
+            mhs.add(i);
+        }
+
+        int sum = 0;
+        Iterator<Integer> it = mhs.iterator();
+
+        while (it.hasNext()) {
+            sum += it.next();
+        }
+
+        assertEquals(465, sum);
     }
 }

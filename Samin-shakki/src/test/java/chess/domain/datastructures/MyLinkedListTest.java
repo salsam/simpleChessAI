@@ -1,5 +1,6 @@
 package chess.domain.datastructures;
 
+import java.util.Iterator;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -10,7 +11,7 @@ import static org.junit.Assert.*;
  */
 public class MyLinkedListTest {
 
-    private MyLinkedList mll;
+    private MyLinkedList<Integer> mll;
 
     public MyLinkedListTest() {
     }
@@ -137,6 +138,56 @@ public class MyLinkedListTest {
         assertTrue(mll.isEmpty());
         assertEquals(0, mll.size());
         assertFalse(mll.contains(42));
+    }
+
+    @Test
+    public void iteratorStartsFromFirstNode() {
+        mll.add(42);
+        mll.add(314);
+        Iterator<Integer> it = mll.iterator();
+        assertTrue(it.hasNext());
+        assertEquals(42, (int) it.next());
+    }
+
+    @Test
+    public void iteratorHasNextUntilEndOfListIsReached() {
+        mll.add(7);
+        mll.add(-273);
+        mll.add(42);
+        mll.add(21);
+        mll.add(13);
+        Iterator<Integer> it = mll.iterator();
+
+        for (int i = 0; i < 5; i++) {
+            assertTrue(it.hasNext());
+            it.next();
+        }
+
+        assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void iteratorDoesNotHaveNextIfListEmpty() {
+        Iterator<Integer> it = mll.iterator();
+        assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void iteratorIteratesOverWholeList() {
+        mll.add(7);
+        mll.add(-273);
+        mll.add(42);
+        mll.add(21);
+        mll.add(13);
+
+        Iterator<Integer> it = mll.iterator();
+        int sum = 0;
+
+        while (it.hasNext()) {
+            sum += it.next();
+        }
+
+        assertEquals(-190, sum);
     }
 
 }

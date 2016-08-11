@@ -68,34 +68,34 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
     public Object get(Object o) {
         int hash = o.hashCode() % capacity;
         return indices[hash].stream()
-                .map(index -> keys[index])
-                .filter(key -> key.equals(o))
+                .filter(index -> keys[index].equals(o))
+                .map(index -> values[index])
                 .findFirst()
                 .get();
     }
 
     @Override
-    public Object put(Object k, Object v) {
+    public Object put(Object key, Object value) {
         ensureCapacity();
-        int hash = k.hashCode() % capacity;
-        int oldIndex = findOldIndex(hash, k);
+        int hash = Math.abs(key.hashCode() % capacity);
+        int oldIndex = findOldIndex(hash, key);
 
         if (oldIndex != -1) {
-            values[oldIndex] = (V) v;
+            values[oldIndex] = (V) value;
         } else {
-            keys[size] = (K) k;
-            values[size] = (V) v;
+            keys[size] = (K) key;
+            values[size] = (V) value;
             indices[hash].add(size);
             size++;
         }
         return true;
     }
 
-    private int findOldIndex(int hash, Object k) {
+    private int findOldIndex(int hash, Object key) {
         int oldIndex = -1;
-        for (int i = 0; i < indices[hash].size(); i++) {
-            if (keys[indices[hash].get(i)].equals(k)) {
-                oldIndex = i;
+        for (Integer index : indices[hash]) {
+            if (keys[index].equals(key)) {
+                oldIndex = index;
                 break;
             }
         }
@@ -122,13 +122,13 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
         for (int i = 0; i < size; i++) {
             newKeys[i] = keys[i];
             newValues[i] = values[i];
-            newIndices[keys[i].hashCode() % capacity].add(i);
+            newIndices[Math.abs(keys[i].hashCode() % capacity)].add(i);
         }
     }
 
     @Override
     public Object remove(Object o) {
-        int hash = o.hashCode() % capacity;
+        int hash = Math.abs(o.hashCode() % capacity);
         for (Integer index : indices[hash]) {
             if (keys[index].equals(o)) {
                 keys[index] = null;

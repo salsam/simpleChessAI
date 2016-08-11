@@ -59,7 +59,28 @@ public class MyLinkedList<T extends Object> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Iterator<T> ret = new Iterator<T>() {
+            private Node<T> cur = first;
+
+            @Override
+            public boolean hasNext() {
+                return cur != null;
+            }
+
+            @Override
+            public T next() {
+                T curVal = cur.getValue();
+                cur = cur.getNext();
+                return curVal;
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+
+        return ret;
     }
 
     @Override

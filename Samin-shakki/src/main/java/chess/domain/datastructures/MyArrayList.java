@@ -46,7 +46,25 @@ public class MyArrayList<T extends Object> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Iterator<T> it = new Iterator<T>() {
+            private int cur = 0;
+
+            @Override
+            public boolean hasNext() {
+                return cur < size;
+            }
+
+            @Override
+            public T next() {
+                return array[cur++];
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+        return it;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package chess.domain.datastructures;
 
+import java.util.Iterator;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -148,6 +149,52 @@ public class MyArrayListTest {
         for (int i = 0; i < 33; i++) {
             assertTrue(test.contains(i));
         }
+    }
+
+    @Test
+    public void iteratorHasNoNextIfListEmpty() {
+        Iterator<Integer> it = test.iterator();
+        assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void iteratorStartsFromFirstIndex() {
+        test.add(42);
+        test.add(101);
+        test.add(-273);
+
+        Iterator<Integer> it = test.iterator();
+        assertEquals(42, (int) it.next());
+    }
+
+    @Test
+    public void hasNextTrueUntilEndOfArray() {
+        test.add(42);
+        test.add(101);
+        test.add(-273);
+
+        Iterator<Integer> it = test.iterator();
+        for (int i = 0; i < 3; i++) {
+            assertTrue(it.hasNext());
+            it.next();
+        }
+        assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void iteratorIteratesOverWholeArray() {
+        for (int i = 0; i < 31; i++) {
+            test.add(i);
+        }
+
+        int sum = 0;
+        Iterator<Integer> it = test.iterator();
+
+        while (it.hasNext()) {
+            sum += it.next();
+        }
+
+        assertEquals(465, sum);
     }
 
 }
