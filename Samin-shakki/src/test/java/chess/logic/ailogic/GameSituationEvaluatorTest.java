@@ -44,23 +44,31 @@ public class GameSituationEvaluatorTest {
 
     @Test
     public void emptyChessBoardValuedZero() {
-        assertEquals(0, evaluateGameSituation(situation, Player.BLACK));
-        assertEquals(0, evaluateGameSituation(situation, Player.WHITE));
+        assertEquals(0, evaluateGameSituation(situation, Player.BLACK, Player.WHITE));
+        assertEquals(0, evaluateGameSituation(situation, Player.WHITE, Player.WHITE));
     }
 
     @Test
     public void standardStartingPositionIsWorthZero() {
         situation = new GameSituation(new StandardBoardInitializer(), new MovementLogic());
-        assertEquals(0, evaluateGameSituation(situation, Player.BLACK));
-        assertEquals(0, evaluateGameSituation(situation, Player.WHITE));
+        assertEquals(0, evaluateGameSituation(situation, Player.BLACK, Player.WHITE));
+        assertEquals(0, evaluateGameSituation(situation, Player.WHITE, Player.WHITE));
     }
 
     @Test
-    public void oneWhitePawnValuedOneHundredForWhiteAndMinusOneHundredForBlack() {
-        Pawn pawn = new Pawn(1, 1, Player.WHITE, "wp");
-        putPieceOnBoard(situation.getChessBoard(), pawn);
-        assertEquals(102, evaluateGameSituation(situation, Player.WHITE));
-        assertEquals(-102, evaluateGameSituation(situation, Player.BLACK));
+    public void gamesituationValuedNormallyWhenOpponentWillBeStaleMatedOnTheirTurn() {
+        Queen queen = new Queen(1, 1, Player.WHITE, "wp");
+        putPieceOnBoard(situation.getChessBoard(), queen);
+        assertEquals(880 + 23, evaluateGameSituation(situation, Player.WHITE, Player.WHITE));
+        assertEquals(-880 - 23, evaluateGameSituation(situation, Player.BLACK, Player.WHITE));
+    }
+
+    @Test
+    public void gameSitutionValuedZeroWhenStaleMate() {
+        Queen queen = new Queen(1, 1, Player.WHITE, "wp");
+        putPieceOnBoard(situation.getChessBoard(), queen);
+        assertEquals(0, evaluateGameSituation(situation, Player.WHITE, Player.BLACK));
+        assertEquals(0, evaluateGameSituation(situation, Player.BLACK, Player.BLACK));
     }
 
     @Test
@@ -73,7 +81,7 @@ public class GameSituationEvaluatorTest {
         putPieceOnBoard(situation.getChessBoard(), brook);
         putPieceOnBoard(situation.getChessBoard(), bqueen);
 
-        assertEquals(-1323, evaluateGameSituation(situation, Player.WHITE));
+        assertEquals(-1313, evaluateGameSituation(situation, Player.WHITE, Player.WHITE));
     }
 
     @Test
@@ -88,54 +96,6 @@ public class GameSituationEvaluatorTest {
 
         situation.getChessBoard().getMovementLogic()
                 .move(wpawn, situation.getChessBoard().getSquare(2, 6), situation.getChessBoard());
-        assertEquals(-423, evaluateGameSituation(situation, Player.WHITE));
-    }
-
-    @Test
-    public void kingThatCanMoveToAllDirectionsIsValued40008() {
-        King wk = new King(2, 5, Player.WHITE, "wk");
-
-        putPieceOnBoard(situation.getChessBoard(), wk);
-
-        assertEquals(40008, evaluateGameSituation(situation, Player.WHITE));
-        assertEquals(-40008, evaluateGameSituation(situation, Player.BLACK));
-    }
-
-    @Test
-    public void kingsMobilityValueIsThreeInCorners() {
-        King wk = new King(0, 0, Player.WHITE, "wk");
-        putPieceOnBoard(situation.getChessBoard(), wk);
-        assertEquals(40003, evaluateGameSituation(situation, Player.WHITE));
-    }
-
-    @Test
-    public void knightsHaveMobilityValueEightInCenter() {
-        Knight wn = new Knight(3, 4, Player.WHITE, "wn");
-        putPieceOnBoard(situation.getChessBoard(), wn);
-        assertEquals(328, evaluateGameSituation(situation, Player.WHITE));
-    }
-
-    @Test
-    public void bishopsHaveMobilityValue13InCenter() {
-        Bishop wb = new Bishop(3, 4, Player.WHITE, "wb");
-        putPieceOnBoard(situation.getChessBoard(), wb);
-        assertEquals(346, evaluateGameSituation(situation, Player.WHITE));
-    }
-
-    @Test
-    public void queenHasMobilityValue27InCenter() {
-        Queen wq = new Queen(3, 4, Player.WHITE, "wq");
-        putPieceOnBoard(situation.getChessBoard(), wq);
-        assertEquals(907, evaluateGameSituation(situation, Player.WHITE));
-    }
-
-    @Test
-    public void pawnHasMobilityValueTwoOnFirstMovementButOneAfterWards() {
-        Pawn wp = new Pawn(3, 4, Player.WHITE, "wq");
-        putPieceOnBoard(situation.getChessBoard(), wp);
-        assertEquals(102, evaluateGameSituation(situation, Player.WHITE));
-        situation.getChessBoard().getMovementLogic()
-                .move(wp, situation.getChessBoard().getSquare(3, 6), situation.getChessBoard());
-        assertEquals(101, evaluateGameSituation(situation, Player.WHITE));
+        assertEquals(150 - 510 + 1 - 14, evaluateGameSituation(situation, Player.WHITE, Player.BLACK));
     }
 }

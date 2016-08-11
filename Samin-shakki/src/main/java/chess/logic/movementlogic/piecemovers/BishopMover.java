@@ -8,9 +8,9 @@ package chess.logic.movementlogic.piecemovers;
 import chess.domain.board.ChessBoard;
 import java.util.Set;
 import chess.domain.board.Square;
+import chess.domain.datastructures.MyHashSet;
 import chess.domain.pieces.Bishop;
 import chess.domain.pieces.Piece;
-import java.util.HashSet;
 
 /**
  * This class is responsible of movement calculation of bishops.
@@ -36,7 +36,7 @@ public class BishopMover extends PieceMover {
     @Override
     public Set<Square> threatenedSquares(Piece bishop, ChessBoard board) {
         bishop = (Bishop) bishop;
-        Set<Square> possibilities = new HashSet<>();
+        Set<Square> possibilities = new MyHashSet<>();
         addDiagonalPossibilities(board.getSquare(bishop.getColumn(), bishop.getRow()), board, possibilities);
 
         return possibilities;

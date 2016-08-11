@@ -3,14 +3,8 @@ package chess.logic.ailogic;
 import chess.domain.GameSituation;
 import chess.domain.board.Player;
 import static chess.domain.board.Player.getOpponent;
-import chess.domain.pieces.Bishop;
-import chess.domain.pieces.King;
-import chess.domain.pieces.Knight;
-import chess.domain.pieces.Pawn;
-import chess.domain.pieces.Piece;
-import chess.domain.pieces.Queen;
-import chess.domain.pieces.Rook;
-import java.util.HashMap;
+import chess.domain.datastructures.MyHashMap;
+import chess.domain.pieces.*;
 import java.util.Map;
 
 /**
@@ -27,7 +21,7 @@ public class GameSituationEvaluator {
     private static Map<Class, Integer[][]> positionalValues;
 
     private static void initValues() {
-        values = new HashMap();
+        values = new MyHashMap();
         values.put(Pawn.class, 100);
         values.put(Knight.class, 320);
         values.put(Bishop.class, 333);
@@ -37,7 +31,7 @@ public class GameSituationEvaluator {
     }
 
     private static void initPositionValues() {
-        positionalValues = new HashMap();
+        positionalValues = new MyHashMap();
         initBishopPositionalValues();
         initKingPositionalValues();
         initKnightPositionalValues();
@@ -102,9 +96,9 @@ public class GameSituationEvaluator {
 
     private static int getPositionalValue(Piece piece) {
         if (piece.getOwner() == Player.WHITE) {
-            return positionalValues.get(piece.getClass())[piece.getColumn()][piece.getRow()];
+            return positionalValues.get(piece.getClass())[piece.getRow()][piece.getColumn()];
         }
-        return positionalValues.get(piece.getClass())[7 - piece.getColumn()][7 - piece.getRow()];
+        return positionalValues.get(piece.getClass())[7 - piece.getRow()][7 - piece.getColumn()];
     }
 
     /**
@@ -115,17 +109,18 @@ public class GameSituationEvaluator {
      * their positional values).
      *
      * @param sit current game situation
-     * @param player player from whose point of view value is calculated
-     * @return value of given game situation from given player's point of view
+     * @param player player from whose point of view value is calculated.
+     * @param whoseTurn whose turn it is when situation is being evaluated.
+     * @return value of given game situation from given player's point of view.
      */
-    public static int evaluateGameSituation(GameSituation sit, Player player) {
+    public static int evaluateGameSituation(GameSituation sit, Player player, Player whoseTurn) {
         int value = 0;
-        if (sit.getCheckLogic().checkIfCheckedAndMated(player)) {
-            return -123456789;
-        } else if (sit.getCheckLogic().checkIfCheckedAndMated(getOpponent(player))) {
+        if (sit.getCheckLogic().checkIfCheckedAndMated(whoseTurn)) {
+            if (whoseTurn == player) {
+                return -123456789;
+            }
             return 123456789;
-        } else if (sit.getCheckLogic().stalemate(player)
-                || sit.getCheckLogic().stalemate(getOpponent(player))) {
+        } else if (sit.getCheckLogic().stalemate(whoseTurn)) {
             return 0;
         }
 
@@ -156,12 +151,14 @@ public class GameSituationEvaluator {
     }
 
     private static int mobilityValue(GameSituation sit, Player player) {
-        int value = sit.getChessBoard().getPieces(player).stream().filter(p -> !p.isTaken())
+        int value = sit.getChessBoard().getPieces(player).stream()
+                .filter(p -> !p.isTaken())
                 .mapToInt(p -> {
                     return sit.getChessBoard().getMovementLogic().possibleMoves(p, sit.getChessBoard()).size();
                 }).sum();
 
-        value -= sit.getChessBoard().getPieces(getOpponent(player)).stream().filter(p -> !p.isTaken())
+        value -= sit.getChessBoard().getPieces(getOpponent(player)).stream()
+                .filter(p -> !p.isTaken())
                 .mapToInt(p -> {
                     return sit.getChessBoard().getMovementLogic().possibleMoves(p, sit.getChessBoard()).size();
                 }).sum();

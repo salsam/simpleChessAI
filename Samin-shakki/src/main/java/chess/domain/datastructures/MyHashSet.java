@@ -105,16 +105,7 @@ public class MyHashSet<T extends Object> implements Set<T> {
     private void ensureCapacity() {
         if (size >= loadFactor * capacity) {
             capacity *= 2;
-            MyLinkedList[] newBuckets = new MyLinkedList[capacity];
-            initializeLinkedLists(newBuckets);
-
-            for (int i = 0; i < capacity / 2; i++) {
-                for (T element : buckets[i]) {
-                    newBuckets[Math.abs(element.hashCode() % capacity)].add(element);
-                }
-            }
-
-            buckets = newBuckets;
+            rehashValues(capacity / 2);
         }
     }
 
@@ -140,7 +131,38 @@ public class MyHashSet<T extends Object> implements Set<T> {
 
     @Override
     public boolean addAll(Collection<? extends T> clctn) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean reservedMemory = false;
+        boolean valueWasAdded = false;
+        int oldCapacity = capacity;
+        while (capacity < size + clctn.size()) {
+            capacity *= 2;
+            reservedMemory = true;
+        }
+
+        if (reservedMemory) {
+            rehashValues(oldCapacity);
+        }
+
+        for (T t : clctn) {
+            if (add(t)) {
+                valueWasAdded = true;
+            }
+        }
+
+        return valueWasAdded;
+    }
+
+    private void rehashValues(int oldCapacity) {
+        MyLinkedList[] newBuckets = new MyLinkedList[capacity];
+        initializeLinkedLists(newBuckets);
+
+        for (int i = 0; i < oldCapacity; i++) {
+            for (T element : buckets[i]) {
+                newBuckets[Math.abs(element.hashCode() % capacity)].add(element);
+            }
+        }
+
+        buckets = newBuckets;
     }
 
     @Override

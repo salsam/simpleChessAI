@@ -1,9 +1,9 @@
 package chess.logic.movementlogic.piecemovers;
 
 import chess.domain.board.ChessBoard;
-import java.util.HashSet;
 import java.util.Set;
 import chess.domain.board.Square;
+import chess.domain.datastructures.MyHashSet;
 import chess.domain.pieces.Pawn;
 import chess.domain.pieces.Piece;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
@@ -69,7 +69,7 @@ public class PawnMover extends PieceMover {
      */
     @Override
     public Set<Square> threatenedSquares(Piece piece, ChessBoard board) {
-        Set<Square> squares = new HashSet();
+        Set<Square> squares = new MyHashSet();
         int[] columnChange = new int[]{1, -1};
         int column = piece.getColumn();
         int row = piece.getRow() + piece.getOwner().getDirection();
@@ -131,7 +131,7 @@ public class PawnMover extends PieceMover {
     @Override
     public Set<Square> possibleMoves(Piece piece, ChessBoard board) {
         Pawn pawn = (Pawn) piece;
-        Set<Square> moves = new HashSet<>();
+        Set<Square> moves = new MyHashSet<>();
         int newrow = piece.getRow() + piece.getOwner().getDirection();
 
         if (addSquareIfWithinTableAndEmpty(board, pawn.getColumn(), newrow, moves)) {

@@ -1,21 +1,11 @@
 package chess.logic.movementlogic;
 
-import chess.domain.pieces.King;
-import chess.domain.pieces.Bishop;
-import chess.domain.pieces.Pawn;
-import chess.domain.pieces.Rook;
-import chess.domain.pieces.Knight;
-import chess.domain.pieces.Piece;
-import chess.domain.pieces.Queen;
-import chess.logic.movementlogic.piecemovers.RookMover;
-import chess.logic.movementlogic.piecemovers.KingMover;
-import chess.logic.movementlogic.piecemovers.PawnMover;
-import chess.logic.movementlogic.piecemovers.BishopMover;
-import chess.logic.movementlogic.piecemovers.QueenMover;
-import chess.logic.movementlogic.piecemovers.KnightMover;
+import chess.domain.pieces.*;
+import chess.logic.movementlogic.piecemovers.*;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
+import chess.domain.datastructures.MyHashSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -89,7 +79,7 @@ public class MovementLogic {
         } else if (piece.getClass() == Rook.class) {
             return rookMover.threatenedSquares(piece, board);
         }
-        return new HashSet<>();
+        return new MyHashSet<>();
     }
 
     /**
@@ -115,7 +105,7 @@ public class MovementLogic {
         } else if (piece.getClass() == Rook.class) {
             return rookMover.possibleMoves(piece, board);
         }
-        return new HashSet<>();
+        return new MyHashSet<>();
     }
 
     /**
@@ -155,7 +145,7 @@ public class MovementLogic {
      * @return set containing all squares that given player's pieces threaten
      */
     public Set<Square> squaresThreatenedByPlayer(Player player, ChessBoard board) {
-        Set<Square> threatenedSquares = new HashSet();
+        Set<Square> threatenedSquares = new MyHashSet();
         board.getPieces(player).stream()
                 .filter(owned -> !owned.isTaken())
                 .forEach(piece -> {
@@ -173,7 +163,7 @@ public class MovementLogic {
      * @return set containing all squares that given player's pieces can move to
      */
     public Set<Square> possibleMovesByPlayer(Player player, ChessBoard board) {
-        Set<Square> possibleMoves = new HashSet();
+        Set<Square> possibleMoves = new MyHashSet();
         board.getPieces(player).stream()
                 .filter(owned -> !owned.isTaken())
                 .forEach(piece -> {

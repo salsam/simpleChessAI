@@ -10,8 +10,8 @@ import static chess.logic.ailogic.GameSituationEvaluator.evaluateGameSituation;
 import chess.logic.movementlogic.MovementLogic;
 import static chess.domain.board.ChessBoardCopier.revertOldSituation;
 import chess.domain.board.Square;
+import chess.domain.datastructures.MyArrayList;
 import chess.domain.pieces.Piece;
-import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -23,7 +23,7 @@ import java.util.Random;
  */
 public class AILogic {
 
-    private ArrayList<Move> bestMoves;
+    private MyArrayList<Move> bestMoves;
     private int[] bestValues;
     private MovementLogic ml;
     private Player maxingPlayer;
@@ -31,7 +31,7 @@ public class AILogic {
 
     public AILogic() {
         bestValues = new int[plies];
-        bestMoves = new ArrayList();
+        bestMoves = new MyArrayList();
     }
 
     /**
@@ -60,7 +60,10 @@ public class AILogic {
      */
     private int tryAllPossibleMoves(int depth, GameSituation situation) {
         if (depth == plies) {
-            return evaluateGameSituation(situation, maxingPlayer);
+            if (depth % 2 == 0) {
+                return evaluateGameSituation(situation, maxingPlayer, situation.whoseTurn());
+            }
+            return evaluateGameSituation(situation, maxingPlayer, getOpponent(situation.whoseTurn()));
         }
 
         if (depth % 2 == 0) {

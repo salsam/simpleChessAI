@@ -10,10 +10,10 @@ import java.util.Set;
 import chess.domain.board.Player;
 import static chess.domain.board.Player.getOpponent;
 import chess.domain.board.Square;
+import chess.domain.datastructures.MyHashSet;
 import chess.domain.pieces.King;
 import chess.domain.pieces.Piece;
 import chess.domain.pieces.Rook;
-import java.util.HashSet;
 
 /**
  * This class is responsible for all king-related movement logic.
@@ -91,7 +91,7 @@ public class KingMover extends PieceMover {
      */
     @Override
     public Set<Square> possibleMoves(Piece piece, ChessBoard board) {
-        Set<Square> moves = new HashSet<>();
+        Set<Square> moves = new MyHashSet<>();
         King king = (King) piece;
         board.updateThreatenedSquares(getOpponent(piece.getOwner()));
 
