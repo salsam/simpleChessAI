@@ -56,11 +56,7 @@ public class MyArrayList<T extends Object> implements List<T> {
 
     @Override
     public <T> T[] toArray(T[] a) {
-        if (a.length < size) {
-            a = (T[]) new Object[size];
-        }
-        System.arraycopy(array, 0, a, 0, size);
-        return a;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -129,14 +125,15 @@ public class MyArrayList<T extends Object> implements List<T> {
 
     @Override
     public T get(int index) {
+        if (index >= size) {
+            return null;
+        }
         return array[index];
     }
 
     @Override
     public T set(int index, T element) {
-        T prev = array[index];
-        array[index] = element;
-        return prev;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -166,22 +163,12 @@ public class MyArrayList<T extends Object> implements List<T> {
 
     @Override
     public int indexOf(Object o) {
-        for (int i = 0; i < size; i++) {
-            if (array[i].equals(o)) {
-                return i;
-            }
-        }
-        return -1;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        for (int i = size - 1; i >= 0; i--) {
-            if (array[i].equals(o)) {
-                return i;
-            }
-        }
-        return -1;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -196,11 +183,7 @@ public class MyArrayList<T extends Object> implements List<T> {
 
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
-        List<T> subList = new MyArrayList();
-        for (int i = fromIndex; i < toIndex; i++) {
-            subList.add(array[i]);
-        }
-        return subList;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

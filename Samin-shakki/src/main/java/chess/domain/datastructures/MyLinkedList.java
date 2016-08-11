@@ -15,7 +15,7 @@ import java.util.ListIterator;
  * attributes for faster modification and usage. Only linked in one direction.
  *
  * @author sami
- * @param <T> type of values saved in this lilnked list.
+ * @param <T> type of values saved in this linked list.
  */
 public class MyLinkedList<T extends Object> implements List<T> {
 
@@ -72,8 +72,8 @@ public class MyLinkedList<T extends Object> implements List<T> {
         } else {
             last.setNext(new Node(e));
             last = last.getNext();
-            size++;
         }
+        size++;
         return true;
     }
 
