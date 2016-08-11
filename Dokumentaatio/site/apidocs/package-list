@@ -1,6 +1,7 @@
 
 chess.domain
 chess.domain.board
+chess.domain.datastructures
 chess.domain.pieces
 chess.gui
 chess.gui.boarddrawing

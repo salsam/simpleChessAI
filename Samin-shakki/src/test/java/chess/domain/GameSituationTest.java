@@ -40,7 +40,7 @@ public class GameSituationTest {
         game.nextTurn();
         assertEquals(Player.WHITE, game.whoseTurn());
     }
-    
+
     @Test
     public void playersPawnsBecomeNoLongerCapturableEnPassantOnPlayersNextTurn() {
         Pawn whitePawn = new Pawn(4, 4, Player.WHITE, "wp");

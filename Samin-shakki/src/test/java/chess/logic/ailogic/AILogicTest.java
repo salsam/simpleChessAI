@@ -131,6 +131,5 @@ public class AILogicTest {
         }
         situation = new GameSituation(new EmptyBoardInitializer(), new MovementLogic());
     }
-    
 
 }
