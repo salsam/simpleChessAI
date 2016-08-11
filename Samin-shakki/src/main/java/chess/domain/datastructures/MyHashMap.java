@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 /**
  * My own take on Java's HashMap. LoadFactor and initial capacity set to Java's
@@ -18,6 +19,7 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
     private K[] keys;
     private V[] values;
     private MyLinkedList<Integer>[] indices;
+    private MyLimitedStack<Integer> freedIndices;
     private int capacity;
     private int size;
     private final double loadFactor;
@@ -27,6 +29,7 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
         capacity = 16;
         keys = (K[]) new Object[capacity];
         values = (V[]) new Object[capacity];
+        freedIndices = new MyLimitedStack(capacity);
         indices = new MyLinkedList[capacity];
         initializeLinkedLists(indices);
         loadFactor = 0.75;
@@ -83,13 +86,17 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
         ensureCapacity();
         int hash = Math.abs(key.hashCode() % capacity);
         int oldIndex = findOldIndex(hash, key);
+        int newIndex = size;
 
         if (oldIndex != -1) {
             values[oldIndex] = (V) value;
         } else {
-            keys[size] = (K) key;
-            values[size] = (V) value;
-            indices[hash].add(size);
+            if (!freedIndices.isEmpty()) {
+                newIndex = freedIndices.pop();
+            }
+            keys[newIndex] = (K) key;
+            values[newIndex] = (V) value;
+            indices[hash].add(newIndex);
             size++;
         }
         return true;
@@ -116,6 +123,7 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
 
             rehashToNewIndices(newKeys, newValues, newIndices);
 
+            freedIndices = new MyLimitedStack(capacity);
             indices = newIndices;
             keys = newKeys;
             values = newValues;
@@ -137,11 +145,13 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
 
         for (Integer index : indices[hash]) {
             if (keys[index].equals(o)) {
-                size--;
                 ret = values[index];
                 keys[index] = null;
                 values[index] = null;
                 indices[hash].remove(index);
+
+                size--;
+                freedIndices.push(index);
                 return ret;
             }
         }
@@ -158,6 +168,7 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
     public void clear() {
         capacity = 16;
         size = 0;
+        freedIndices = new MyLimitedStack(capacity);
         indices = new MyLinkedList[capacity];
         keys = (K[]) new Object[capacity];
         values = (V[]) new Object[capacity];

@@ -277,4 +277,37 @@ public class MyHashMapTest {
         });
     }
 
+    @Test
+    public void youCanPutAndRemoveMappingsMultipleTimes() {
+        for (int i = 0; i < 100; i++) {
+            mhm.put(i, 2 * i);
+            if (i % 5 == 0) {
+                mhm.remove(i / 5);
+            }
+        }
+
+        for (int i = 30; i < 70; i++) {
+            mhm.remove(i);
+            if (i % 7 == 0) {
+                mhm.put(i / 7, 3 * i);
+            }
+        }
+
+        for (int i = 100; i < 140; i++) {
+            mhm.put(i, 2 * i);
+            if (i % 5 == 0) {
+                mhm.remove(i / 5);
+            }
+        }
+
+        for (int i = 0; i < 140; i++) {
+            if (i >= 28 && (i < 30 || i >= 70)) {
+                if (!mhm.containsKey(i)) {
+                    System.out.println(i);
+                }
+                assertTrue(mhm.containsKey(i));
+            }
+        }
+    }
+
 }
