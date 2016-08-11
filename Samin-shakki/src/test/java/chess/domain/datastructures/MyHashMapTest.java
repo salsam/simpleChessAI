@@ -1,5 +1,7 @@
 package chess.domain.datastructures;
 
+import java.util.Collection;
+import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -117,4 +119,162 @@ public class MyHashMapTest {
         assertEquals(-273, mhm.get(2));
         assertEquals(42, mhm.get(-273));
     }
+
+    @Test
+    public void removeRemovesNothingAndReturnsNullIfNoneOfKeysMatchParameter() {
+        mhm.put(1, 2);
+        mhm.put(314, -273);
+        mhm.put(-273, 42);
+
+        assertEquals(null, mhm.remove(2));
+        assertEquals(3, mhm.size());
+    }
+
+    @Test
+    public void removeRemovesKeyValuePairMatchingItsParameter() {
+        mhm.put(1, 2);
+        mhm.put(314, -273);
+        mhm.put(-273, 42);
+
+        mhm.remove(314);
+        assertFalse(mhm.containsKey(314));
+    }
+
+    @Test
+    public void removingKeyValuePairsDecresesSize() {
+        mhm.put(1, 2);
+        mhm.put(314, -273);
+        mhm.put(-273, 42);
+
+        mhm.remove(314);
+        assertEquals(2, mhm.size());
+
+        mhm.remove(1);
+        assertEquals(1, mhm.size());
+
+        mhm.remove(-273);
+        assertEquals(0, mhm.size());
+    }
+
+    @Test
+    public void ifObjectIsRemovedRemoveReturnsItsAssociatedValue() {
+        mhm.put(1, 2);
+        mhm.put(314, -273);
+        mhm.put(-273, 42);
+
+        assertEquals(-273, mhm.remove(314));
+    }
+
+    @Test
+    public void ifLastPairIsRemovedMapIsEmpty() {
+        mhm.put(1, 2);
+        mhm.remove(1);
+        assertTrue(mhm.isEmpty());
+    }
+
+    @Test
+    public void mapEmptyAndSizeZeroAfterClearing() {
+        mhm.put(1, 2);
+        mhm.put(314, -273);
+        mhm.put(-273, 42);
+
+        mhm.clear();
+        assertTrue(mhm.isEmpty());
+        assertEquals(0, mhm.size());
+    }
+
+    @Test
+    public void keysetEmptyButNotNullIfMApEmpty() {
+        Set<Integer> s = mhm.keySet();
+        assertNotEquals(null, s);
+        assertTrue(s.isEmpty());
+    }
+
+    @Test
+    public void keysetContainsAllKeysFromMap() {
+        mhm.put(1, 2);
+        mhm.put(314, -273);
+        mhm.put(-273, 42);
+
+        Set<Integer> s = mhm.keySet();
+
+        assertTrue(s.contains(1));
+        assertTrue(s.contains(314));
+        assertTrue(s.contains(-273));
+    }
+
+    @Test
+    public void keySetDoesNotContainNulls() {
+        mhm.put(1, 2);
+        mhm.put(314, -273);
+        mhm.put(-273, 42);
+        mhm.remove(1);
+        mhm.remove(-273);
+
+        Set<Integer> s = mhm.keySet();
+        s.stream().forEach(i -> {
+            assertFalse(i == null);
+        });
+    }
+
+    @Test
+    public void keysetDoesNotContainRemovedKeys() {
+        mhm.put(1, 2);
+        mhm.put(314, -273);
+        mhm.put(-273, 42);
+        mhm.remove(1);
+        mhm.remove(-273);
+
+        Set<Integer> s = mhm.keySet();
+        assertFalse(s.contains(1));
+        assertFalse(s.contains(-273));
+    }
+
+    @Test
+    public void valuesEmptyButNotNullIfMapEmpty() {
+        Collection<Integer> values = mhm.values();
+        assertNotEquals(null, values);
+        assertTrue(values.isEmpty());
+    }
+
+    @Test
+    public void valuesContainsAllValuesFromMap() {
+        mhm.put(1, 2);
+        mhm.put(314, -273);
+        mhm.put(-273, 42);
+
+        Collection<Integer> values = mhm.values();
+
+        assertTrue(values.contains(2));
+        assertTrue(values.contains(42));
+        assertTrue(values.contains(-273));
+    }
+
+    @Test
+    public void valuesDoesNotContainRemovedValues() {
+        mhm.put(1, 2);
+        mhm.put(314, -273);
+        mhm.put(-273, 42);
+        mhm.remove(1);
+        mhm.remove(-273);
+
+        Collection<Integer> values = mhm.values();
+        assertFalse(values.contains(2));
+        assertFalse(values.contains(42));
+    }
+
+    @Test
+    public void valuesDoesNotContainNulls() {
+        mhm.put(1, 2);
+        mhm.put(314, -273);
+        mhm.put(-273, 42);
+        mhm.remove(1);
+        mhm.remove(-273);
+
+        Collection<Integer> values = mhm.values();
+        values.stream().forEach(v -> {
+            assertFalse(v == null);
+        });
+    }
+
 }

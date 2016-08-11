@@ -50,7 +50,7 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
 
     @Override
     public boolean containsKey(Object o) {
-        return indices[o.hashCode() % capacity].stream()
+        return indices[Math.abs(o.hashCode() % capacity)].stream()
                 .anyMatch((index) -> keys[index].equals(o));
     }
 
@@ -66,7 +66,11 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
 
     @Override
     public Object get(Object o) {
-        int hash = o.hashCode() % capacity;
+        int hash = Math.abs(o.hashCode() % capacity);
+        if (!containsKey(o)) {
+            return null;
+        }
+
         return indices[hash].stream()
                 .filter(index -> keys[index].equals(o))
                 .map(index -> values[index])
@@ -129,16 +133,20 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
     @Override
     public Object remove(Object o) {
         int hash = Math.abs(o.hashCode() % capacity);
+        V ret = null;
+
         for (Integer index : indices[hash]) {
             if (keys[index].equals(o)) {
+                size--;
+                ret = values[index];
                 keys[index] = null;
                 values[index] = null;
                 indices[hash].remove(index);
-                return true;
+                return ret;
             }
         }
 
-        return false;
+        return ret;
     }
 
     @Override
@@ -159,7 +167,9 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
     public Set keySet() {
         Set<K> ks = new HashSet();
         for (int i = 0; i < size; i++) {
-            ks.add(keys[i]);
+            if (keys[i] != null) {
+                ks.add(keys[i]);
+            }
         }
         return ks;
     }
@@ -168,7 +178,9 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
     public Collection values() {
         Collection<V> vals = new MyHashSet();
         for (int i = 0; i < size; i++) {
-            vals.add(values[i]);
+            if (values[i] != null) {
+                vals.add(values[i]);
+            }
         }
         return vals;
     }
