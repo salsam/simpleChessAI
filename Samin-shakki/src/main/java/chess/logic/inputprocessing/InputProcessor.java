@@ -124,12 +124,11 @@ public class InputProcessor {
             return;
         }
 
-        promote(target, game);
+        promote(target, game.getChessBoard());
         startNextTurn(game);
     }
 
-    private void promote(Square target, GameSituation game) {
-        ChessBoard cbl = game.getChessBoard();
+    public static void promote(Square target, ChessBoard cbl) {
         Piece piece = target.getPiece();
         if (piece.getClass() == Pawn.class) {
             Pawn chosenPawn = (Pawn) piece;
