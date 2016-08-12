@@ -27,24 +27,32 @@ public class MyLinkedList<T extends Object> implements List<T> {
         size = 0;
     }
 
-    public Node<T> getFirst() {
-        return first;
-    }
-
-    public Node<T> getLast() {
-        return last;
-    }
-
+    /**
+     * Returns the amount of values saved in this linked list.
+     *
+     * @return size of this linked list.
+     */
     @Override
     public int size() {
         return size;
     }
 
+    /**
+     * Checks if this list is empty.
+     *
+     * @return true if list is empty, otherwise false.
+     */
     @Override
     public boolean isEmpty() {
         return first == null;
     }
 
+    /**
+     * Checks if this list contains object o by going through nodes one by one.
+     *
+     * @param o object being searched for.
+     * @return true if list contains object o, otherwise false.
+     */
     @Override
     public boolean contains(Object o) {
         Node cur = first;
@@ -57,6 +65,12 @@ public class MyLinkedList<T extends Object> implements List<T> {
         return false;
     }
 
+    /**
+     * Returns iterator over this linked list. Iterator will go through nodes
+     * one by one until it finds null.
+     *
+     * @return iterator that will go over this list node by node.
+     */
     @Override
     public Iterator<T> iterator() {
         Iterator<T> ret = new Iterator<T>() {
@@ -93,6 +107,15 @@ public class MyLinkedList<T extends Object> implements List<T> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Adds given element to this list. If list is empty, sets new node with
+     * value e as first and last. If list isn't empty searches for last node and
+     * adds node with value e as next of last and then makes last point to new
+     * last node. In either case increases size by one.
+     *
+     * @param e element being added to this list.
+     * @return true if object was added
+     */
     @Override
     public boolean add(T e) {
         if (isEmpty()) {
@@ -106,6 +129,20 @@ public class MyLinkedList<T extends Object> implements List<T> {
         return true;
     }
 
+    /**
+     * Removes given object from this list. Checks first manually that first
+     * node exists and whether it's value equals o or not. If there was no
+     * match, loops over rest of linked list until it finds value equal to o or
+     * meets null.
+     *
+     * If value equal to null is found makes previous node point to current
+     * node's next pointer effectively removing current node. In case match was
+     * in first node, makes field first point to current node's next node. In
+     * either case decreases size by one in the end.
+     *
+     * @param o object being removed.
+     * @return true if object was removed, otherwise false.
+     */
     @Override
     public boolean remove(Object o) {
         if (isEmpty()) {
@@ -158,6 +195,9 @@ public class MyLinkedList<T extends Object> implements List<T> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Clears this linked list of all nodes and sets size to 0;
+     */
     @Override
     public void clear() {
         first = null;
