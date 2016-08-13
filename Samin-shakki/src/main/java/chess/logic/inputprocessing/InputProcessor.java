@@ -47,10 +47,10 @@ public class InputProcessor {
     private AILogic ai;
 
     /**
-     * Creates a new GUILogic-object.
+     * Creates a new InputProcessor-object.
      */
     public InputProcessor() {
-        this.ai = new AILogic();
+        this.ai = new AILogic(3);
     }
 
     public Piece getChosen() {
@@ -105,7 +105,7 @@ public class InputProcessor {
     }
 
     private void makeBestMoveAccordingToAILogic(GameSituation game) {
-        ai.findBestMove(game);
+        ai.findBestMoves(game);
         Move move = ai.getBestMove();
         setChosen(move.getPiece());
         moveToTargetLocation(move.getTarget().getColumn(), move.getTarget().getRow(), game);

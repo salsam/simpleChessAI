@@ -55,4 +55,9 @@ public class Move {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "(" + this.piece + ", " + this.target + ")";
+    }
+
 }

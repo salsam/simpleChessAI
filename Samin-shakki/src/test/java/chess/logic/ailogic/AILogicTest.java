@@ -38,7 +38,7 @@ public class AILogicTest {
     @BeforeClass
     public static void setUpClass() {
         situation = new GameSituation(new EmptyBoardInitializer(), new MovementLogic());
-        ai = new AILogic();
+        ai = new AILogic(3);
     }
 
     @Before
@@ -50,7 +50,7 @@ public class AILogicTest {
     public void findBestMoveChoosesAMove() {
         Pawn pawn = new Pawn(1, 1, Player.WHITE, "wp1");
         putPieceOnBoard(situation.getChessBoard(), pawn);
-        ai.findBestMove(situation);
+        ai.findBestMoves(situation);
         assertFalse(ai.getBestMove() == null);
     }
 
@@ -58,7 +58,7 @@ public class AILogicTest {
     public void bestMoveCorrectWithOnePiece() {
         Pawn pawn = new Pawn(1, 1, Player.WHITE, "wp1");
         putPieceOnBoard(situation.getChessBoard(), pawn);
-        ai.findBestMove(situation);
+        ai.findBestMoves(situation);
         assertTrue(ai.getBestMove().getTarget().equals(situation.getChessBoard().getSquare(1, 2))
                 || ai.getBestMove().getTarget().equals(situation.getChessBoard().getSquare(1, 3)));
         assertEquals(pawn, ai.getBestMove().getPiece());
@@ -76,7 +76,7 @@ public class AILogicTest {
         putPieceOnBoard(situation.getChessBoard(), bn);
         putPieceOnBoard(situation.getChessBoard(), wq);
 
-        ai.findBestMove(situation);
+        ai.findBestMoves(situation);
         assertEquals(new Move(wq, situation.getChessBoard().getSquare(1, 6)), ai.getBestMove());
     }
 
@@ -90,7 +90,7 @@ public class AILogicTest {
         putPieceOnBoard(situation.getChessBoard(), bn);
         putPieceOnBoard(situation.getChessBoard(), wq);
 
-        ai.findBestMove(situation);
+        ai.findBestMoves(situation);
         assertNotEquals(new Move(wq, new Square(1, 0)), ai.getBestMove());
     }
 
@@ -98,7 +98,7 @@ public class AILogicTest {
     public void findBestMoveDoesNotChangeChessBoard() {
         situation = new GameSituation(new StandardBoardInitializer(), new MovementLogic());
         ChessBoard backUp = copy(situation.getChessBoard());
-        ai.findBestMove(situation);
+        ai.findBestMoves(situation);
 
         for (Player player : Player.values()) {
             backUp.getPieces(player).stream().forEach((piece) -> {
@@ -116,7 +116,7 @@ public class AILogicTest {
         ChessBoard cb = situation.getChessBoard();
         ml.move(cb.getSquare(1, 1).getPiece(), cb.getSquare(1, 3), cb);
         ChessBoard backUp = copy(situation.getChessBoard());
-        ai.findBestMove(situation);
+        ai.findBestMoves(situation);
 
         for (Player player : Player.values()) {
             for (Piece p : backUp.getPieces(player)) {

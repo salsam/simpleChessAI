@@ -23,13 +23,14 @@ import java.util.Random;
  */
 public class AILogic {
 
+    private GameSituation sit;
     private MyArrayList<Move> bestMoves;
     private int[] bestValues;
     private MovementLogic ml;
-    private Player maxingPlayer;
-    private final int plies = 3;
+    private final int plies;
 
-    public AILogic() {
+    public AILogic(int plies) {
+        this.plies = plies;
         bestValues = new int[plies];
         bestMoves = new MyArrayList();
     }
@@ -45,100 +46,82 @@ public class AILogic {
     }
 
     /**
-     * This method is used to calculate best move for player in given game
-     * situation using maximin-algorithm. Helper function
-     * playerChoosesMoveWithHighestValue is called for when it's player's turn
-     * and he'll choose move with highest associated value. On the other hand
-     * helper function opponentChoosesMoveToMinimizePlayersValue is called when
-     * it's opponents turn and opponent will choose move with lowest associated
-     * value, that is best move after player's movement according to heuristic.
+     * This method is used to calculate best move for ai in given game situation
+     * using negaMax sped up with alpha-beta pruning. For each depth
+     * corresponding bestValue is initialized to -12456790 representing negative
+     * infinity. If leaf isn't reached yet, method will recurse forward by
+     * calling submethod makeMoveAndCheckValue for each piece player owns on
+     * board.
      *
      * @param depth Recursion depth in turns
-     * @param situation Game situation before move.
+     * @param sit Game situation before move.
      * @param maxingPlayer player whose best move is being figured out
      * @return highest value associated with any move.
      */
-    private int tryAllPossibleMoves(int depth, GameSituation situation) {
+    private int negaMax(int depth, int alpha, int beta, Player maxingPlayer) {
         if (depth == plies) {
-            if (depth % 2 == 0) {
-                return evaluateGameSituation(situation, maxingPlayer, situation.whoseTurn());
-            }
-            return evaluateGameSituation(situation, maxingPlayer, getOpponent(situation.whoseTurn()));
+            return evaluateGameSituation(sit, maxingPlayer);
         }
 
-        if (depth % 2 == 0) {
-            playerChoosesMoveWithHighestValue(situation, depth);
-        } else {
-            opponentChoosesMoveToMinimizePlayersValue(situation, depth);
+        bestValues[depth] = -123456790;
+
+        for (Piece piece : sit.getChessBoard().getPieces(maxingPlayer)) {
+            if (piece.isTaken()) {
+                continue;
+            }
+            makeMoveAndCheckValue(piece, maxingPlayer, depth, alpha, beta);
         }
+
         return bestValues[depth];
     }
 
-    private void playerChoosesMoveWithHighestValue(GameSituation sit, int depth) {
+    /**
+     * This method will first back up current situation on chessboard before
+     * trying to move piece to each possible square recursing deeper into game
+     * tree by calling nageMax. After returning to current node in recursion,
+     * reverts back to situation before move was made. If alpha value is greater
+     * than beta value, we can stop trying to find better values as no such will
+     * be found. Uses cut off of 500 centipawns to make evaluation faster.
+     *
+     * @param piece piece to be moved.
+     * @param maxingPlayer player who's maxing value of heuristic this turn.
+     * @param depth depth in game tree.
+     * @param alpha alpha value for current node in game tree.
+     * @param beta beta value for current node in game tree.
+     */
+    private void makeMoveAndCheckValue(Piece piece, Player maxingPlayer, int depth, int alpha, int beta) {
         ChessBoard backUp = copy(sit.getChessBoard());
-        bestValues[depth] = -123456790;
+        for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
+            ml.move(piece, possibility, sit.getChessBoard());
+            alpha = checkForChangeInBestOrAlphaValue(maxingPlayer, depth, alpha, beta, piece, possibility);
+            revertOldSituation(sit.getChessBoard(), backUp);
+            sit.setContinues(true);
 
-        sit.getChessBoard().getPieces(maxingPlayer).stream()
-                .filter(piece -> !piece.isTaken())
-                .forEach(piece -> {
-                    for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
-                        moveToTargetPositionAndCheckIfValueLargestSoFar(sit, depth, piece, possibility);
-                        revertOldSituation(sit.getChessBoard(), backUp);
-                        sit.setContinues(true);
-                        if (depth > 0 && bestValues[depth] > bestValues[depth - 1]) {
-                            return;
-                        }
-                    }
-                });
-    }
-
-    private void moveToTargetPositionAndCheckIfValueLargestSoFar(GameSituation sit, int depth, Piece piece, Square possibility) {
-        ml.move(piece, possibility, sit.getChessBoard());
-        if (!sit.getCheckLogic().checkIfChecked(maxingPlayer)) {
-            int value = tryAllPossibleMoves(depth + 1, sit);
-            if (value >= bestValues[depth]) {
-                if (depth == 0) {
-                    if (value > bestValues[depth]) {
-                        bestMoves.clear();
-                    }
-                    bestMoves.add(new Move(piece, possibility));
-                }
-                bestValues[depth] = value;
+            if (bestValues[0] > 500 || alpha >= beta) {
+                break;
             }
         }
     }
 
-    private void opponentChoosesMoveToMinimizePlayersValue(GameSituation sit, int depth) {
-        ChessBoard backUp = copy(sit.getChessBoard());
-        bestValues[depth] = 123456790;
-
-        sit.getChessBoard().getPieces(getOpponent(maxingPlayer)).stream()
-                .filter(piece -> !piece.isTaken())
-                .forEach(piece -> {
-                    for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
-                        moveToTargetPositionAndCheckIfValueSmallestSoFar(sit, backUp, depth, piece, possibility);
-                        revertOldSituation(sit.getChessBoard(), backUp);
-                        sit.setContinues(true);
-                        if (bestValues[depth] < bestValues[depth - 1]) {
-                            return;
-                        }
-                    }
-                });
-    }
-
-    private void moveToTargetPositionAndCheckIfValueSmallestSoFar(GameSituation sit, ChessBoard backUp, int depth, Piece piece, Square possibility) {
-        ml.move(piece, possibility, sit.getChessBoard());
-        if (!sit.getCheckLogic().checkIfChecked(getOpponent(maxingPlayer))) {
-            int value = tryAllPossibleMoves(depth + 1, sit);
-            if (value <= bestValues[depth]) {
-                if (depth == 0) {
-                    if (value < bestValues[depth]) {
-                        bestMoves.clear();
-                    }
-                    bestMoves.add(new Move(piece, possibility));
-                }
+    private int checkForChangeInBestOrAlphaValue(
+            Player maxingPlayer, int depth, int alpha, int beta, Piece piece, Square possibility) {
+        if (!sit.getCheckLogic().checkIfChecked(maxingPlayer)) {
+            int value = -negaMax(depth + 1, -beta, -alpha, getOpponent(maxingPlayer));
+            if (value >= bestValues[depth]) {
+                keepTrackOfBestMoves(depth, value, piece, possibility);
                 bestValues[depth] = value;
             }
+            alpha = Math.max(alpha, value);
+        }
+        return alpha;
+    }
+
+    private void keepTrackOfBestMoves(int depth, int value, Piece piece, Square possibility) {
+        if (depth == 0) {
+            if (value > bestValues[depth]) {
+                bestMoves.clear();
+            }
+            bestMoves.add(new Move(piece, possibility));
         }
     }
 
@@ -149,10 +132,10 @@ public class AILogic {
      *
      * @param situation game situation at the beginning of AI's turn.
      */
-    public void findBestMove(GameSituation situation) {
+    public void findBestMoves(GameSituation situation) {
         ml = situation.getChessBoard().getMovementLogic();
-        maxingPlayer = situation.whoseTurn();
-        tryAllPossibleMoves(0, situation);
+        sit = situation;
+        negaMax(0, -123456790, 123456790, situation.whoseTurn());
     }
 
 }

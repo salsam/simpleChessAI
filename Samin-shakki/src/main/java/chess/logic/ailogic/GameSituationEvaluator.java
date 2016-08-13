@@ -110,17 +110,13 @@ public class GameSituationEvaluator {
      *
      * @param sit current game situation
      * @param player player from whose point of view value is calculated.
-     * @param whoseTurn whose turn it is when situation is being evaluated.
      * @return value of given game situation from given player's point of view.
      */
-    public static int evaluateGameSituation(GameSituation sit, Player player, Player whoseTurn) {
+    public static int evaluateGameSituation(GameSituation sit, Player player) {
         int value = 0;
-        if (sit.getCheckLogic().checkIfCheckedAndMated(whoseTurn)) {
-            if (whoseTurn == player) {
-                return -123456789;
-            }
+        if (sit.getCheckLogic().checkIfCheckedAndMated(player)) {
             return 123456789;
-        } else if (sit.getCheckLogic().stalemate(whoseTurn)) {
+        } else if (sit.getCheckLogic().stalemate(player)) {
             return 0;
         }
 
