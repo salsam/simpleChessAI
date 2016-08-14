@@ -110,19 +110,20 @@ public class InputProcessorTest {
         assertTrue(game.getChessBoard().getSquare(0, 7).getPiece().getClass() == Queen.class);
         Queen q = (Queen) game.getChessBoard().getSquare(0, 7).getPiece();
         assertEquals(Player.WHITE, q.getOwner());
-        assertEquals("wq9", q.getPieceCode());
+        assertEquals("wp9", q.getPieceCode());
     }
 
     @Test
-    public void ifPawnIsMovedToOpposingEndOfBoardItIsReplacedByQueen() {
+    public void ifPawnIsMovedToOpposingEndOfBoardItIsReplacedByQueenWithSamePieceCode() {
         ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new Pawn(1, 6, Player.WHITE, "wp9"));
         inputProcessor.processClick(1, 6, game);
         inputProcessor.processClick(0, 7, game);
         assertTrue(game.getChessBoard().getPieces(Player.WHITE).stream()
-                .noneMatch(whitePiece -> whitePiece.getPieceCode().equals("wp9")));
+                .noneMatch(whitePiece -> whitePiece.getPieceCode().equals("wp9")
+                        && whitePiece.getClass() == Pawn.class));
 
         assertTrue(game.getChessBoard().getPieces(Player.WHITE).stream()
-                .anyMatch(whitePiece -> whitePiece.getPieceCode().equals("wq9")));
+                .anyMatch(whitePiece -> whitePiece.getPieceCode().equals("wp9")));
     }
 
     @Test

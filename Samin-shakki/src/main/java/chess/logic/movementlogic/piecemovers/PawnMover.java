@@ -50,7 +50,7 @@ public class PawnMover extends PieceMover {
         if (!target.containsAPiece() && target.getColumn() != piece.getColumn()) {
             Square enpassanted = board.getSquare(target.getColumn(), target.getRow() - piece.getOwner().getDirection());
             Piece enpassantedPiece = enpassanted.getPiece();
-            ChessBoardInitializer.setPieceAsTaken(enpassantedPiece, board);
+            enpassantedPiece.setTaken(true);
             enpassanted.setPiece(null);
         }
 

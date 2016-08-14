@@ -133,8 +133,11 @@ public class InputProcessor {
         if (piece.getClass() == Pawn.class) {
             Pawn chosenPawn = (Pawn) piece;
             if (chosenPawn.opposingEnd() == target.getRow()) {
-                String queensPieceCode = chosenPawn.getOwner().toString();
-                putPieceOnBoard(cbl, new Queen(chosenPawn.getColumn(), chosenPawn.getRow(), chosenPawn.getOwner(), queensPieceCode));
+                putPieceOnBoard(cbl,
+                        new Queen(chosenPawn.getColumn(),
+                                chosenPawn.getRow(),
+                                chosenPawn.getOwner(),
+                                chosenPawn.getPieceCode()));
                 ChessBoardInitializer.removePieceFromOwner(chosenPawn, cbl);
             }
         }

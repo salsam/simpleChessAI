@@ -49,21 +49,6 @@ public abstract class ChessBoardInitializer {
         chessBoard.getPieces(piece.getOwner()).remove(piece);
     }
 
-    /**
-     * Marks chosen piece on chosen board as taken so player it no longer
-     * affects game.
-     *
-     * @param piece Piece to be marked as taken
-     * @param chessBoard ChessBoard on which piece is situated
-     */
-    public static void setPieceAsTaken(Piece piece, ChessBoard chessBoard) {
-        for (Piece owned : chessBoard.getPieces(piece.getOwner())) {
-            if (owned.equals(piece)) {
-                owned.setTaken(true);
-            }
-        }
-    }
-
     protected void clearBoard(ChessBoard board) {
         for (int i = 0; i < board.getTable().length; i++) {
             for (int j = 0; j < board.getTable()[0].length; j++) {

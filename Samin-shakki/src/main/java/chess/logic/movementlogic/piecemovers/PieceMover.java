@@ -4,7 +4,6 @@ import chess.domain.board.ChessBoard;
 import java.util.Set;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
-import static chess.logic.chessboardinitializers.ChessBoardInitializer.setPieceAsTaken;
 import chess.domain.pieces.Piece;
 import chess.logic.inputprocessing.InputProcessor;
 
@@ -99,7 +98,7 @@ public abstract class PieceMover {
         board.getSquare(piece.getColumn(), piece.getRow()).setPiece(null);
         
         if (target.containsAPiece()) {
-            setPieceAsTaken(target.getPiece(), board);
+            target.getPiece().setTaken(true);
         }
         target.setPiece(piece);
         
