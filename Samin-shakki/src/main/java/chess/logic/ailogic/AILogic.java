@@ -20,7 +20,17 @@ import java.util.Random;
 /**
  * This class is responsible for calculating AI's next move and then returning
  * it when asked for next move. All values are measured in centipawns that is
- * one hundredth of pawn's value.
+ * one hundredth of pawn's value. Uses negamax sped up with alpha-beta-pruning
+ * and transposition tables. Alpha-beta pruning also is sped up by principal
+ * variation heuristic simplified for depth of 3.
+ *
+ * @see <a href="Negamax">https://en.wikipedia.org/wiki/Negamax</a>
+ *
+ * @see
+ * <a href="Principal variation">https://chessprogramming.wikispaces.com/Principal+variation</a>
+ *
+ * @see
+ * <a href="Transposition tables">https://en.wikipedia.org/wiki/Transposition_table</a>
  *
  * @author sami
  */
@@ -80,7 +90,36 @@ public class AILogic {
             transpositionTable.put(key.opposingKey(), -value);
             return value;
         }
+        tryAllPossibleMovesForMaxingPlayer(depth, alpha, maxingPlayer, beta);
+
+        return bestValues[depth];
+    }
+
+    private void tryAllPossibleMovesForMaxingPlayer(int depth, int alpha, Player maxingPlayer, int beta) {
         bestValues[depth] = -123456790;
+        alpha = testPrincipalMove(depth, maxingPlayer, alpha, beta);
+
+        for (Piece piece : sit.getChessBoard().getPieces(maxingPlayer)) {
+            if (piece.isTaken()) {
+                continue;
+            }
+            makeMoveAndCheckValue(piece, maxingPlayer, depth, alpha, beta);
+        }
+    }
+
+    /**
+     * Tries making principal move first. Principal move is assumed to be best
+     * move because of earlier iteration thus testing it first should in most
+     * cases increase alpha value asap causing alpha-beta-pruning to cut more
+     * branches.
+     *
+     * @param depth depth in game tree.
+     * @param maxingPlayer player whose turn it is.
+     * @param alpha current alpha value.
+     * @param beta current beta value.
+     * @return alpha value after testing principal move.
+     */
+    private int testPrincipalMove(int depth, Player maxingPlayer, int alpha, int beta) {
         if (!principalMoves.isEmpty() && depth == 0) {
             Piece piec = principalMoves.get(maxingPlayer).getPiece();
             if (piec.equals(sit.getChessBoard()
@@ -94,15 +133,7 @@ public class AILogic {
                 sit.setContinues(true);
             }
         }
-
-        for (Piece piece : sit.getChessBoard().getPieces(maxingPlayer)) {
-            if (piece.isTaken()) {
-                continue;
-            }
-            makeMoveAndCheckValue(piece, maxingPlayer, depth, alpha, beta);
-        }
-
-        return bestValues[depth];
+        return alpha;
     }
 
     /**
