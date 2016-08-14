@@ -2,23 +2,13 @@ package chess.logic.ailogic;
 
 import chess.domain.GameSituation;
 import chess.domain.Move;
-import chess.domain.board.ChessBoard;
 import static chess.domain.board.ChessBoardCopier.copy;
-import chess.domain.board.Player;
-import chess.domain.board.Square;
-import chess.domain.pieces.King;
-import chess.domain.pieces.Knight;
-import chess.domain.pieces.Pawn;
-import chess.domain.pieces.Piece;
-import chess.domain.pieces.Queen;
+import chess.domain.board.*;
+import chess.domain.pieces.*;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
-import chess.logic.chessboardinitializers.EmptyBoardInitializer;
-import chess.logic.chessboardinitializers.StandardBoardInitializer;
+import chess.logic.chessboardinitializers.*;
 import chess.logic.movementlogic.MovementLogic;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -130,6 +120,28 @@ public class AILogicTest {
             }
         }
         situation = new GameSituation(new EmptyBoardInitializer(), new MovementLogic());
+    }
+
+    @Test
+    public void pawnRemainsPawnIfPromotionIsTested() {
+        MovementLogic ml = situation.getChessBoard().getMovementLogic();
+        ChessBoard cb = situation.getChessBoard();
+        Pawn wp = new Pawn(1, 6, Player.WHITE, "wp");
+        ChessBoard backUp = copy(situation.getChessBoard());
+        ai.findBestMoves(situation);
+
+        for (Player player : Player.values()) {
+            for (Piece p : backUp.getPieces(player)) {
+                for (Piece newP : situation.getChessBoard().getPieces(player)) {
+                    if (p.equals(newP)) {
+                        assertEquals(p.getClass(), newP.getClass());
+                        assertEquals(p.getColumn(), newP.getColumn());
+                        assertEquals(p.getRow(), newP.getRow());
+                        assertEquals(p.getOwner(), newP.getOwner());
+                    }
+                }
+            }
+        }
     }
 
 }
