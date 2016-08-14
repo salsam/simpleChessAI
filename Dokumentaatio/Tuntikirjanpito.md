@@ -12,3 +12,5 @@ Päivät | Tunnit | Kuvaus
 10.08.2016 | 6h | Lisätty alkeelliset toteutukset MyHashMapille, MyHashSetille ja MyArrayListille. Aloitettu testien kirjoittaminen niille.
 11.08.2016 | 8h | Korjattu MyHashSetin toteutus hyödyntämään MyStackia ja MyLinkedListiä parempaa toimimista varten. Lisätty iteraattorille toteutus MyHashSettiin ja MyLinkedListiin. Lisätty testit kaikille omille tietorakenteille, joilla muitakin metodeita kuin vain getterit. Laskettu tarkka aikavaativuss ja lisätty se Unicodella aiheenmäärittelyyn.
 12.08.2016 | 3h | Lisätty javadoc kommentit julkisille metodeille omiin tietorakenteisiin ja korjattu bugi, jonka vuoksi tekoäly ei huomioinut sotilaiden korotusta.
+13.08.2016 | 4h | Vaihdettu tekoälyn algoritmi minmaxista negamaxiin, jotta copypaste vähenisi.
+14.08.2016 | 5h | Lisätty transpositiotaulu, jonka avulla vältetään saman tilanteen uudelleen arvioiminen. Lisäksi otetaan talteen edellisen iteraation parhaat siirrot ja yritetään niitä ensimmäisenä, jotta alfa-beeta-karsinnan teho paranisi. (Yhteensä keskimääräinen vuoroon kulunut aikatippui noin 15s:ta noin 7s:iin syvyydellä 3).
