@@ -8,6 +8,7 @@ import static chess.domain.board.Player.getOpponent;
 import chess.domain.board.Square;
 import chess.domain.GameSituation;
 import chess.domain.Move;
+import static chess.domain.board.ChessBoardCopier.undoMove;
 import chess.domain.pieces.Pawn;
 import chess.domain.pieces.Piece;
 import chess.domain.pieces.Queen;
@@ -114,13 +115,14 @@ public class InputProcessor {
     private void moveToTargetLocation(int column, int row, GameSituation game) {
         ChessBoard backUp = ChessBoardCopier.copy(game.getChessBoard());
         Square target = game.getChessBoard().getSquare(column, row);
+        Square from = game.getChessBoard().getSquare(chosen.getColumn(), chosen.getRow());
 
         game.getChessBoard().getMovementLogic().move(chosen, target, game.getChessBoard());
         chosen = null;
         possibilities = null;
 
         if (game.getCheckLogic().checkIfChecked(game.whoseTurn())) {
-            ChessBoardCopier.revertOldSituation(game.getChessBoard(), backUp);
+            undoMove(game.getChessBoard(), backUp, from, target);
             return;
         }
 
@@ -146,6 +148,10 @@ public class InputProcessor {
     private void startNextTurn(GameSituation game) {
         game.nextTurn();
         textArea.setText(game.whoseTurn() + "'s turn.");
+        if (game.getChessBoardSituationCounter().get(game.getHasher().hash(game.getChessBoard())) == 3) {
+            textArea.setText("Third repetition of situation. Game ended as a draw!");
+            frames.get("endingScreen").setVisible(true);
+        }
         if (game.getCheckLogic().checkIfChecked(game.whoseTurn())) {
             textArea.setText(textArea.getText() + " Check!");
             if (game.getCheckLogic().checkMate(game.whoseTurn())) {

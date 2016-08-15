@@ -4,11 +4,11 @@ import chess.domain.GameSituation;
 import chess.domain.Move;
 import chess.domain.board.ChessBoard;
 import static chess.domain.board.ChessBoardCopier.copy;
+import static chess.domain.board.ChessBoardCopier.undoMove;
 import chess.domain.board.Player;
 import static chess.domain.board.Player.getOpponent;
 import static chess.logic.ailogic.GameSituationEvaluator.evaluateGameSituation;
 import chess.logic.movementlogic.MovementLogic;
-import static chess.domain.board.ChessBoardCopier.revertOldSituation;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyArrayList;
 import chess.domain.datastructures.MyHashMap;
@@ -43,7 +43,6 @@ public class AILogic {
     private int[] bestValues;
     private MovementLogic ml;
     private final int plies;
-    private ZobristHasher hasher;
     private Map<Player, Move> principalMoves;
     private Map<TranspositionKey, Integer> transpositionTable;
 
@@ -51,7 +50,6 @@ public class AILogic {
         this.plies = plies;
         bestValues = new int[plies];
         bestMoves = new MyArrayList();
-        hasher = new ZobristHasher();
         principalMoves = new MyHashMap();
         transpositionTable = new MyHashMap();
     }
@@ -69,7 +67,7 @@ public class AILogic {
     /**
      * This method is used to calculate best move for ai in given game situation
      * using negaMax sped up with alpha-beta pruning. For each depth
-     * corresponding bestValue is initialized to -12456790 representing negative
+     * corresponding bestValue is initialized to -12456789 representing negative
      * infinity. If leaf isn't reached yet, method will recurse forward by
      * calling submethod makeMoveAndCheckValue for each piece player owns on
      * board.
@@ -81,7 +79,7 @@ public class AILogic {
      */
     private int negaMax(int depth, int alpha, int beta, Player maxingPlayer) {
         TranspositionKey key = new TranspositionKey(
-                depth, maxingPlayer, maxingPlayer, hasher.hash(sit.getChessBoard()));
+                depth, maxingPlayer, maxingPlayer, sit.getHasher().hash(sit.getChessBoard()));
         if (transpositionTable.containsKey(key)) {
             return transpositionTable.get(key);
         }
@@ -98,7 +96,7 @@ public class AILogic {
     }
 
     private void tryAllPossibleMovesForMaxingPlayer(int depth, int alpha, Player maxingPlayer, int beta) {
-        bestValues[depth] = -123456790;
+        bestValues[depth] = -123456789;
         alpha = testPrincipalMove(depth, maxingPlayer, alpha, beta);
 
         for (Piece piece : sit.getChessBoard().getPieces(maxingPlayer)) {
@@ -122,17 +120,20 @@ public class AILogic {
      * @return alpha value after testing principal move.
      */
     private int testPrincipalMove(int depth, Player maxingPlayer, int alpha, int beta) {
-        if (!principalMoves.isEmpty() && depth == 0) {
+        if (principalMoves.containsKey(maxingPlayer) && depth == 0) {
             Piece piec = principalMoves.get(maxingPlayer).getPiece();
-            if (piec.equals(sit.getChessBoard()
-                    .getSquare(piec.getColumn(), piec.getRow()).getPiece())) {
-                Square target = principalMoves.get(maxingPlayer).getTarget();
-                ChessBoard backUp = copy(sit.getChessBoard());
-                ml.move(piec, target, sit.getChessBoard());
-                alpha = checkForChangeInBestOrAlphaValue(
-                        maxingPlayer, depth, alpha, beta, piec, target);
-                revertOldSituation(sit.getChessBoard(), backUp);
-                sit.setContinues(true);
+            Square from = sit.getChessBoard().getSquare(piec.getColumn(), piec.getRow());
+            Square target = principalMoves.get(maxingPlayer).getTarget();
+
+            if (piec.equals(from.getPiece())) {
+                if (ml.possibleMoves(piec, sit.getChessBoard()).contains(target)) {
+                    ChessBoard backUp = copy(sit.getChessBoard());
+                    ml.move(piec, target, sit.getChessBoard());
+                    alpha = checkForChangeInBestOrAlphaValue(
+                            maxingPlayer, depth, alpha, beta, piec, target);
+                    undoMove(sit.getChessBoard(), backUp, from, target);
+                    sit.setContinues(true);
+                }
             }
         }
         return alpha;
@@ -156,15 +157,17 @@ public class AILogic {
             int depth, int alpha, int beta) {
 
         ChessBoard backUp = copy(sit.getChessBoard());
+        Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
         for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
-            if (!principalMoves.isEmpty()
+            if (principalMoves.containsKey(maxingPlayer)
                     && piece.equals(principalMoves.get(maxingPlayer).getPiece())
                     && possibility.equals(principalMoves.get(maxingPlayer).getTarget())) {
                 continue;
             }
             ml.move(piece, possibility, sit.getChessBoard());
-            alpha = checkForChangeInBestOrAlphaValue(maxingPlayer, depth, alpha, beta, piece, possibility);
-            revertOldSituation(sit.getChessBoard(), backUp);
+            alpha = checkForChangeInBestOrAlphaValue(
+                    maxingPlayer, depth, alpha, beta, piece, possibility);
+            undoMove(sit.getChessBoard(), backUp, from, possibility);
             sit.setContinues(true);
 
             if (alpha >= beta) {
@@ -239,7 +242,7 @@ public class AILogic {
         long start = System.currentTimeMillis();
         ml = situation.getChessBoard().getMovementLogic();
         sit = situation;
-        negaMax(0, -123456790, 123456790, situation.whoseTurn());
+        negaMax(0, -123456789, 123456789, situation.whoseTurn());
         System.out.println(System.currentTimeMillis() - start);
     }
 

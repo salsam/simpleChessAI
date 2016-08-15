@@ -4,9 +4,12 @@ import chess.logic.movementlogic.MovementLogic;
 import chess.domain.board.ChessBoard;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import chess.domain.board.Player;
+import chess.domain.datastructures.MyHashMap;
 import chess.domain.pieces.Pawn;
+import chess.logic.ailogic.ZobristHasher;
 import chess.logic.gamelogic.CheckingLogic;
 import chess.logic.gamelogic.LegalityChecker;
+import java.util.Map;
 
 /**
  * This class is responsible for keeping track of current game situation. Class
@@ -51,6 +54,16 @@ public class GameSituation {
     private boolean[] ais;
 
     /**
+     * Used to count how many times given situation has occurred on board.
+     */
+    private Map<Long, Integer> chessBoardSituationCounter;
+
+    /**
+     * Used to hash chessboard situations.
+     */
+    private ZobristHasher hasher;
+
+    /**
      * Creates a new game with given movement logic and chessboard initializer.
      *
      * @param init chessboard initializer to be used for this game
@@ -63,7 +76,9 @@ public class GameSituation {
         turn = 1;
         legalityChecker = new LegalityChecker(board);
         checkLogic = new CheckingLogic(this);
+        chessBoardSituationCounter = new MyHashMap();
         continues = true;
+        hasher = new ZobristHasher();
         ais = new boolean[2];
     }
 
@@ -120,6 +135,14 @@ public class GameSituation {
         this.checkLogic = checkLogic;
     }
 
+    public Map<Long, Integer> getChessBoardSituationCounter() {
+        return chessBoardSituationCounter;
+    }
+
+    public ZobristHasher getHasher() {
+        return hasher;
+    }
+
     /**
      * Sets the given chessBoard in the field board and updates LegalityChecker
      * to check that board instead of old board.
@@ -141,6 +164,11 @@ public class GameSituation {
         board.updateThreatenedSquares(whoseTurn());
         turn++;
         makePawnsUnEnPassantable(whoseTurn());
+        long hash = hasher.hash(board);
+        if (!chessBoardSituationCounter.containsKey(hash)) {
+            chessBoardSituationCounter.put(hash, 0);
+        }
+        chessBoardSituationCounter.put(hash, chessBoardSituationCounter.get(hash) + 1);
     }
 
     /**

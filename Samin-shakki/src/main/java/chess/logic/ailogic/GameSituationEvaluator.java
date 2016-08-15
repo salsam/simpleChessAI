@@ -115,7 +115,7 @@ public class GameSituationEvaluator {
     public static int evaluateGameSituation(GameSituation sit, Player player) {
         int value = 0;
 //        if (sit.getCheckLogic().checkIfCheckedAndMated(player)) {
-//            return 123456789;
+//            return 100000000;
 //        } else if (sit.getCheckLogic().stalemate(player)) {
 //            return 0;
 //        }

@@ -5,6 +5,7 @@ import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import static chess.domain.board.Player.getOpponent;
 import chess.domain.board.ChessBoardCopier;
+import static chess.domain.board.ChessBoardCopier.undoMove;
 import chess.domain.board.Square;
 import chess.domain.pieces.King;
 import chess.domain.pieces.Piece;
@@ -71,18 +72,20 @@ public class CheckingLogic {
             if (piece.isTaken()) {
                 continue;
             }
+
+            Square from = game.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
             game.getChessBoard().updateThreatenedSquares(getOpponent(player));
             for (Square possibility : game.getChessBoard().getMovementLogic().possibleMoves(piece, game.getChessBoard())) {
                 game.getChessBoard().getMovementLogic().move(piece, possibility, game.getChessBoard());
                 game.getChessBoard().updateThreatenedSquares(getOpponent(player));
                 if (!checkIfChecked(player)) {
-                    ChessBoardCopier.revertOldSituation(game.getChessBoard(), backUp);
+                    undoMove(game.getChessBoard(), backUp, from, possibility);
                     return false;
                 }
-                ChessBoardCopier.revertOldSituation(game.getChessBoard(), backUp);;
+                undoMove(game.getChessBoard(), backUp, from, possibility);
             }
         }
-        ChessBoardCopier.revertOldSituation(game.getChessBoard(), backUp);;
+
         game.setContinues(false);
 
         return true;
