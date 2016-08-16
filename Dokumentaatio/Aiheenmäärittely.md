@@ -25,4 +25,12 @@ Todellisuudessa aikavaativuus tulee kuitenkin olemaan huomattavasti pienempi, si
 
 [Different material values for chess pieces](https://en.wikipedia.org/wiki/Chess_piece_relative_value)
 
+[Iterative deepening](https://en.wikipedia.org/wiki/Iterative_deepening_depth-first_search)
+
+[NegaMax-algorithm](https://en.wikipedia.org/wiki/Negamax)
+
 [Positional values for pieces of each class] (https://chessprogramming.wikispaces.com/Simplified+evaluation+function)
+
+[Principal variation](https://chessprogramming.wikispaces.com/Principal+variation?responseToken=9eebfa4cd8351cf79afdf2a772da9d99)
+
+[Transposition tables](https://en.wikipedia.org/wiki/Transposition_table)
