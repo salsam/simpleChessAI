@@ -26,11 +26,11 @@ public class StandardBoardInitializer extends ChessBoardInitializer {
     @Override
     public void initialize(ChessBoard board) {
         clearBoard(board);
-        initialiseBishops(board);
         initialiseKingsAndQueens(board);
+        initialiseRooks(board);
+        initialiseBishops(board);
         initialiseKnights(board);
         initialisePawns(board);
-        initialiseRooks(board);
     }
 
     private void initialiseBishops(ChessBoard board) {
@@ -41,9 +41,9 @@ public class StandardBoardInitializer extends ChessBoardInitializer {
     }
 
     private void initialiseKingsAndQueens(ChessBoard board) {
-        putPieceOnBoard(board, new Queen(3, 0, Player.WHITE, "wq"));
         putPieceOnBoard(board, new King(4, 0, Player.WHITE, "wk"));
         putPieceOnBoard(board, new King(3, 7, Player.BLACK, "bk"));
+        putPieceOnBoard(board, new Queen(3, 0, Player.WHITE, "wq"));
         putPieceOnBoard(board, new Queen(4, 7, Player.BLACK, "bq"));
     }
 

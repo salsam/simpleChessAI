@@ -45,11 +45,13 @@ public class AILogic {
     private final int plies;
     private Map<Player, Move> principalMoves;
     private Map<TranspositionKey, Integer> transpositionTable;
+    private Move[][] killerMoves;
 
     public AILogic(int plies) {
         this.plies = plies;
-        bestValues = new int[plies];
+        bestValues = new int[plies + 1];
         bestMoves = new MyArrayList();
+        killerMoves = new Move[plies][2];
         principalMoves = new MyHashMap();
         transpositionTable = new MyHashMap();
     }
@@ -72,7 +74,7 @@ public class AILogic {
      * calling submethod makeMoveAndCheckValue for each piece player owns on
      * board.
      *
-     * @param depth Recursion depth in turns
+     * @param depth Recursion depth left in turns
      * @param sit Game situation before move.
      * @param maxingPlayer player whose best move is being figured out
      * @return highest value associated with any move.
@@ -84,7 +86,7 @@ public class AILogic {
             return transpositionTable.get(key);
         }
 
-        if (depth == plies) {
+        if (depth == 0) {
             int value = evaluateGameSituation(sit, maxingPlayer);
             transpositionTable.put(key, value);
             transpositionTable.put(key.opposingKey(), -value);
@@ -120,7 +122,7 @@ public class AILogic {
      * @return alpha value after testing principal move.
      */
     private int testPrincipalMove(int depth, Player maxingPlayer, int alpha, int beta) {
-        if (principalMoves.containsKey(maxingPlayer) && depth == 0) {
+        if (principalMoves.containsKey(maxingPlayer) && depth == plies) {
             Piece piec = principalMoves.get(maxingPlayer).getPiece();
             Square from = sit.getChessBoard().getSquare(piec.getColumn(), piec.getRow());
             Square target = principalMoves.get(maxingPlayer).getTarget();
@@ -196,7 +198,7 @@ public class AILogic {
         if (sit.getCheckLogic().checkIfChecked(maxingPlayer)) {
             return alpha;
         }
-        int value = -negaMax(depth + 1, -beta, -alpha, getOpponent(maxingPlayer));
+        int value = -negaMax(depth - 1, -beta, -alpha, getOpponent(maxingPlayer));
         TranspositionKey key = new TranspositionKey(depth, maxingPlayer, maxingPlayer, value);
         transpositionTable.put(key, value);
         transpositionTable.put(key.opposingKey(), -value);
@@ -223,7 +225,7 @@ public class AILogic {
      * @param possibility square piece was moved to.
      */
     private void keepTrackOfBestMoves(int depth, int value, Piece piece, Square possibility) {
-        if (depth == 0) {
+        if (depth == plies) {
             if (value > bestValues[depth]) {
                 bestMoves.clear();
             }
@@ -233,8 +235,8 @@ public class AILogic {
 
     /**
      * This method is used to calculate best move for player whose turn it is
-     * now in given game situation. @See tryAllPossibleMoves for exact method
-     * used.
+     * now in given game situation. Uses iterative deepening to speed up
+     * alpha-beta thus looping over search depths from 0 to wanted depth.
      *
      * @param situation game situation at the beginning of AI's turn.
      */
@@ -242,7 +244,9 @@ public class AILogic {
         long start = System.currentTimeMillis();
         ml = situation.getChessBoard().getMovementLogic();
         sit = situation;
-        negaMax(0, -123456789, 123456789, situation.whoseTurn());
+        for (int i = 0; i <= plies; i++) {
+            negaMax(i, -123456789, 123456789, situation.whoseTurn());
+        }
         System.out.println(System.currentTimeMillis() - start);
     }
 
