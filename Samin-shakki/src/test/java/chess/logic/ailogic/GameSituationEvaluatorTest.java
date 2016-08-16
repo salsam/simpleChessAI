@@ -94,7 +94,7 @@ public class GameSituationEvaluatorTest {
         putPieceOnBoard(situation.getChessBoard(), bqueen);
 
         situation.getChessBoard().getMovementLogic()
-                .move(wpawn, situation.getChessBoard().getSquare(2, 6), situation.getChessBoard());
+                .move(wpawn, situation.getChessBoard().getSquare(2, 6), situation);
         assertEquals(150 - 510 + 1 - 14, evaluateGameSituation(situation, Player.WHITE));
     }
 }

@@ -1,13 +1,11 @@
 package chess.domain.board;
 
-import chess.domain.board.ChessBoardCopier;
-import chess.domain.board.ChessBoard;
-import chess.domain.board.Player;
+import chess.domain.GameSituation;
+import chess.logic.movementlogic.MovementLogic;
+import chess.domain.pieces.Queen;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import chess.logic.chessboardinitializers.StandardBoardInitializer;
-import chess.logic.movementlogic.MovementLogic;
-import chess.domain.pieces.Queen;
 import java.util.Arrays;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -20,7 +18,7 @@ import static org.junit.Assert.*;
  */
 public class ChessBoardCopierTest {
 
-    private static ChessBoard board;
+    private static GameSituation sit;
     private static ChessBoardInitializer init;
 
     public ChessBoardCopierTest() {
@@ -29,28 +27,28 @@ public class ChessBoardCopierTest {
     @BeforeClass
     public static void setUpClass() {
         init = new StandardBoardInitializer();
-        board = new ChessBoard(new MovementLogic());
+        sit = new GameSituation(init, new MovementLogic());
     }
 
     @Before
     public void setUp() {
-        init.initialize(board);
+        init.initialize(sit.getChessBoard());
     }
 
     @Test
     public void copyCreatesChessBoardWithIdenticalTable() {
-        init.initialize(board);
-        ChessBoard copy = ChessBoardCopier.copy(board);
+        init.initialize(sit.getChessBoard());
+        ChessBoard copy = ChessBoardCopier.copy(sit.getChessBoard());
 
-        assertTrue(Arrays.deepEquals(board.getTable(), copy.getTable()));
+        assertTrue(Arrays.deepEquals(sit.getChessBoard().getTable(), copy.getTable()));
     }
 
     @Test
     public void copyCreatesChessBoardWithPieceListsThatContainAllPieces() {
-        ChessBoard copy = ChessBoardCopier.copy(board);
+        ChessBoard copy = ChessBoardCopier.copy(sit.getChessBoard());
 
         for (Player player : Player.values()) {
-            board.getPieces(player).stream().forEach(piece -> {
+            sit.getChessBoard().getPieces(player).stream().forEach(piece -> {
                 assertTrue(copy.getPieces(player).contains(piece));
             });
         }
@@ -58,43 +56,43 @@ public class ChessBoardCopierTest {
 
     @Test
     public void copyCreatesChessBoardWithPieceListsThatContainNoExtraPieces() {
-        ChessBoard copy = ChessBoardCopier.copy(board);
+        ChessBoard copy = ChessBoardCopier.copy(sit.getChessBoard());
 
         for (Player player : Player.values()) {
             copy.getPieces(player).stream().forEach(piece -> {
-                assertTrue(board.getPieces(player).contains(piece));
+                assertTrue(sit.getChessBoard().getPieces(player).contains(piece));
             });
         }
     }
 
     @Test
     public void copyHasBothKingsInCorrectSpot() {
-        ChessBoard copy = ChessBoardCopier.copy(board);
+        ChessBoard copy = ChessBoardCopier.copy(sit.getChessBoard());
 
         for (Player player : Player.values()) {
-            assertTrue(copy.getKings().get(player).equals(board.getKings().get(player)));
+            assertTrue(copy.getKings().get(player).equals(sit.getChessBoard().getKings().get(player)));
         }
     }
 
     @Test
     public void copyAndOriginalAreNotSame() {
-        init.initialize(board);
-        assertFalse(ChessBoardCopier.copy(board) == board);
+        init.initialize(sit.getChessBoard());
+        assertFalse(ChessBoardCopier.copy(sit.getChessBoard()) == sit.getChessBoard());
     }
 
     @Test
     public void copyCreatesANewChessBoard() {
-        init.initialize(board);
-        ChessBoard copy = ChessBoardCopier.copy(board);
+        init.initialize(sit.getChessBoard());
+        ChessBoard copy = ChessBoardCopier.copy(sit.getChessBoard());
 
         Queen queen = new Queen(4, 4, Player.BLACK, "bp1");
-        putPieceOnBoard(board, queen);
+        putPieceOnBoard(sit.getChessBoard(), queen);
 
-        assertTrue(board.getSquare(4, 4).containsAPiece());
+        assertTrue(sit.getChessBoard().getSquare(4, 4).containsAPiece());
         assertFalse(copy.getSquare(4, 4).containsAPiece());
 
-        board.getMovementLogic().move(queen, board.getSquare(4, 1), board);
-        assertEquals(Player.BLACK, board.getSquare(4, 1).getPiece().getOwner());
+        sit.getChessBoard().getMovementLogic().move(queen, sit.getChessBoard().getSquare(4, 1), sit);
+        assertEquals(Player.BLACK, sit.getChessBoard().getSquare(4, 1).getPiece().getOwner());
         assertEquals(Player.WHITE, copy.getSquare(4, 1).getPiece().getOwner());
     }
 }

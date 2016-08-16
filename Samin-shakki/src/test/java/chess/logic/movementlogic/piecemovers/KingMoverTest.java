@@ -1,6 +1,6 @@
 package chess.logic.movementlogic.piecemovers;
 
-import chess.logic.movementlogic.piecemovers.KingMover;
+import chess.domain.GameSituation;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
@@ -27,6 +27,7 @@ import static org.junit.Assert.assertTrue;
 public class KingMoverTest {
 
     private King king;
+    private static GameSituation sit;
     private static ChessBoard board;
     private static ChessBoardInitializer init;
     private static KingMover kingMover;
@@ -36,8 +37,9 @@ public class KingMoverTest {
 
     @BeforeClass
     public static void setUpClass() {
-        board = new ChessBoard(new MovementLogic());
         init = new EmptyBoardInitializer();
+        sit = new GameSituation(init, new MovementLogic());
+        board = sit.getChessBoard();
         kingMover = new KingMover();
     }
 
@@ -141,7 +143,7 @@ public class KingMoverTest {
         Rook blackRook = new Rook(7, 7, Player.BLACK, "br");
         putPieceOnBoard(board, blackKing);
         putPieceOnBoard(board, blackRook);
-        kingMover.move(blackKing, board.getSquare(6, 7), board);
+        kingMover.move(blackKing, board.getSquare(6, 7), sit);
         assertEquals(board.getSquare(5, 7), board.getSquare(blackRook.getColumn(), blackRook.getRow()));
     }
 
@@ -151,7 +153,7 @@ public class KingMoverTest {
         Rook blackRook = new Rook(0, 7, Player.BLACK, "br");
         putPieceOnBoard(board, blackKing);
         putPieceOnBoard(board, blackRook);
-        kingMover.move(blackKing, board.getSquare(2, 7), board);
+        kingMover.move(blackKing, board.getSquare(2, 7), sit);
         assertEquals(board.getSquare(3, 7), board.getSquare(blackRook.getColumn(), blackRook.getRow()));
     }
 }

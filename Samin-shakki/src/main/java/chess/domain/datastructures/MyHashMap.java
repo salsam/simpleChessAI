@@ -1,6 +1,7 @@
 package chess.domain.datastructures;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -63,7 +64,7 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
     /**
      * Returns true if map contains object o, otherwise false. Searches for o by
      * using its hashcode to find correct bucket and then goes through contents
-     * of that bucket looking for math.
+     * of that bucket looking for match.
      *
      * @param o object to be searched for.
      * @return true if map contains object o as key, otherwise false.
@@ -236,6 +237,7 @@ public class MyHashMap<K extends Object, V extends Object> implements Map {
         size = 0;
         freedIndices = new MyLimitedStack(capacity);
         indices = new MyLinkedList[capacity];
+        initializeLinkedLists(indices);
         keys = (K[]) new Object[capacity];
         values = (V[]) new Object[capacity];
     }

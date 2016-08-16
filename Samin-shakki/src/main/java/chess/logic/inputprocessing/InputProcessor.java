@@ -51,7 +51,7 @@ public class InputProcessor {
      * Creates a new InputProcessor-object.
      */
     public InputProcessor() {
-        this.ai = new AILogic(3);
+        this.ai = new AILogic(2);
     }
 
     public Piece getChosen() {
@@ -117,12 +117,12 @@ public class InputProcessor {
         Square target = game.getChessBoard().getSquare(column, row);
         Square from = game.getChessBoard().getSquare(chosen.getColumn(), chosen.getRow());
 
-        game.getChessBoard().getMovementLogic().move(chosen, target, game.getChessBoard());
+        game.getChessBoard().getMovementLogic().move(chosen, target, game);
         chosen = null;
         possibilities = null;
 
         if (game.getCheckLogic().checkIfChecked(game.whoseTurn())) {
-            undoMove(game.getChessBoard(), backUp, from, target);
+            undoMove(backUp, game, from, target);
             return;
         }
 
@@ -136,10 +136,8 @@ public class InputProcessor {
             Pawn chosenPawn = (Pawn) piece;
             if (chosenPawn.opposingEnd() == target.getRow()) {
                 putPieceOnBoard(cbl,
-                        new Queen(chosenPawn.getColumn(),
-                                chosenPawn.getRow(),
-                                chosenPawn.getOwner(),
-                                chosenPawn.getPieceCode()));
+                        new Queen(chosenPawn.getColumn(), chosenPawn.getRow(),
+                                chosenPawn.getOwner(), chosenPawn.getPieceCode()));
                 ChessBoardInitializer.removePieceFromOwner(chosenPawn, cbl);
             }
         }
@@ -148,7 +146,7 @@ public class InputProcessor {
     private void startNextTurn(GameSituation game) {
         game.nextTurn();
         textArea.setText(game.whoseTurn() + "'s turn.");
-        if (game.getChessBoardSituationCounter().get(game.getHasher().hash(game.getChessBoard())) == 3) {
+        if (game.getCountOfCurrentSituation() == 3) {
             textArea.setText("Third repetition of situation. Game ended as a draw!");
             frames.get("endingScreen").setVisible(true);
         }

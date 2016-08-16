@@ -5,6 +5,7 @@
  */
 package chess.logic.movementlogic.piecemovers;
 
+import chess.domain.GameSituation;
 import chess.domain.board.ChessBoard;
 import java.util.Set;
 import chess.domain.board.Player;
@@ -35,10 +36,10 @@ public class KingMover extends PieceMover {
      *
      * @param piece target king for movement
      * @param target square this king is moving to.
-     * @param board board on which movement happens.
+     * @param sit situation being changed.
      */
     @Override
-    public void move(Piece piece, Square target, ChessBoard board) {
+    public void move(Piece piece, Square target, GameSituation sit) {
 
         if (piece == null || piece.getClass() != King.class) {
             return;
@@ -48,18 +49,20 @@ public class KingMover extends PieceMover {
         king.setHasBeenMoved(true);
         RookMover rookMover = new RookMover();
 
-        castleIfChosen(king, target, board, rookMover);
+        castleIfChosen(king, target, sit, rookMover);
 
-        super.move(king, target, board);
+        super.move(king, target, sit);
     }
 
-    private void castleIfChosen(King king, Square target, ChessBoard board, RookMover rookMover) {
+    private void castleIfChosen(King king, Square target, GameSituation sit, RookMover rookMover) {
         if (king.getColumn() - target.getColumn() == 2) {
-            Rook rook = (Rook) board.getSquare(0, king.getRow()).getPiece();
-            rookMover.move(rook, board.getSquare(target.getColumn() + 1, target.getRow()), board);
+            Rook rook = (Rook) sit.getChessBoard().getSquare(0, king.getRow()).getPiece();
+            rookMover.move(rook, sit.getChessBoard()
+                    .getSquare(target.getColumn() + 1, target.getRow()), sit);
         } else if (king.getColumn() - target.getColumn() == -2) {
-            Rook rook = (Rook) board.getSquare(7, king.getRow()).getPiece();
-            rookMover.move(rook, board.getSquare(target.getColumn() - 1, target.getRow()), board);
+            Rook rook = (Rook) sit.getChessBoard().getSquare(7, king.getRow()).getPiece();
+            rookMover.move(rook, sit.getChessBoard()
+                    .getSquare(target.getColumn() - 1, target.getRow()), sit);
 
         }
     }

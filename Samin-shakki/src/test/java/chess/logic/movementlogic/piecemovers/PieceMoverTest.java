@@ -1,5 +1,6 @@
 package chess.logic.movementlogic.piecemovers;
 
+import chess.domain.GameSituation;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
@@ -24,14 +25,16 @@ public class PieceMoverTest {
     private Piece pawn;
     private static ChessBoard board;
     private static ChessBoardInitializer init;
+    private static GameSituation sit;
 
     public PieceMoverTest() {
     }
 
     @BeforeClass
     public static void setUpClass() {
-        board = new ChessBoard(new MovementLogic());
         init = new StandardBoardInitializer();
+        sit = new GameSituation(init, new MovementLogic());
+        board = sit.getChessBoard();
     }
 
     @Before
@@ -56,19 +59,19 @@ public class PieceMoverTest {
 
     @Test
     public void movingChangesLocationCorrectly() {
-        board.getMovementLogic().move(piece, board.getSquare(3, 5), board);
+        board.getMovementLogic().move(piece, board.getSquare(3, 5), sit);
         assertEquals(board.getSquare(3, 5), board.getSquare(piece.getColumn(), piece.getRow()));
     }
 
     @Test
     public void movingRemovesPieceFromPreviousSquare() {
-        board.getMovementLogic().move(piece, board.getSquare(3, 5), board);
+        board.getMovementLogic().move(piece, board.getSquare(3, 5), sit);
         assertEquals(null, board.getSquare(3, 4).getPiece());
     }
 
     @Test
     public void movingAddsPieceToTargetSquare() {
-        board.getMovementLogic().move(piece, board.getSquare(3, 5), board);
+        board.getMovementLogic().move(piece, board.getSquare(3, 5), sit);
         assertEquals(piece, board.getSquare(3, 5).getPiece());
     }
 

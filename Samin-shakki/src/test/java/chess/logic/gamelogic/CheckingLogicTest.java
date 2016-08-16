@@ -87,13 +87,13 @@ public class CheckingLogicTest {
         stdinit.initialize(game.getChessBoard());
         MovementLogic mvl = game.getChessBoard().getMovementLogic();
 
-        mvl.move(game.getChessBoard().getSquare(4, 1).getPiece(), game.getChessBoard().getSquare(4, 2), game.getChessBoard());
-        mvl.move(game.getChessBoard().getSquare(5, 6).getPiece(), game.getChessBoard().getSquare(5, 5), game.getChessBoard());
-        mvl.move(game.getChessBoard().getSquare(5, 0).getPiece(), game.getChessBoard().getSquare(1, 4), game.getChessBoard());
-        mvl.move(game.getChessBoard().getSquare(3, 6).getPiece(), game.getChessBoard().getSquare(3, 5), game.getChessBoard());
-        mvl.move(game.getChessBoard().getSquare(3, 0).getPiece(), game.getChessBoard().getSquare(7, 4), game.getChessBoard());
-        mvl.move(game.getChessBoard().getSquare(5, 5).getPiece(), game.getChessBoard().getSquare(5, 4), game.getChessBoard());
-        mvl.move(game.getChessBoard().getSquare(7, 4).getPiece(), game.getChessBoard().getSquare(4, 7), game.getChessBoard());
+        mvl.move(game.getChessBoard().getSquare(4, 1).getPiece(), game.getChessBoard().getSquare(4, 2), game);
+        mvl.move(game.getChessBoard().getSquare(5, 6).getPiece(), game.getChessBoard().getSquare(5, 5), game);
+        mvl.move(game.getChessBoard().getSquare(5, 0).getPiece(), game.getChessBoard().getSquare(1, 4), game);
+        mvl.move(game.getChessBoard().getSquare(3, 6).getPiece(), game.getChessBoard().getSquare(3, 5), game);
+        mvl.move(game.getChessBoard().getSquare(3, 0).getPiece(), game.getChessBoard().getSquare(7, 4), game);
+        mvl.move(game.getChessBoard().getSquare(5, 5).getPiece(), game.getChessBoard().getSquare(5, 4), game);
+        mvl.move(game.getChessBoard().getSquare(7, 4).getPiece(), game.getChessBoard().getSquare(4, 7), game);
         game.getChessBoard().updateThreatenedSquares(Player.WHITE);
         ChessBoard backUp = ChessBoardCopier.copy(game.getChessBoard());
 
@@ -125,12 +125,12 @@ public class CheckingLogicTest {
         Pawn blackPawn1 = (Pawn) game.getChessBoard().getSquare(5, 6).getPiece();
         Pawn blackPawn2 = (Pawn) game.getChessBoard().getSquare(4, 6).getPiece();
 
-        mvl.move(whitePawn, game.getChessBoard().getSquare(5, 2), game.getChessBoard());
-        mvl.move(blackPawn1, game.getChessBoard().getSquare(5, 4), game.getChessBoard());
-        mvl.move(whiteKing, game.getChessBoard().getSquare(5, 1), game.getChessBoard());
-        mvl.move(blackPawn2, game.getChessBoard().getSquare(4, 4), game.getChessBoard());
-        mvl.move(whiteKing, game.getChessBoard().getSquare(6, 2), game.getChessBoard());
-        mvl.move(blackPawn1, game.getChessBoard().getSquare(5, 3), game.getChessBoard());
+        mvl.move(whitePawn, game.getChessBoard().getSquare(5, 2), game);
+        mvl.move(blackPawn1, game.getChessBoard().getSquare(5, 4), game);
+        mvl.move(whiteKing, game.getChessBoard().getSquare(5, 1), game);
+        mvl.move(blackPawn2, game.getChessBoard().getSquare(4, 4), game);
+        mvl.move(whiteKing, game.getChessBoard().getSquare(6, 2), game);
+        mvl.move(blackPawn1, game.getChessBoard().getSquare(5, 3), game);
         assertFalse(cl.checkMate(Player.WHITE));
     }
 

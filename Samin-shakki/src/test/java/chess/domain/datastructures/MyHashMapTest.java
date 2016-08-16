@@ -184,6 +184,30 @@ public class MyHashMapTest {
     }
 
     @Test
+    public void containsKeyFalseAfterClearing() {
+        mhm.put(1, 2);
+        mhm.put(314, -273);
+        mhm.put(-273, 42);
+
+        mhm.clear();
+        assertFalse(mhm.containsKey(1));
+        assertFalse(mhm.containsKey(314));
+        assertFalse(mhm.containsKey(-273));
+    }
+
+    @Test
+    public void containsValueFalseAfterClearing() {
+        mhm.put(1, 2);
+        mhm.put(314, -273);
+        mhm.put(-273, 42);
+
+        mhm.clear();
+        assertFalse(mhm.containsValue(2));
+        assertFalse(mhm.containsValue(42));
+        assertFalse(mhm.containsValue(-273));
+    }
+
+    @Test
     public void keysetEmptyButNotNullIfMApEmpty() {
         Set<Integer> s = mhm.keySet();
         assertNotEquals(null, s);

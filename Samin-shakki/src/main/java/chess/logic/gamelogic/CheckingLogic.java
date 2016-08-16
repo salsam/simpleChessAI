@@ -76,13 +76,13 @@ public class CheckingLogic {
             Square from = game.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
             game.getChessBoard().updateThreatenedSquares(getOpponent(player));
             for (Square possibility : game.getChessBoard().getMovementLogic().possibleMoves(piece, game.getChessBoard())) {
-                game.getChessBoard().getMovementLogic().move(piece, possibility, game.getChessBoard());
+                game.getChessBoard().getMovementLogic().move(piece, possibility, game);
                 game.getChessBoard().updateThreatenedSquares(getOpponent(player));
                 if (!checkIfChecked(player)) {
-                    undoMove(game.getChessBoard(), backUp, from, possibility);
+                    undoMove(backUp, game, from, possibility);
                     return false;
                 }
-                undoMove(game.getChessBoard(), backUp, from, possibility);
+                undoMove(backUp, game, from, possibility);
             }
         }
 

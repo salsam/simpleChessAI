@@ -1,12 +1,12 @@
 package chess.logic.movementlogic;
 
+import chess.domain.GameSituation;
 import chess.domain.pieces.*;
 import chess.logic.movementlogic.piecemovers.*;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -112,27 +112,27 @@ public class MovementLogic {
      * Uses corresponding PieceMover to move given piece to target square on
      * given board.
      *
-     * @param piece piece to be moved
-     * @param target square where piece will be moved to
-     * @param board board on which movement happens
+     * @param piece piece to be moved.
+     * @param target square where piece will be moved to.
+     * @param sit situation before move.
      */
-    public void move(Piece piece, Square target, ChessBoard board) {
+    public void move(Piece piece, Square target, GameSituation sit) {
         if (piece == null) {
             return;
         }
 
         if (piece.getClass() == Bishop.class) {
-            bishopMover.move(piece, target, board);
+            bishopMover.move(piece, target, sit);
         } else if (piece.getClass() == King.class) {
-            kingMover.move(piece, target, board);
+            kingMover.move(piece, target, sit);
         } else if (piece.getClass() == Knight.class) {
-            knightMover.move(piece, target, board);
+            knightMover.move(piece, target, sit);
         } else if (piece.getClass() == Pawn.class) {
-            pawnMover.move(piece, target, board);
+            pawnMover.move(piece, target, sit);
         } else if (piece.getClass() == Queen.class) {
-            queenMover.move(piece, target, board);
+            queenMover.move(piece, target, sit);
         } else if (piece.getClass() == Rook.class) {
-            rookMover.move(piece, target, board);
+            rookMover.move(piece, target, sit);
         }
     }
 

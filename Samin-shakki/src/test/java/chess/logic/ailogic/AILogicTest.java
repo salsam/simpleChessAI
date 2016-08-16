@@ -104,7 +104,7 @@ public class AILogicTest {
         situation = new GameSituation(new StandardBoardInitializer(), new MovementLogic());
         MovementLogic ml = situation.getChessBoard().getMovementLogic();
         ChessBoard cb = situation.getChessBoard();
-        ml.move(cb.getSquare(1, 1).getPiece(), cb.getSquare(1, 3), cb);
+        ml.move(cb.getSquare(1, 1).getPiece(), cb.getSquare(1, 3), situation);
         ChessBoard backUp = copy(situation.getChessBoard());
         ai.findBestMoves(situation);
 

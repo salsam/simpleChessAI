@@ -1,5 +1,6 @@
 package chess.domain.board;
 
+import chess.domain.GameSituation;
 import chess.domain.datastructures.MyArrayList;
 import chess.domain.pieces.King;
 import chess.domain.pieces.Pawn;
@@ -106,23 +107,24 @@ public class ChessBoardCopier {
      * Offers a more effective way of reverting a single move instead of whole
      * series of moves.
      *
-     * @param board chessboard that playing happens on.
      * @param backUp backUp of situation before move was made.
+     * @param sit game situation after move was made.
      * @param from square that moved piece moved from.
      * @param to square that moved piece moved to.
      */
-    public static void undoMove(ChessBoard board, ChessBoard backUp, Square from, Square to) {
+    public static void undoMove(ChessBoard backUp, GameSituation sit, Square from, Square to) {
+        sit.decrementCountOfCurrentBoardSituation();
         from.setPiece(to.getPiece());
         from.getPiece().makeDeeplyEqualTo(
                 backUp.getSquare(from.getColumn(), from.getRow()).getPiece());
 
         Piece taken = backUp.getSquare(to.getColumn(), to.getRow()).getPiece();
         if (taken != null) {
-            putTakenPieceBackOnBoard(board, taken, to);
+            putTakenPieceBackOnBoard(sit.getChessBoard(), taken, to);
         } else {
             to.setPiece(null);
-            handleCastling(from, to, board, backUp);
-            handleEnPassant(from, to, board, backUp);
+            handleCastling(from, to, sit.getChessBoard(), backUp);
+            handleEnPassant(from, to, sit.getChessBoard(), backUp);
         }
     }
 

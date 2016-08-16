@@ -5,6 +5,7 @@
  */
 package chess.logic.movementlogic.piecemovers;
 
+import chess.domain.GameSituation;
 import chess.domain.board.ChessBoard;
 import java.util.Set;
 import chess.domain.board.Square;
@@ -29,10 +30,9 @@ public class RookMover extends PieceMover {
      * This method moves rook on the board and saves true to field hasBeenMoved.
      *
      * @param target square this rook is moving to.
-     * @param board board on which movement happens.
      */
     @Override
-    public void move(Piece piece, Square target, ChessBoard board) {
+    public void move(Piece piece, Square target, GameSituation sit) {
 
         if (piece == null || piece.getClass() != Rook.class) {
             return;
@@ -40,7 +40,7 @@ public class RookMover extends PieceMover {
 
         Rook rook = (Rook) piece;
         rook.setHasBeenMoved(true);
-        super.move(rook, target, board);
+        super.move(rook, target, sit);
     }
 
     /**

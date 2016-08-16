@@ -142,6 +142,17 @@ public class MyHashSetTest {
     }
 
     @Test
+    public void containsFalseAfterClearing() {
+        mhs.add(42);
+        mhs.add(101);
+        mhs.add(-273);
+        mhs.add(0);
+
+        mhs.clear();
+        assertFalse(mhs.contains(42));
+    }
+
+    @Test
     public void setCanContainOver16Objects() {
         for (int i = 0; i < 17; i++) {
             mhs.add(i);
@@ -201,5 +212,34 @@ public class MyHashSetTest {
         }
 
         assertEquals(465, sum);
+    }
+
+    @Test
+    public void addAllAddsAllElementsToSet() {
+        MyArrayList<Integer> mal = new MyArrayList();
+        mal.add(42);
+        mal.add(101);
+        mal.add(-273);
+        mal.add(0);
+
+        mhs.addAll(mal);
+        assertTrue(mhs.contains(42));
+        assertTrue(mhs.contains(101));
+        assertTrue(mhs.contains(-273));
+        assertTrue(mhs.contains(0));
+    }
+
+    @Test
+    public void addAllCanAddOver32Elements() {
+        MyArrayList<Integer> mal = new MyArrayList();
+        for (int i = 0; i < 33; i++) {
+            mal.add(i);
+        }
+
+        mhs.addAll(mal);
+
+        for (int i = 0; i < 33; i++) {
+            assertTrue(mhs.contains(i));
+        }
     }
 }

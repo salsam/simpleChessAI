@@ -4,6 +4,7 @@ import chess.logic.movementlogic.MovementLogic;
 import chess.domain.board.ChessBoard;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import chess.domain.board.Player;
+import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashMap;
 import chess.domain.pieces.Pawn;
 import chess.logic.ailogic.ZobristHasher;
@@ -64,6 +65,11 @@ public class GameSituation {
     private ZobristHasher hasher;
 
     /**
+     * Hash of current board situation.
+     */
+    private long boardHash;
+
+    /**
      * Creates a new game with given movement logic and chessboard initializer.
      *
      * @param init chessboard initializer to be used for this game
@@ -79,6 +85,8 @@ public class GameSituation {
         chessBoardSituationCounter = new MyHashMap();
         continues = true;
         hasher = new ZobristHasher();
+        boardHash = hasher.hash(board);
+        incrementCountOfCurrentBoardSituation();
         ais = new boolean[2];
     }
 
@@ -131,16 +139,41 @@ public class GameSituation {
         this.ais[1] = isAi;
     }
 
-    public void setCheckLogic(CheckingLogic checkLogic) {
-        this.checkLogic = checkLogic;
+    public long getBoardHash() {
+        return boardHash;
     }
 
-    public Map<Long, Integer> getChessBoardSituationCounter() {
-        return chessBoardSituationCounter;
+    public int getCountOfCurrentSituation() {
+        if (!chessBoardSituationCounter.containsKey(boardHash)) {
+            return 0;
+        }
+        return chessBoardSituationCounter.get(boardHash);
     }
 
-    public ZobristHasher getHasher() {
-        return hasher;
+    /**
+     * Decreases the amount of times current board situation has been met by 1.
+     */
+    public void decrementCountOfCurrentBoardSituation() {
+        if (!chessBoardSituationCounter.containsKey(boardHash)) {
+            return;
+        }
+        chessBoardSituationCounter.put(boardHash,
+                chessBoardSituationCounter.get(boardHash) - 1);
+    }
+
+    /**
+     * Increases the amount of times current board situation has been met by 1.
+     */
+    public void incrementCountOfCurrentBoardSituation() {
+        if (!chessBoardSituationCounter.containsKey(boardHash)) {
+            chessBoardSituationCounter.put(boardHash, 0);
+        }
+        chessBoardSituationCounter.put(boardHash,
+                chessBoardSituationCounter.get(boardHash) + 1);
+    }
+
+    public void updateHashForMove(Square from, Square to) {
+        boardHash = hasher.updateHash(boardHash, board, from, to);
     }
 
     /**
@@ -164,11 +197,7 @@ public class GameSituation {
         board.updateThreatenedSquares(whoseTurn());
         turn++;
         makePawnsUnEnPassantable(whoseTurn());
-        long hash = hasher.hash(board);
-        if (!chessBoardSituationCounter.containsKey(hash)) {
-            chessBoardSituationCounter.put(hash, 0);
-        }
-        chessBoardSituationCounter.put(hash, chessBoardSituationCounter.get(hash) + 1);
+        incrementCountOfCurrentBoardSituation();
     }
 
     /**
@@ -191,8 +220,11 @@ public class GameSituation {
      */
     public void reset() {
         init.initialize(board);
+        boardHash = hasher.hash(board);
         turn = 1;
         continues = true;
+        chessBoardSituationCounter.clear();
+        incrementCountOfCurrentBoardSituation();
     }
 
 }

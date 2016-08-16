@@ -1,5 +1,6 @@
 package chess.logic.movementlogic.piecemovers;
 
+import chess.domain.GameSituation;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
@@ -22,6 +23,7 @@ public class PawnMoverTest {
     private Pawn pawn;
     private static ChessBoard board;
     private static ChessBoardInitializer init;
+    private static GameSituation sit;
     private static PawnMover pawnMover;
 
     public PawnMoverTest() {
@@ -30,7 +32,8 @@ public class PawnMoverTest {
     @BeforeClass
     public static void setUpClass() {
         init = new EmptyBoardInitializer();
-        board = new ChessBoard(new MovementLogic());
+        sit = new GameSituation(init, new MovementLogic());
+        board = sit.getChessBoard();
         pawnMover = new PawnMover();
     }
 
@@ -74,7 +77,7 @@ public class PawnMoverTest {
     @Test
     public void pawnCannotMoveTwoStepsAfterMovingOnce() {
         pawn = new Pawn(2, 2, Player.WHITE, "wp");
-        pawnMover.move(pawn, board.getSquare(2, 3), board);
+        pawnMover.move(pawn, board.getSquare(2, 3), sit);
         assertFalse(pawnMover.possibleMoves(pawn, board).contains(new Square(2, 5)));
     }
 
@@ -110,7 +113,7 @@ public class PawnMoverTest {
     public void pawnCanEnPassantOpposingPawnThatMovedTwoSquaresLastTurn() {
         Pawn opposingPawn = new Pawn(3, 3, Player.BLACK, "op");
         putPieceOnBoard(board, opposingPawn);
-        pawnMover.move(opposingPawn, board.getSquare(3, 1), board);
+        pawnMover.move(opposingPawn, board.getSquare(3, 1), sit);
         assertTrue(pawnMover.possibleMoves(pawn, board).contains(new Square(3, 2)));
     }
 
@@ -118,8 +121,8 @@ public class PawnMoverTest {
     public void whenEnPassantingOpposingPawnIsRemovedFromBoard() {
         Pawn opposingPawn = new Pawn(3, 3, Player.BLACK, "op");
         putPieceOnBoard(board, opposingPawn);
-        pawnMover.move(opposingPawn, board.getSquare(3, 1), board);
-        pawnMover.move(pawn, board.getSquare(3, 2), board);
+        pawnMover.move(opposingPawn, board.getSquare(3, 1), sit);
+        pawnMover.move(pawn, board.getSquare(3, 2), sit);
         assertFalse(board.getSquare(3, 1).containsAPiece());
     }
 }

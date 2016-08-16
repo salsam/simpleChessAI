@@ -1,5 +1,6 @@
 package chess.logic.movementlogic.piecemovers;
 
+import chess.domain.GameSituation;
 import chess.domain.board.ChessBoard;
 import java.util.Set;
 import chess.domain.board.Square;
@@ -31,10 +32,9 @@ public class PawnMover extends PieceMover {
      *
      * @param piece pawn to be moved.
      * @param target square that pawn is moving to.
-     * @param board ChessBoard on which movement happens.
      */
     @Override
-    public void move(Piece piece, Square target, ChessBoard board) {
+    public void move(Piece piece, Square target, GameSituation sit) {
 
         if (piece == null || piece.getClass() != Pawn.class) {
             return;
@@ -48,13 +48,11 @@ public class PawnMover extends PieceMover {
         }
 
         if (!target.containsAPiece() && target.getColumn() != piece.getColumn()) {
-            Square enpassanted = board.getSquare(target.getColumn(), target.getRow() - piece.getOwner().getDirection());
-            Piece enpassantedPiece = enpassanted.getPiece();
-            enpassantedPiece.setTaken(true);
-            enpassanted.setPiece(null);
+            super.move(piece, sit.getChessBoard()
+                    .getSquare(target.getColumn(), piece.getRow()), sit);
         }
 
-        super.move(piece, target, board);
+        super.move(piece, target, sit);
     }
 
     /**
