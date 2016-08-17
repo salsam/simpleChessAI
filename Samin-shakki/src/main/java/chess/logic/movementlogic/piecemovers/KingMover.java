@@ -57,12 +57,12 @@ public class KingMover extends PieceMover {
     private void castleIfChosen(King king, Square target, GameSituation sit, RookMover rookMover) {
         if (king.getColumn() - target.getColumn() == 2) {
             Rook rook = (Rook) sit.getChessBoard().getSquare(0, king.getRow()).getPiece();
-            rookMover.move(rook, sit.getChessBoard()
-                    .getSquare(target.getColumn() + 1, target.getRow()), sit);
+            rookMover.move(rook,
+                    sit.getChessBoard().getSquare(target.getColumn() + 1, target.getRow()), sit);
         } else if (king.getColumn() - target.getColumn() == -2) {
             Rook rook = (Rook) sit.getChessBoard().getSquare(7, king.getRow()).getPiece();
-            rookMover.move(rook, sit.getChessBoard()
-                    .getSquare(target.getColumn() - 1, target.getRow()), sit);
+            rookMover.move(rook,
+                    sit.getChessBoard().getSquare(target.getColumn() - 1, target.getRow()), sit);
 
         }
     }

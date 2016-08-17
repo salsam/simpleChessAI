@@ -1,10 +1,13 @@
 package chess.domain.board;
 
 import chess.domain.GameSituation;
+import chess.domain.pieces.King;
 import chess.logic.movementlogic.MovementLogic;
 import chess.domain.pieces.Queen;
+import chess.domain.pieces.Rook;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
+import chess.logic.chessboardinitializers.EmptyBoardInitializer;
 import chess.logic.chessboardinitializers.StandardBoardInitializer;
 import java.util.Arrays;
 import org.junit.Before;
@@ -122,6 +125,51 @@ public class ChessBoardCopierTest {
         ml.move(from.getPiece(), to, sit);
         assertNotEquals(oldHash, sit.getBoardHash());
         ChessBoardCopier.undoMove(backup, sit, from, to);
+        assertEquals(oldHash, sit.getBoardHash());
+    }
+
+    @Test
+    public void undoMoveReturnsSituationBeforeCastling() {
+        EmptyBoardInitializer empty = new EmptyBoardInitializer();
+        ChessBoard cb = sit.getChessBoard();
+        empty.initialize(cb);
+
+        King wk = new King(3, 0, Player.WHITE, "wk");
+        Rook wr = new Rook(0, 0, Player.WHITE, "wr");
+        putPieceOnBoard(cb, wk);
+        putPieceOnBoard(cb, wr);
+        sit.reHashBoard(true);
+
+        ChessBoard backup = ChessBoardCopier.copy(cb);
+        MovementLogic ml = cb.getMovementLogic();
+        Square from = cb.getSquare(3, 0);
+        Square to = cb.getSquare(1, 0);
+        ml.move(from.getPiece(), to, sit);
+        ChessBoardCopier.undoMove(backup, sit, from, to);
+        assertTrue(Arrays.deepEquals(backup.getTable(), cb.getTable()));
+    }
+
+    @Test
+    public void undoMoveReturnsHashToSituationBeforeCastling() {
+        EmptyBoardInitializer empty = new EmptyBoardInitializer();
+        ChessBoard cb = sit.getChessBoard();
+        empty.initialize(cb);
+
+        King wk = new King(3, 0, Player.WHITE, "wk");
+        Rook wr = new Rook(0, 0, Player.WHITE, "wr");
+        putPieceOnBoard(cb, wk);
+        putPieceOnBoard(cb, wr);
+        sit.reHashBoard(true);
+
+        ChessBoard backup = ChessBoardCopier.copy(cb);
+        long oldHash = sit.getBoardHash();
+        MovementLogic ml = cb.getMovementLogic();
+        Square from = cb.getSquare(3, 0);
+        Square to = cb.getSquare(1, 0);
+        ml.move(from.getPiece(), to, sit);
+        assertNotEquals(oldHash, sit.getBoardHash());
+        ChessBoardCopier.undoMove(backup, sit, from, to);
+        assertEquals(sit.getHasher().hash(cb), sit.getBoardHash());
         assertEquals(oldHash, sit.getBoardHash());
     }
 }

@@ -124,7 +124,7 @@ public class ChessBoardCopier {
             putTakenPieceBackOnBoard(sit.getChessBoard(), taken, to);
         } else {
             to.setPiece(null);
-            handleCastling(from, to, sit.getChessBoard(), backUp);
+            handleCastling(from, to, sit, backUp);
             handleEnPassant(from, to, sit.getChessBoard(), backUp);
         }
     }
@@ -152,21 +152,17 @@ public class ChessBoardCopier {
     }
 
     private static void handleCastling(
-            Square from, Square to, ChessBoard board, ChessBoard backUp) {
-        if (from.getPiece().getClass() == King.class
-                && from.getColumn() - to.getColumn() == -2) {
-            board.getSquare(to.getColumn() - 1, to.getRow()).getPiece()
-                    .makeDeeplyEqualTo(backUp.getSquare(7, from.getRow()).getPiece());
-            board.getSquare(7, from.getRow()).setPiece(
-                    board.getSquare(to.getColumn() - 1, to.getRow()).getPiece());
-            board.getSquare(to.getColumn() - 1, to.getRow()).setPiece(null);
-        } else if (from.getPiece().getClass() == King.class
-                && from.getColumn() - to.getColumn() == 2) {
-            board.getSquare(to.getColumn() + 1, to.getRow()).getPiece()
-                    .makeDeeplyEqualTo(backUp.getSquare(0, from.getRow()).getPiece());
-            board.getSquare(0, from.getRow()).setPiece(
-                    board.getSquare(to.getColumn() + 1, to.getRow()).getPiece());
-            board.getSquare(to.getColumn() + 1, to.getRow()).setPiece(null);
+            Square from, Square to, GameSituation sit, ChessBoard backUp) {
+        if (from.getPiece().getClass() == King.class) {
+            if (from.getColumn() - to.getColumn() == -2) {
+                from = sit.getChessBoard().getSquare(7, from.getRow());
+                to = sit.getChessBoard().getSquare(to.getColumn() - 1, to.getRow());
+                undoMove(backUp, sit, from, to);
+            } else if (from.getColumn() - to.getColumn() == 2) {
+                from = sit.getChessBoard().getSquare(0, from.getRow());
+                to = sit.getChessBoard().getSquare(to.getColumn() + 1, to.getRow());
+                undoMove(backUp, sit, from, to);
+            }
         }
     }
 }

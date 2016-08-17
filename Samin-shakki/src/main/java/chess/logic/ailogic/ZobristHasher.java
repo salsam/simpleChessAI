@@ -91,7 +91,7 @@ public class ZobristHasher {
     /**
      * Hashes given chessboard using previously generated square hashes and
      * bitwise XOR-operation. Chance of having two different board situations
-     * with same hash is miniscule.
+     * with same hash is miniscule and thus ignored.
      *
      * @param board chessboard to be hashed.
      * @return hash of given chessboard.
@@ -128,6 +128,17 @@ public class ZobristHasher {
         return hash;
     }
 
+    /**
+     * Updates hash for given chessboard to hash of situation before move was
+     * made.
+     *
+     * @param hash old hash of chessboard.
+     * @param board chessboard of which hash is being updated.
+     * @param backup backup of chessboard before move was made.
+     * @param from square that moved piece was situated on.
+     * @param to square piece was moved to.
+     * @return hash of chessboard before move was made.
+     */
     public long getHashBeforeMove(long hash, ChessBoard board, ChessBoard backup, Square from, Square to) {
         hash ^= squareHashes[8 * to.getColumn() + to.getRow()][numberOfPieceAtSquare(board, to)];
         hash ^= squareHashes[8 * to.getColumn() + to.getRow()][numberOfPieceAtSquare(backup, to)];

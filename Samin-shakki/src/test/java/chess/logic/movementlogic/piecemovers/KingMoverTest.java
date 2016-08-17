@@ -156,4 +156,17 @@ public class KingMoverTest {
         kingMover.move(blackKing, board.getSquare(2, 7), sit);
         assertEquals(board.getSquare(3, 7), board.getSquare(blackRook.getColumn(), blackRook.getRow()));
     }
+
+    @Test
+    public void hashUpdatedCorrectlyWhenCastlingKingside() {
+        init.initialize(board);
+        King wk = new King(3, 0, Player.WHITE, "wk");
+        Rook wr = new Rook(0, 0, Player.WHITE, "wr");
+        putPieceOnBoard(board, wk);
+        putPieceOnBoard(board, wr);
+
+        sit.reHashBoard(true);
+        kingMover.move(wk, board.getSquare(1, 0), sit);
+        assertEquals(sit.getHasher().hash(board), sit.getBoardHash());
+    }
 }

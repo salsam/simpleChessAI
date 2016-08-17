@@ -179,7 +179,7 @@ public class GameSituationTest {
         game.reHashBoard(true);
         Square from = game.getChessBoard().getSquare(0, 0);
         Square to = game.getChessBoard().getSquare(1, 0);
-        game.updateHashForMove(from, to);
+        game.updateHashForMoving(from, to);
         long updatedHash = game.getBoardHash();
         MovementLogic ml = game.getChessBoard().getMovementLogic();
         King wk = (King) from.getPiece();

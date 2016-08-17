@@ -103,8 +103,9 @@ public class GameSituationEvaluatorTest {
         situation.reHashBoard(true);
         ChessBoard cb = situation.getChessBoard();
         MovementLogic ml = cb.getMovementLogic();
+        ml.move(wr, cb.getSquare(0, 6), situation);
         ml.move(wr, cb.getSquare(0, 7), situation);
-        ml.move(wr, cb.getSquare(0, 7), situation);
+        ml.move(wr, cb.getSquare(0, 6), situation);
         ml.move(wr, cb.getSquare(0, 7), situation);
 
         assertEquals(0, evaluateGameSituation(situation, Player.WHITE));

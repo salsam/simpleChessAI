@@ -7,7 +7,6 @@ import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
 import chess.domain.pieces.Pawn;
 import chess.domain.pieces.Piece;
-import chess.logic.chessboardinitializers.ChessBoardInitializer;
 
 /**
  * This class is responsible for containing all pawn-related movement logic.
