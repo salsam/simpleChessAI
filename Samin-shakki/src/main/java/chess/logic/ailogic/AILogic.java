@@ -107,13 +107,14 @@ public class AILogic {
 
     private void tryAllPossibleMovesForMaxingPlayer(int depth, int alpha, Player maxingPlayer, int beta) {
         bestValues[depth] = -123456789;
-        alpha = testPrincipalMove(depth, maxingPlayer, alpha, beta);
+        ChessBoard backUp = copy(sit.getChessBoard());
+        alpha = testPrincipalMove(depth, maxingPlayer, alpha, beta, backUp);
 
         for (Piece piece : sit.getChessBoard().getPieces(maxingPlayer)) {
             if (piece.isTaken()) {
                 continue;
             }
-            makeaMoveAndCheckValue(piece, maxingPlayer, depth, alpha, beta);
+            makeaMoveAndCheckValue(backUp, piece, maxingPlayer, depth, alpha, beta);
         }
     }
 
@@ -123,13 +124,14 @@ public class AILogic {
      * cases increase alpha value asap causing alpha-beta pruning to cut more
      * branches.
      *
+     * @param backUp backup of situation on chessboard before move.
      * @param depth depth in game tree.
      * @param maxingPlayer player whose turn it is.
      * @param alpha current alpha value.
      * @param beta current beta value.
      * @return alpha value after testing principal move.
      */
-    private int testPrincipalMove(int depth, Player maxingPlayer, int alpha, int beta) {
+    private int testPrincipalMove(int depth, Player maxingPlayer, int alpha, int beta, ChessBoard backUp) {
         if (depth > 1) {
             Piece piec = principalMoves[maxDepth - depth].getPiece();
             Square from = sit.getChessBoard().getSquare(piec.getColumn(), piec.getRow());
@@ -137,7 +139,6 @@ public class AILogic {
 
             if (piec.equals(from.getPiece())) {
                 if (ml.possibleMoves(piec, sit.getChessBoard()).contains(to)) {
-                    ChessBoard backUp = copy(sit.getChessBoard());
                     ml.move(piec, to, sit);
                     alpha = checkForChangeInBestOrAlphaValue(
                             maxingPlayer, depth, alpha, beta, piec, to);
@@ -158,16 +159,16 @@ public class AILogic {
      * than beta value, we can stop trying to find better values as no such will
      * be found.
      *
+     * @param backUp backup of situation on chessboard before move.
      * @param piece piece to be moved.
      * @param maxingPlayer player who's maxing value of heuristic this turn.
      * @param depth depth in game tree.
      * @param alpha alpha value for current node in game tree.
      * @param beta beta value for current node in game tree.
      */
-    private void makeaMoveAndCheckValue(Piece piece, Player maxingPlayer,
+    private void makeaMoveAndCheckValue(ChessBoard backUp, Piece piece, Player maxingPlayer,
             int depth, int alpha, int beta) {
 
-        ChessBoard backUp = copy(sit.getChessBoard());
         Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
         for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
             if (depth > 1
