@@ -3,7 +3,8 @@ package chess.domain.datastructures;
 import java.util.Objects;
 
 /**
- * This class is used to save pairs formed of two objects.
+ * This class is used to save pairs formed of two objects acting like Python's
+ * tuple.
  *
  * @author sami
  * @param <Type1> type of first saved object.

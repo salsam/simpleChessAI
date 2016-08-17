@@ -75,4 +75,23 @@ public class PieceMoverTest {
         assertEquals(piece, board.getSquare(3, 5).getPiece());
     }
 
+    @Test
+    public void movingToEmptySquareUpdatesHashCorrectly() {
+        sit.reHashBoard();
+        board.getMovementLogic().move(piece, board.getSquare(3, 5), sit);
+        ChessBoard comp = new ChessBoard(new MovementLogic());
+        putPieceOnBoard(comp, piece);
+        putPieceOnBoard(comp, pawn);
+        assertEquals(sit.getHasher().hash(comp), sit.getBoardHash());
+    }
+
+    @Test
+    public void takingAPieceUpdatesHashCorrectly() {
+        sit.reHashBoard();
+        board.getMovementLogic().move(piece, board.getSquare(3, 6), sit);
+        ChessBoard comp = new ChessBoard(new MovementLogic());
+        putPieceOnBoard(comp, piece);
+        assertEquals(sit.getHasher().hash(comp), sit.getBoardHash());
+    }
+
 }

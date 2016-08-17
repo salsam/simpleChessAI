@@ -72,4 +72,13 @@ public class ZobristHasherTest {
                 zb.updateHash(oldHash, sit.getChessBoard(),
                         cb.getSquare(1, 1), cb.getSquare(1, 2)));
     }
+
+    @Test
+    public void takenPiecesAreNotAccountedForHashing() {
+        long oldHash = zb.hash(cb);
+        Pawn wp = new Pawn(1, 1, Player.WHITE, "wp");
+        ChessBoardInitializer.putPieceOnBoard(cb, wp);
+        wp.setTaken(true);
+        assertEquals(oldHash, zb.hash(cb));
+    }
 }

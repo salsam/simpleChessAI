@@ -127,6 +127,10 @@ public class GameSituation {
         return this.ais;
     }
 
+    public ZobristHasher getHasher() {
+        return hasher;
+    }
+
     public int getTurn() {
         return this.turn;
     }
@@ -170,6 +174,10 @@ public class GameSituation {
         }
         chessBoardSituationCounter.put(boardHash,
                 chessBoardSituationCounter.get(boardHash) + 1);
+    }
+
+    public void reHashBoard() {
+        boardHash = hasher.hash(board);
     }
 
     public void updateHashForMove(Square from, Square to) {

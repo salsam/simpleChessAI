@@ -7,13 +7,15 @@ import chess.domain.board.Square;
 import chess.logic.chessboardinitializers.EmptyBoardInitializer;
 import chess.domain.pieces.King;
 import chess.domain.pieces.Pawn;
-import chess.logic.ailogic.ZobristHasher;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
+import chess.logic.chessboardinitializers.StandardBoardInitializer;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import org.junit.BeforeClass;
 
 /**
  *
@@ -22,8 +24,14 @@ import static org.junit.Assert.assertTrue;
 public class GameSituationTest {
 
     private GameSituation game;
+    private static StandardBoardInitializer stdinit;
 
     public GameSituationTest() {
+    }
+
+    @BeforeClass
+    public static void setUpClass() {
+        stdinit = new StandardBoardInitializer();
     }
 
     @Before
@@ -125,21 +133,58 @@ public class GameSituationTest {
         assertEquals(2, game.getCountOfCurrentSituation());
     }
 
-//    @Test
-//    public void boardHashDoesNotChangeWhenPieceMovedStill() {
-//        long oldHash = game.getBoardHash();
-//        Square fromTo = game.getChessBoard().getSquare(0, 0);
-//        game.updateHashForMove(fromTo, fromTo);
-//        assertEquals(oldHash, game.getBoardHash());
-//    }
-//
-//    @Test
-//    public void updateHashForMoveUpdatesHashCorrect() {
-//        long oldHash = game.getBoardHash();
-//        Square from = game.getChessBoard().getSquare(0, 0);
-//        Square to = game.getChessBoard().getSquare(0, 1);
-//        game.updateHashForMove(from, to);
-//        game.updateHashForMove(to, from);
-//        assertEquals(oldHash, game.getBoardHash());
-//    }
+    @Test
+    public void boardHashUptoDateAfterInitialization() {
+        game = new GameSituation(stdinit, new MovementLogic());
+        assertEquals(game.getHasher().hash(game.getChessBoard()), game.getBoardHash());
+    }
+
+    @Test
+    public void boardHashRemainsSameWhenRehashingIfNoChanges() {
+        game = new GameSituation(stdinit, new MovementLogic());
+        long oldHash = game.getBoardHash();
+        game.reHashBoard();
+        assertEquals(oldHash, game.getBoardHash());
+    }
+
+    @Test
+    public void reHashBoardChangesHashIfBoardSituationChanged() {
+        long oldHash = game.getBoardHash();
+        Pawn whitePawn = new Pawn(4, 4, Player.WHITE, "wp");
+        Pawn blackPawn = new Pawn(4, 6, Player.BLACK, "bp");
+        ChessBoard board = game.getChessBoard();
+        putPieceOnBoard(board, whitePawn);
+        putPieceOnBoard(board, blackPawn);
+        game.reHashBoard();
+        assertNotEquals(oldHash, game.getBoardHash());
+    }
+
+    @Test
+    public void boardHashCorrectAfterReHashing() {
+        game.reset();
+        Pawn whitePawn = new Pawn(4, 4, Player.WHITE, "wp");
+        Pawn blackPawn = new Pawn(4, 6, Player.BLACK, "bp");
+        ChessBoard board = game.getChessBoard();
+        ChessBoard comp = new ChessBoard(new MovementLogic());
+        putPieceOnBoard(board, whitePawn);
+        putPieceOnBoard(board, blackPawn);
+        putPieceOnBoard(comp, whitePawn);
+        putPieceOnBoard(comp, blackPawn);
+        game.reHashBoard();
+        assertEquals(game.getHasher().hash(comp), game.getBoardHash());
+    }
+
+    @Test
+    public void hashIsUpdatedCorrectlyForMove() {
+        game.reHashBoard();
+        Square from = game.getChessBoard().getSquare(0, 0);
+        Square to = game.getChessBoard().getSquare(1, 0);
+        game.updateHashForMove(from, to);
+        long updatedHash = game.getBoardHash();
+        MovementLogic ml = game.getChessBoard().getMovementLogic();
+        King wk = (King) from.getPiece();
+        ml.move(wk, to, game);
+        game.reHashBoard();
+        assertEquals(game.getBoardHash(), updatedHash);
+    }
 }

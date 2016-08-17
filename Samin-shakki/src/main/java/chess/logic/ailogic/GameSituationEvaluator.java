@@ -4,6 +4,7 @@ import chess.domain.GameSituation;
 import chess.domain.board.Player;
 import static chess.domain.board.Player.getOpponent;
 import chess.domain.datastructures.MyHashMap;
+import chess.domain.datastructures.Pair;
 import chess.domain.pieces.*;
 import java.util.Map;
 
