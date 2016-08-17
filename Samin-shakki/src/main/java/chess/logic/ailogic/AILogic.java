@@ -44,7 +44,7 @@ public class AILogic {
     private MovementLogic ml;
     private final int plies;
     private int maxDepth;
-    private Map<Player, Move> principalMoves;
+    private Move[] principalMoves;
     private Map<TranspositionKey, Integer> transpositionTable;
     private long sum = 0;
     private int count = 0;
@@ -53,7 +53,7 @@ public class AILogic {
         this.plies = plies;
         bestValues = new int[plies + 1];
         bestMoves = new MyArrayList();
-        principalMoves = new MyHashMap();
+        principalMoves = new Move[plies];
         transpositionTable = new MyHashMap();
     }
 
@@ -130,10 +130,10 @@ public class AILogic {
      * @return alpha value after testing principal move.
      */
     private int testPrincipalMove(int depth, Player maxingPlayer, int alpha, int beta) {
-        if (principalMoves.containsKey(maxingPlayer) && depth == plies) {
-            Piece piec = principalMoves.get(maxingPlayer).getPiece();
+        if (depth > 1) {
+            Piece piec = principalMoves[maxDepth - depth].getPiece();
             Square from = sit.getChessBoard().getSquare(piec.getColumn(), piec.getRow());
-            Square to = principalMoves.get(maxingPlayer).getTarget();
+            Square to = principalMoves[maxDepth - depth].getTarget();
 
             if (piec.equals(from.getPiece())) {
                 if (ml.possibleMoves(piec, sit.getChessBoard()).contains(to)) {
@@ -146,13 +146,14 @@ public class AILogic {
                 }
             }
         }
+
         return alpha;
     }
 
     /**
      * This method will first back up current situation on chessboard before
      * trying to move piece to each possible square recursing deeper into game
-     * tree by calling nageMax. After returning to current node in recursion,
+     * tree by calling negaMax. After returning to current node in recursion,
      * reverts back to situation before move was made. If alpha value is greater
      * than beta value, we can stop trying to find better values as no such will
      * be found.
@@ -169,9 +170,9 @@ public class AILogic {
         ChessBoard backUp = copy(sit.getChessBoard());
         Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
         for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
-            if (principalMoves.containsKey(maxingPlayer)
-                    && piece.equals(principalMoves.get(maxingPlayer).getPiece())
-                    && possibility.equals(principalMoves.get(maxingPlayer).getTarget())) {
+            if (depth > 1
+                    && piece.equals(principalMoves[maxDepth - depth].getPiece())
+                    && possibility.equals(principalMoves[maxDepth - depth].getTarget())) {
                 continue;
             }
             ml.move(piece, possibility, sit);
@@ -210,15 +211,13 @@ public class AILogic {
         TranspositionKey key = new TranspositionKey(depth, maxingPlayer, maxingPlayer, value);
         transpositionTable.put(key, value);
         transpositionTable.put(key.opposingKey(), -value);
-        if (value >= bestValues[depth]) {
+        if (value > bestValues[depth]) {
             keepTrackOfBestMoves(depth, value, piece, possibility);
             bestValues[depth] = value;
         }
-        if (value >= alpha) {
+        if (value > alpha) {
             alpha = value;
-            if (depth > 0) {
-                principalMoves.put(maxingPlayer, new Move(piece, possibility));
-            }
+            principalMoves[maxDepth - depth] = new Move(piece, possibility);
         }
         return alpha;
     }
@@ -244,7 +243,10 @@ public class AILogic {
     /**
      * This method is used to calculate best move for player whose turn it is
      * now in given game situation. Uses iterative deepening to speed up
-     * alpha-beta thus looping over search depths from 0 to wanted depth.
+     * alpha-beta thus looping over search depths from 0 to wanted depth. If
+     * value of best move so far has greater absolute value than 20000, we know
+     * that either player will inevitably win the game in i moves and thus
+     * there's no need to loop further.
      *
      * @param situation game situation at the beginning of AI's turn.
      */
@@ -254,9 +256,11 @@ public class AILogic {
         sit = situation;
         for (int i = 0; i <= plies; i++) {
             maxDepth = i;
-            if (negaMax(i, -123456789, 123456789, situation.whoseTurn()) > 10000) {
+            negaMax(i, -123456789, 123456789, situation.whoseTurn());
+            if (Math.abs(bestValues[i]) > 20000) {
                 break;
             }
+
         }
         long used = System.currentTimeMillis() - start;
         sum += used;

@@ -72,11 +72,11 @@ public class AILogicTest {
 
     @Test
     public void aiWillNotInitiateLosingTrades() {
-        King bk = new King(0, 1, Player.BLACK, "bk");
+        Bishop bb = new Bishop(0, 1, Player.BLACK, "bb");
         Knight bn = new Knight(1, 0, Player.BLACK, "bn");
         Queen wq = new Queen(1, 3, Player.WHITE, "wq");
 
-        putPieceOnBoard(situation.getChessBoard(), bk);
+        putPieceOnBoard(situation.getChessBoard(), bb);
         putPieceOnBoard(situation.getChessBoard(), bn);
         putPieceOnBoard(situation.getChessBoard(), wq);
 
@@ -127,6 +127,7 @@ public class AILogicTest {
         MovementLogic ml = situation.getChessBoard().getMovementLogic();
         ChessBoard cb = situation.getChessBoard();
         Pawn wp = new Pawn(1, 6, Player.WHITE, "wp");
+        putPieceOnBoard(cb, wp);
         ChessBoard backUp = copy(situation.getChessBoard());
         ai.findBestMoves(situation);
 

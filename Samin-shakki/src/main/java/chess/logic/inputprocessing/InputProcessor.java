@@ -109,7 +109,7 @@ public class InputProcessor {
         ai.findBestMoves(game);
         Move move = ai.getBestMove();
         setChosen(move.getPiece());
-        moveToTargetLocation(move.getTarget().getColumn(), 
+        moveToTargetLocation(move.getTarget().getColumn(),
                 move.getTarget().getRow(), game);
     }
 
