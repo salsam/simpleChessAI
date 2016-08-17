@@ -107,13 +107,14 @@ public class ChessBoardCopier {
      * Offers a more effective way of reverting a single move instead of whole
      * series of moves.
      *
-     * @param backUp backUp of situation before move was made.
+     * @param backUp backup of situation before move was made.
      * @param sit game situation after move was made.
      * @param from square that moved piece moved from.
      * @param to square that moved piece moved to.
      */
     public static void undoMove(ChessBoard backUp, GameSituation sit, Square from, Square to) {
         sit.decrementCountOfCurrentBoardSituation();
+        sit.updateHashForUndoingMove(backUp, from, to);
         from.setPiece(to.getPiece());
         from.getPiece().makeDeeplyEqualTo(
                 backUp.getSquare(from.getColumn(), from.getRow()).getPiece());
@@ -126,7 +127,6 @@ public class ChessBoardCopier {
             handleCastling(from, to, sit.getChessBoard(), backUp);
             handleEnPassant(from, to, sit.getChessBoard(), backUp);
         }
-        sit.reHashBoard(false);
     }
 
     private static void putTakenPieceBackOnBoard(

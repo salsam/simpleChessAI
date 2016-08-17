@@ -185,7 +185,11 @@ public class GameSituation {
     }
 
     public void updateHashForMove(Square from, Square to) {
-        boardHash = hasher.updateHash(boardHash, board, from, to);
+        boardHash = hasher.getHashAfterMove(boardHash, board, from, to);
+    }
+
+    public void updateHashForUndoingMove(ChessBoard backup, Square from, Square to) {
+        boardHash = hasher.getHashBeforeMove(boardHash, board, backup, from, to);
     }
 
     /**

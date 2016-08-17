@@ -5,15 +5,16 @@ import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
-import chess.logic.chessboardinitializers.StandardBoardInitializer;
 import chess.logic.movementlogic.MovementLogic;
 import chess.domain.pieces.Pawn;
 import chess.domain.pieces.Piece;
 import chess.domain.pieces.Queen;
+import chess.logic.chessboardinitializers.EmptyBoardInitializer;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  *
@@ -32,7 +33,7 @@ public class PieceMoverTest {
 
     @BeforeClass
     public static void setUpClass() {
-        init = new StandardBoardInitializer();
+        init = new EmptyBoardInitializer();
         sit = new GameSituation(init, new MovementLogic());
         board = sit.getChessBoard();
     }
@@ -44,6 +45,7 @@ public class PieceMoverTest {
         pawn = new Pawn(3, 6, Player.BLACK, "bp");
         putPieceOnBoard(board, pawn);
         putPieceOnBoard(board, piece);
+        sit.reHashBoard(true);
     }
 
     @Test
@@ -77,7 +79,6 @@ public class PieceMoverTest {
 
     @Test
     public void movingToEmptySquareUpdatesHashCorrectly() {
-        sit.reHashBoard(true);
         board.getMovementLogic().move(piece, board.getSquare(3, 5), sit);
         ChessBoard comp = new ChessBoard(new MovementLogic());
         putPieceOnBoard(comp, piece);
@@ -87,11 +88,9 @@ public class PieceMoverTest {
 
     @Test
     public void takingAPieceUpdatesHashCorrectly() {
-        sit.reHashBoard(true);
         board.getMovementLogic().move(piece, board.getSquare(3, 6), sit);
         ChessBoard comp = new ChessBoard(new MovementLogic());
         putPieceOnBoard(comp, piece);
         assertEquals(sit.getHasher().hash(comp), sit.getBoardHash());
     }
-
 }

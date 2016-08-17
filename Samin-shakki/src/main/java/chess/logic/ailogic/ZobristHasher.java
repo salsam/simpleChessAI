@@ -44,7 +44,8 @@ public class ZobristHasher {
      * @param sq square of which piece is being checked.
      * @return index of piece placed on this square.
      */
-    private int numberOfPieceAtSquare(ChessBoard board, Square sq) {
+    private int numberOfPieceAtSquare(ChessBoard board, Square square) {
+        Square sq = board.getSquare(square.getColumn(), square.getRow());
         if (!sq.containsAPiece()) {
             return 0;
         }
@@ -119,11 +120,19 @@ public class ZobristHasher {
      * @param to square that moved piece is moved to.
      * @return new hash of chessboard after movement.
      */
-    public long updateHash(long hash, ChessBoard board, Square from, Square to) {
+    public long getHashAfterMove(long hash, ChessBoard board, Square from, Square to) {
         hash ^= squareHashes[8 * from.getColumn() + from.getRow()][numberOfPieceAtSquare(board, from)];
         hash ^= squareHashes[8 * from.getColumn() + from.getRow()][0];
         hash ^= squareHashes[8 * to.getColumn() + to.getRow()][numberOfPieceAtSquare(board, to)];
         hash ^= squareHashes[8 * to.getColumn() + to.getRow()][numberOfPieceAtSquare(board, from)];
+        return hash;
+    }
+
+    public long getHashBeforeMove(long hash, ChessBoard board, ChessBoard backup, Square from, Square to) {
+        hash ^= squareHashes[8 * to.getColumn() + to.getRow()][numberOfPieceAtSquare(board, to)];
+        hash ^= squareHashes[8 * to.getColumn() + to.getRow()][numberOfPieceAtSquare(backup, to)];
+        hash ^= squareHashes[8 * from.getColumn() + from.getRow()][0];
+        hash ^= squareHashes[8 * from.getColumn() + from.getRow()][numberOfPieceAtSquare(backup, from)];
         return hash;
     }
 

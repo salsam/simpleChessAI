@@ -95,4 +95,33 @@ public class ChessBoardCopierTest {
         assertEquals(Player.BLACK, sit.getChessBoard().getSquare(4, 1).getPiece().getOwner());
         assertEquals(Player.WHITE, copy.getSquare(4, 1).getPiece().getOwner());
     }
+
+    @Test
+    public void undoMoveReturnsChessBoardToSituationBeforeMoveWasMade() {
+        ChessBoard backup = ChessBoardCopier.copy(sit.getChessBoard());
+        ChessBoard cb = sit.getChessBoard();
+        MovementLogic ml = cb.getMovementLogic();
+        Square from = cb.getSquare(1, 0);
+        Square to = cb.getSquare(2, 2);
+        ml.move(from.getPiece(), to, sit);
+        assertFalse(from.containsAPiece());
+        assertTrue(to.containsAPiece());
+        assertTrue(backup.getSquare(from.getColumn(), from.getRow()).containsAPiece());
+        ChessBoardCopier.undoMove(backup, sit, from, to);
+        assertTrue(Arrays.deepEquals(backup.getTable(), cb.getTable()));
+    }
+
+    @Test
+    public void undoMoveReturnsBoardHashToSituationBeforeMoveWasMade() {
+        ChessBoard backup = ChessBoardCopier.copy(sit.getChessBoard());
+        ChessBoard cb = sit.getChessBoard();
+        long oldHash = sit.getBoardHash();
+        MovementLogic ml = cb.getMovementLogic();
+        Square from = cb.getSquare(1, 0);
+        Square to = cb.getSquare(2, 2);
+        ml.move(from.getPiece(), to, sit);
+        assertNotEquals(oldHash, sit.getBoardHash());
+        ChessBoardCopier.undoMove(backup, sit, from, to);
+        assertEquals(oldHash, sit.getBoardHash());
+    }
 }
