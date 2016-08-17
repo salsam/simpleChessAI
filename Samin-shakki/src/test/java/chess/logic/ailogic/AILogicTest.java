@@ -66,6 +66,8 @@ public class AILogicTest {
         putPieceOnBoard(situation.getChessBoard(), bn);
         putPieceOnBoard(situation.getChessBoard(), wq);
 
+        situation.reHashBoard(true);
+
         ai.findBestMoves(situation);
         assertEquals(new Move(wq, situation.getChessBoard().getSquare(1, 6)), ai.getBestMove());
     }
@@ -124,7 +126,6 @@ public class AILogicTest {
 
     @Test
     public void pawnRemainsPawnIfPromotionIsTested() {
-        MovementLogic ml = situation.getChessBoard().getMovementLogic();
         ChessBoard cb = situation.getChessBoard();
         Pawn wp = new Pawn(1, 6, Player.WHITE, "wp");
         putPieceOnBoard(cb, wp);
@@ -143,6 +144,31 @@ public class AILogicTest {
                 }
             }
         }
+    }
+
+    @Test
+    public void aiWillNotReturnToSamePositionForThirdTimeIfWinning() {
+        King bk = new King(0, 7, Player.BLACK, "bk");
+        Knight bn = new Knight(7, 3, Player.BLACK, "bn");
+        Queen wq = new Queen(1, 3, Player.WHITE, "wq");
+        King wk = new King(2, 5, Player.WHITE, "wk");
+
+        putPieceOnBoard(situation.getChessBoard(), wk);
+        putPieceOnBoard(situation.getChessBoard(), bk);
+        putPieceOnBoard(situation.getChessBoard(), bn);
+        putPieceOnBoard(situation.getChessBoard(), wq);
+        situation.reHashBoard(true);
+
+        ChessBoard cb = situation.getChessBoard();
+        MovementLogic ml = cb.getMovementLogic();
+        ml.move(wq, cb.getSquare(1, 6), situation);
+        ml.move(wq, cb.getSquare(1, 4), situation);
+        ml.move(wq, cb.getSquare(1, 6), situation);
+        ml.move(wq, cb.getSquare(1, 3), situation);
+        ai.findBestMoves(situation);
+        System.out.println(ai.getBestMove().getPiece() + ":" + ai.getBestMove().getTarget());
+        assertNotEquals(new Move(wq, cb.getSquare(1, 6)), ai.getBestMove());
+        assertEquals(new Move(wq, cb.getSquare(7, 3)), ai.getBestMove());
     }
 
 }

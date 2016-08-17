@@ -143,7 +143,7 @@ public class GameSituationTest {
     public void boardHashRemainsSameWhenRehashingIfNoChanges() {
         game = new GameSituation(stdinit, new MovementLogic());
         long oldHash = game.getBoardHash();
-        game.reHashBoard();
+        game.reHashBoard(true);
         assertEquals(oldHash, game.getBoardHash());
     }
 
@@ -155,7 +155,7 @@ public class GameSituationTest {
         ChessBoard board = game.getChessBoard();
         putPieceOnBoard(board, whitePawn);
         putPieceOnBoard(board, blackPawn);
-        game.reHashBoard();
+        game.reHashBoard(true);
         assertNotEquals(oldHash, game.getBoardHash());
     }
 
@@ -170,13 +170,13 @@ public class GameSituationTest {
         putPieceOnBoard(board, blackPawn);
         putPieceOnBoard(comp, whitePawn);
         putPieceOnBoard(comp, blackPawn);
-        game.reHashBoard();
+        game.reHashBoard(true);
         assertEquals(game.getHasher().hash(comp), game.getBoardHash());
     }
 
     @Test
     public void hashIsUpdatedCorrectlyForMove() {
-        game.reHashBoard();
+        game.reHashBoard(true);
         Square from = game.getChessBoard().getSquare(0, 0);
         Square to = game.getChessBoard().getSquare(1, 0);
         game.updateHashForMove(from, to);
@@ -184,7 +184,7 @@ public class GameSituationTest {
         MovementLogic ml = game.getChessBoard().getMovementLogic();
         King wk = (King) from.getPiece();
         ml.move(wk, to, game);
-        game.reHashBoard();
+        game.reHashBoard(true);
         assertEquals(game.getBoardHash(), updatedHash);
     }
 }

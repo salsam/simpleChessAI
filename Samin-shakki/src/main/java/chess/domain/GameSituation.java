@@ -176,8 +176,12 @@ public class GameSituation {
                 chessBoardSituationCounter.get(boardHash) + 1);
     }
 
-    public void reHashBoard() {
+    public void reHashBoard(boolean increment) {
+        long oldHash = boardHash;
         boardHash = hasher.hash(board);
+        if (increment && oldHash != boardHash) {
+            incrementCountOfCurrentBoardSituation();
+        }
     }
 
     public void updateHashForMove(Square from, Square to) {
@@ -205,7 +209,6 @@ public class GameSituation {
         board.updateThreatenedSquares(whoseTurn());
         turn++;
         makePawnsUnEnPassantable(whoseTurn());
-        incrementCountOfCurrentBoardSituation();
     }
 
     /**

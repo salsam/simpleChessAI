@@ -134,6 +134,7 @@ public class MovementLogic {
         } else if (piece.getClass() == Rook.class) {
             rookMover.move(piece, target, sit);
         }
+        sit.incrementCountOfCurrentBoardSituation();
     }
 
     /**

@@ -51,7 +51,7 @@ public class InputProcessor {
      * Creates a new InputProcessor-object.
      */
     public InputProcessor() {
-        this.ai = new AILogic(3);
+        this.ai = new AILogic(2);
     }
 
     public Piece getChosen() {
@@ -147,7 +147,7 @@ public class InputProcessor {
     private void startNextTurn(GameSituation game) {
         game.nextTurn();
         textArea.setText(game.whoseTurn() + "'s turn.");
-        if (game.getCountOfCurrentSituation() == 3) {
+        if (game.getCountOfCurrentSituation() >= 3) {
             textArea.setText("Third repetition of situation. Game ended as a draw!");
             frames.get("endingScreen").setVisible(true);
         }

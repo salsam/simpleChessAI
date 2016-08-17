@@ -1,10 +1,8 @@
 package chess.logic.ailogic;
 
 import chess.domain.GameSituation;
+import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
-import chess.domain.pieces.Bishop;
-import chess.domain.pieces.King;
-import chess.domain.pieces.Knight;
 import chess.domain.pieces.Pawn;
 import chess.domain.pieces.Queen;
 import chess.domain.pieces.Rook;
@@ -96,5 +94,19 @@ public class GameSituationEvaluatorTest {
         situation.getChessBoard().getMovementLogic()
                 .move(wpawn, situation.getChessBoard().getSquare(2, 6), situation);
         assertEquals(150 - 510 + 1 - 14, evaluateGameSituation(situation, Player.WHITE));
+    }
+
+    @Test
+    public void thirdRepetitionOfBoardSituationIsWorthZero() {
+        Rook wr = new Rook(0, 7, Player.WHITE, "wr");
+        putPieceOnBoard(situation.getChessBoard(), wr);
+        situation.reHashBoard(true);
+        ChessBoard cb = situation.getChessBoard();
+        MovementLogic ml = cb.getMovementLogic();
+        ml.move(wr, cb.getSquare(0, 7), situation);
+        ml.move(wr, cb.getSquare(0, 7), situation);
+        ml.move(wr, cb.getSquare(0, 7), situation);
+
+        assertEquals(0, evaluateGameSituation(situation, Player.WHITE));
     }
 }

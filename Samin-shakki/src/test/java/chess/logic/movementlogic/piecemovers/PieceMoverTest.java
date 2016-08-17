@@ -77,7 +77,7 @@ public class PieceMoverTest {
 
     @Test
     public void movingToEmptySquareUpdatesHashCorrectly() {
-        sit.reHashBoard();
+        sit.reHashBoard(true);
         board.getMovementLogic().move(piece, board.getSquare(3, 5), sit);
         ChessBoard comp = new ChessBoard(new MovementLogic());
         putPieceOnBoard(comp, piece);
@@ -87,7 +87,7 @@ public class PieceMoverTest {
 
     @Test
     public void takingAPieceUpdatesHashCorrectly() {
-        sit.reHashBoard();
+        sit.reHashBoard(true);
         board.getMovementLogic().move(piece, board.getSquare(3, 6), sit);
         ChessBoard comp = new ChessBoard(new MovementLogic());
         putPieceOnBoard(comp, piece);

@@ -126,6 +126,7 @@ public class ChessBoardCopier {
             handleCastling(from, to, sit.getChessBoard(), backUp);
             handleEnPassant(from, to, sit.getChessBoard(), backUp);
         }
+        sit.reHashBoard(false);
     }
 
     private static void putTakenPieceBackOnBoard(
