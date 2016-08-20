@@ -125,7 +125,7 @@ public class ChessBoardCopier {
         } else {
             to.setPiece(null);
             handleCastling(from, to, sit, backUp);
-            handleEnPassant(from, to, sit.getChessBoard(), backUp);
+            handleEnPassant(from, to, sit, backUp);
         }
     }
     
@@ -140,14 +140,15 @@ public class ChessBoardCopier {
         }
     }
     
-    private static void handleEnPassant(Square from, Square to, ChessBoard board, ChessBoard backUp) {
+    private static void handleEnPassant(Square from, Square to, GameSituation sit, ChessBoard backUp) {
         Piece taken;
         if (from.getPiece().getClass() == Pawn.class
                 && from.getColumn() != to.getColumn()) {
-            to = board.getSquare(to.getColumn(), from.getRow());
+            to = sit.getChessBoard().getSquare(to.getColumn(), from.getRow());
             taken = backUp.getSquare(to.getColumn(), to.getRow()).getPiece();
             
-            putTakenPieceBackOnBoard(board, taken, to);
+            putTakenPieceBackOnBoard(sit.getChessBoard(), taken, to);
+            sit.reHashBoard(false);
         }
     }
     

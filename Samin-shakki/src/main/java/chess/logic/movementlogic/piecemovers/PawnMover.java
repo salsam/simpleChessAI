@@ -49,6 +49,7 @@ public class PawnMover extends PieceMover {
         if (!target.containsAPiece() && target.getColumn() != piece.getColumn()) {
             super.move(piece, sit.getChessBoard()
                     .getSquare(target.getColumn(), piece.getRow()), sit);
+            sit.decrementCountOfCurrentBoardSituation();
         }
 
         super.move(piece, target, sit);

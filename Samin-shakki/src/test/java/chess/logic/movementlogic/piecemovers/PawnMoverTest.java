@@ -125,4 +125,14 @@ public class PawnMoverTest {
         pawnMover.move(pawn, board.getSquare(3, 2), sit);
         assertFalse(board.getSquare(3, 1).containsAPiece());
     }
+
+    @Test
+    public void whenEnPassantingHashIsUpdatedCorrectly() {
+        Pawn opposingPawn = new Pawn(3, 3, Player.BLACK, "op");
+        putPieceOnBoard(board, opposingPawn);
+        sit.reHashBoard(true);
+        pawnMover.move(opposingPawn, board.getSquare(3, 1), sit);
+        pawnMover.move(pawn, board.getSquare(3, 2), sit);
+        assertEquals(sit.getHasher().hash(board), sit.getBoardHash());
+    }
 }
