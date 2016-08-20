@@ -38,7 +38,7 @@ public class Pawn extends Piece {
 
     @Override
     public void makeDeeplyEqualTo(Piece piece) {
-        if (piece.getClass() != Pawn.class) {
+        if (piece == null || piece.getClass() != Pawn.class) {
             return;
         }
         Pawn pawn = (Pawn) piece;

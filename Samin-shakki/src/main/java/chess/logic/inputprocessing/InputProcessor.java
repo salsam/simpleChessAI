@@ -44,7 +44,7 @@ public class InputProcessor {
      * Squares that chosen piece can move to.
      */
     private Set<Square> possibilities;
-
+    
     private AILogic ai;
 
     /**
@@ -53,27 +53,27 @@ public class InputProcessor {
     public InputProcessor() {
         this.ai = new AILogic(3);
     }
-
+    
     public Piece getChosen() {
         return chosen;
     }
-
+    
     public void setChosen(Piece chosen) {
         this.chosen = chosen;
     }
-
+    
     public void setFrames(Map<String, JFrame> frames) {
         this.frames = frames;
     }
-
+    
     public void setTextArea(JLabel textArea) {
         this.textArea = textArea;
     }
-
+    
     public Set<Square> getPossibilities() {
         return possibilities;
     }
-
+    
     public void setPossibilities(Set<Square> possibilities) {
         this.possibilities = possibilities;
     }
@@ -90,7 +90,7 @@ public class InputProcessor {
         if (!game.getContinues()) {
             return;
         }
-
+        
         if (game.getAis()[game.getTurn() % 2]) {
             makeBestMoveAccordingToAILogic(game);
         } else if (game.getChessBoard().withinTable(column, row)) {
@@ -104,7 +104,7 @@ public class InputProcessor {
             }
         }
     }
-
+    
     private void makeBestMoveAccordingToAILogic(GameSituation game) {
         ai.findBestMoves(game);
         Move move = ai.getBestMove();
@@ -112,25 +112,25 @@ public class InputProcessor {
         moveToTargetLocation(move.getTarget().getColumn(),
                 move.getTarget().getRow(), game);
     }
-
+    
     private void moveToTargetLocation(int column, int row, GameSituation game) {
         ChessBoard backUp = ChessBoardCopier.copy(game.getChessBoard());
         Square target = game.getChessBoard().getSquare(column, row);
         Square from = game.getChessBoard().getSquare(chosen.getColumn(), chosen.getRow());
-
+        
         game.getChessBoard().getMovementLogic().move(chosen, target, game);
         chosen = null;
         possibilities = null;
-
+        
         if (game.getCheckLogic().checkIfChecked(game.whoseTurn())) {
             undoMove(backUp, game, from, target);
             return;
         }
-
+        
         promote(target, game.getChessBoard());
         startNextTurn(game);
     }
-
+    
     public static void promote(Square target, ChessBoard cbl) {
         Piece piece = target.getPiece();
         if (piece.getClass() == Pawn.class) {
@@ -143,11 +143,12 @@ public class InputProcessor {
             }
         }
     }
-
+    
     private void startNextTurn(GameSituation game) {
         game.nextTurn();
         textArea.setText(game.whoseTurn() + "'s turn.");
         if (game.getCountOfCurrentSituation() >= 3) {
+            game.setContinues(false);
             textArea.setText("Third repetition of situation. Game ended as a draw!");
             frames.get("endingScreen").setVisible(true);
         }
@@ -162,5 +163,5 @@ public class InputProcessor {
             frames.get("endingScreen").setVisible(true);
         }
     }
-
+    
 }

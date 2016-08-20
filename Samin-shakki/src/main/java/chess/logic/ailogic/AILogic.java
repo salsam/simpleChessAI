@@ -51,7 +51,8 @@ public class AILogic {
     private int oldestIndex;
     private Pair<Integer, Move[]> lastPrincipalVariation;
     private Move[] principalMoves;
-    private Map<Integer, Move[]> killerMoves;
+    private Move[] killerCandidates;
+    private Move[][] killerMoves;
     private Map<TranspositionKey, Integer> transpositionTable;
     private long sum = 0;
     private int count = 0;
@@ -60,11 +61,9 @@ public class AILogic {
         this.plies = plies;
         bestValues = new int[plies + 1];
         bestMoves = new MyArrayList();
-        killerMoves = new MyHashMap();
+        killerCandidates = new Move[plies];
+        killerMoves = new Move[plies][2];
         oldestIndex = 0;
-        for (int i = 0; i < plies; i++) {
-            killerMoves.put(i, new Move[2]);
-        }
         principalMoves = new Move[plies];
         transpositionTable = new MyHashMap();
     }
@@ -121,7 +120,7 @@ public class AILogic {
         bestValues[depth] = -123456789;
         ChessBoard backUp = copy(sit.getChessBoard());
         alpha = testPrincipalMove(depth, maxingPlayer, alpha, beta, backUp);
-//        alpha = testKillerMoves(depth, maxingPlayer, alpha, beta, backUp);
+        alpha = testKillerMoves(depth, maxingPlayer, alpha, beta, backUp);
 
         for (Piece piece : sit.getChessBoard().getPieces(maxingPlayer)) {
             if (piece.isTaken()) {
@@ -131,21 +130,34 @@ public class AILogic {
         }
     }
 
+    /**
+     * After testing principal variation the next likely moves to be best are
+     * killer moves so they are tested next. Killer moves are moves that caused
+     * a (alpha-)beta-cutoff in a node at same depth and they are changed every
+     * time new one is found.
+     *
+     * @param backUp backup of situation on chessboard before move.
+     * @param depth recursion depth left counted in turns.
+     * @param maxingPlayer player whose turn it is.
+     * @param alpha current alpha value.
+     * @param beta current beta value.
+     * @return alpha value after testing killer moves.
+     */
     private int testKillerMoves(int depth, Player maxingPlayer, int alpha, int beta, ChessBoard backUp) {
         for (int i = 0; i < 2; i++) {
-            Move killer = killerMoves.get(maxDepth - depth)[i];
+            Move killer = killerMoves[maxDepth - depth][i];
             if (killer == null) {
                 continue;
             }
-            Piece piec = killer.getPiece();
-            Square from = sit.getChessBoard().getSquare(piec.getColumn(), piec.getRow());
+            Piece piece = killer.getPiece();
+            Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
             Square to = killer.getTarget();
 
-            if (piec.equals(from.getPiece())) {
-                if (ml.possibleMoves(piec, sit.getChessBoard()).contains(to)) {
-                    ml.move(piec, to, sit);
+            if (piece.equals(from.getPiece())) {
+                if (ml.possibleMoves(piece, sit.getChessBoard()).contains(to)) {
+                    ml.move(piece, to, sit);
                     alpha = checkForChangeInBestOrAlphaValue(
-                            maxingPlayer, depth, alpha, beta, piec, to);
+                            maxingPlayer, depth, alpha, beta, piece, to);
                     undoMove(backUp, sit, from, to);
                     sit.setContinues(true);
                 }
@@ -162,7 +174,7 @@ public class AILogic {
      * branches.
      *
      * @param backUp backup of situation on chessboard before move.
-     * @param depth depth in game tree.
+     * @param depth recursion depth left in turns.
      * @param maxingPlayer player whose turn it is.
      * @param alpha current alpha value.
      * @param beta current beta value.
@@ -170,15 +182,15 @@ public class AILogic {
      */
     private int testPrincipalMove(int depth, Player maxingPlayer, int alpha, int beta, ChessBoard backUp) {
         if (principalMoves[maxDepth - depth] != null) {
-            Piece piec = principalMoves[maxDepth - depth].getPiece();
-            Square from = sit.getChessBoard().getSquare(piec.getColumn(), piec.getRow());
+            Piece piece = principalMoves[maxDepth - depth].getPiece();
+            Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
             Square to = principalMoves[maxDepth - depth].getTarget();
 
-            if (piec.equals(from.getPiece())) {
-                if (ml.possibleMoves(piec, sit.getChessBoard()).contains(to)) {
-                    ml.move(piec, to, sit);
+            if (piece.equals(from.getPiece())) {
+                if (ml.possibleMoves(piece, sit.getChessBoard()).contains(to)) {
+                    ml.move(piece, to, sit);
                     alpha = checkForChangeInBestOrAlphaValue(
-                            maxingPlayer, depth, alpha, beta, piec, to);
+                            maxingPlayer, depth, alpha, beta, piece, to);
                     undoMove(backUp, sit, from, to);
                     sit.setContinues(true);
                 }
@@ -208,9 +220,7 @@ public class AILogic {
 
         Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
         for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
-            if (principalMoves[maxDepth - depth] != null
-                    && piece.equals(principalMoves[maxDepth - depth].getPiece())
-                    && possibility.equals(principalMoves[maxDepth - depth].getTarget())) {
+            if (moveHasBeenTestedAlready(depth, piece, possibility)) {
                 continue;
             }
             ml.move(piece, possibility, sit);
@@ -220,9 +230,26 @@ public class AILogic {
             sit.setContinues(true);
 
             if (alpha >= beta) {
+                if (killerCandidates[maxDepth - depth] != null) {
+                    killerMoves[maxDepth - depth][oldestIndex] = killerCandidates[maxDepth - depth];
+                    oldestIndex = 1 - oldestIndex;
+                    killerCandidates[maxDepth - depth] = null;
+                }
                 break;
             }
+            killerCandidates[maxDepth - depth] = new Move(piece, possibility);
         }
+    }
+
+    private boolean moveHasBeenTestedAlready(int depth, Piece piece, Square possibility) {
+        Move tested = new Move(piece, possibility);
+        for (int i = 0; i < 2; i++) {
+            if (tested.equals(killerMoves[maxDepth - depth][i])) {
+                return true;
+            }
+        }
+
+        return tested.equals(principalMoves[maxDepth - depth]);
     }
 
     /**
@@ -256,7 +283,6 @@ public class AILogic {
         if (value > alpha) {
             alpha = value;
             principalMoves[maxDepth - depth] = new Move(piece, possibility);
-            oldestIndex = 1 - oldestIndex;
         }
         return alpha;
     }
@@ -293,7 +319,7 @@ public class AILogic {
         long start = System.currentTimeMillis();
         ml = situation.getChessBoard().getMovementLogic();
         sit = situation;
-        setPrincipleAsVariationMatchingPartOfLastComputation();
+        setPrinciplVariationAsMatchingPartOfLastComputation();
         for (int i = 0; i <= plies; i++) {
             maxDepth = i;
             negaMax(i, -123456789, 123456789, situation.whoseTurn());
@@ -314,13 +340,17 @@ public class AILogic {
      * So current principal variation will be moves in last one minus the moves
      * that - probably - have been made.
      */
-    private void setPrincipleAsVariationMatchingPartOfLastComputation() {
+    private void setPrinciplVariationAsMatchingPartOfLastComputation() {
         if (lastPrincipalVariation != null) {
             int turnsSince = sit.getTurn() - lastPrincipalVariation.getFirst();
             for (int i = 0; i < plies; i++) {
                 if (i < plies - turnsSince) {
                     principalMoves[i] = lastPrincipalVariation.getSecond()[i + turnsSince];
+                    killerMoves[i][0] = killerMoves[i + turnsSince][0];
+                    killerMoves[i][1] = killerMoves[i + turnsSince][1];
                 } else {
+                    killerMoves[i][0] = null;
+                    killerMoves[i][1] = null;
                     principalMoves[i] = null;
                 }
             }
