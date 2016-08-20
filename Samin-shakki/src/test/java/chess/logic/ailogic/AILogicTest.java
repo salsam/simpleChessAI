@@ -152,19 +152,20 @@ public class AILogicTest {
         Knight bn = new Knight(7, 3, Player.BLACK, "bn");
         Queen wq = new Queen(1, 3, Player.WHITE, "wq");
         King wk = new King(2, 5, Player.WHITE, "wk");
-
-        putPieceOnBoard(situation.getChessBoard(), wk);
-        putPieceOnBoard(situation.getChessBoard(), bk);
-        putPieceOnBoard(situation.getChessBoard(), bn);
-        putPieceOnBoard(situation.getChessBoard(), wq);
-        situation.reHashBoard(true);
-
         ChessBoard cb = situation.getChessBoard();
         MovementLogic ml = cb.getMovementLogic();
+
+        putPieceOnBoard(cb, wk);
+        putPieceOnBoard(cb, bk);
+        putPieceOnBoard(cb, bn);
+        putPieceOnBoard(cb, wq);
+        situation.reHashBoard(true);
+
         ml.move(wq, cb.getSquare(1, 6), situation);
         ml.move(wq, cb.getSquare(1, 4), situation);
         ml.move(wq, cb.getSquare(1, 6), situation);
         ml.move(wq, cb.getSquare(1, 3), situation);
+        
         ai.findBestMoves(situation);
         System.out.println(ai.getBestMove().getPiece() + ":" + ai.getBestMove().getTarget());
         assertNotEquals(new Move(wq, cb.getSquare(1, 6)), ai.getBestMove());

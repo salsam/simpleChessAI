@@ -12,6 +12,7 @@ import chess.logic.movementlogic.MovementLogic;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyArrayList;
 import chess.domain.datastructures.MyHashMap;
+import chess.domain.datastructures.Pair;
 import chess.domain.datastructures.TranspositionKey;
 import chess.domain.pieces.Piece;
 import java.util.Map;
@@ -25,6 +26,9 @@ import java.util.Random;
  * variation heuristic simplified for depth of 3.
  *
  * @see <a href="https://en.wikipedia.org/wiki/Negamax">Negamax</a>
+ *
+ * @see <a href="https://en.wikipedia.org/wiki/Alpha-beta_pruning">Alpha-beta
+ * pruning</a>
  *
  * @see
  * <a href="https://chessprogramming.wikispaces.com/Principal+variation">Principal
@@ -44,7 +48,10 @@ public class AILogic {
     private MovementLogic ml;
     private final int plies;
     private int maxDepth;
+    private int oldestIndex;
+    private Pair<Integer, Move[]> lastPrincipalVariation;
     private Move[] principalMoves;
+    private Map<Integer, Move[]> killerMoves;
     private Map<TranspositionKey, Integer> transpositionTable;
     private long sum = 0;
     private int count = 0;
@@ -53,6 +60,11 @@ public class AILogic {
         this.plies = plies;
         bestValues = new int[plies + 1];
         bestMoves = new MyArrayList();
+        killerMoves = new MyHashMap();
+        oldestIndex = 0;
+        for (int i = 0; i < plies; i++) {
+            killerMoves.put(i, new Move[2]);
+        }
         principalMoves = new Move[plies];
         transpositionTable = new MyHashMap();
     }
@@ -109,6 +121,7 @@ public class AILogic {
         bestValues[depth] = -123456789;
         ChessBoard backUp = copy(sit.getChessBoard());
         alpha = testPrincipalMove(depth, maxingPlayer, alpha, beta, backUp);
+//        alpha = testKillerMoves(depth, maxingPlayer, alpha, beta, backUp);
 
         for (Piece piece : sit.getChessBoard().getPieces(maxingPlayer)) {
             if (piece.isTaken()) {
@@ -116,6 +129,30 @@ public class AILogic {
             }
             makeaMoveAndCheckValue(backUp, piece, maxingPlayer, depth, alpha, beta);
         }
+    }
+
+    private int testKillerMoves(int depth, Player maxingPlayer, int alpha, int beta, ChessBoard backUp) {
+        for (int i = 0; i < 2; i++) {
+            Move killer = killerMoves.get(maxDepth - depth)[i];
+            if (killer == null) {
+                continue;
+            }
+            Piece piec = killer.getPiece();
+            Square from = sit.getChessBoard().getSquare(piec.getColumn(), piec.getRow());
+            Square to = killer.getTarget();
+
+            if (piec.equals(from.getPiece())) {
+                if (ml.possibleMoves(piec, sit.getChessBoard()).contains(to)) {
+                    ml.move(piec, to, sit);
+                    alpha = checkForChangeInBestOrAlphaValue(
+                            maxingPlayer, depth, alpha, beta, piec, to);
+                    undoMove(backUp, sit, from, to);
+                    sit.setContinues(true);
+                }
+            }
+        }
+
+        return alpha;
     }
 
     /**
@@ -132,7 +169,7 @@ public class AILogic {
      * @return alpha value after testing principal move.
      */
     private int testPrincipalMove(int depth, Player maxingPlayer, int alpha, int beta, ChessBoard backUp) {
-        if (depth > 1) {
+        if (principalMoves[maxDepth - depth] != null) {
             Piece piec = principalMoves[maxDepth - depth].getPiece();
             Square from = sit.getChessBoard().getSquare(piec.getColumn(), piec.getRow());
             Square to = principalMoves[maxDepth - depth].getTarget();
@@ -166,12 +203,12 @@ public class AILogic {
      * @param alpha alpha value for current node in game tree.
      * @param beta beta value for current node in game tree.
      */
-    private void makeaMoveAndCheckValue(ChessBoard backUp, Piece piece, Player maxingPlayer,
-            int depth, int alpha, int beta) {
+    private void makeaMoveAndCheckValue(ChessBoard backUp, Piece piece,
+            Player maxingPlayer, int depth, int alpha, int beta) {
 
         Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
         for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
-            if (depth > 1
+            if (principalMoves[maxDepth - depth] != null
                     && piece.equals(principalMoves[maxDepth - depth].getPiece())
                     && possibility.equals(principalMoves[maxDepth - depth].getTarget())) {
                 continue;
@@ -212,13 +249,14 @@ public class AILogic {
         TranspositionKey key = new TranspositionKey(depth, maxingPlayer, maxingPlayer, value);
         transpositionTable.put(key, value);
         transpositionTable.put(key.opposingKey(), -value);
-        if (value > bestValues[depth]) {
+        if (value >= bestValues[depth]) {
             keepTrackOfBestMoves(depth, value, piece, possibility);
             bestValues[depth] = value;
         }
         if (value > alpha) {
             alpha = value;
             principalMoves[maxDepth - depth] = new Move(piece, possibility);
+            oldestIndex = 1 - oldestIndex;
         }
         return alpha;
     }
@@ -255,6 +293,7 @@ public class AILogic {
         long start = System.currentTimeMillis();
         ml = situation.getChessBoard().getMovementLogic();
         sit = situation;
+        setPrincipleAsVariationMatchingPartOfLastComputation();
         for (int i = 0; i <= plies; i++) {
             maxDepth = i;
             negaMax(i, -123456789, 123456789, situation.whoseTurn());
@@ -263,10 +302,29 @@ public class AILogic {
             }
 
         }
+        lastPrincipalVariation = new Pair(sit.getTurn(), principalMoves);
         long used = System.currentTimeMillis() - start;
         sum += used;
         count++;
         System.out.println("used: " + used + ", avg: " + sum / count + ", count: " + count);
+    }
+
+    /**
+     * Sets matching part of last principal variation as start for current one.
+     * So current principal variation will be moves in last one minus the moves
+     * that - probably - have been made.
+     */
+    private void setPrincipleAsVariationMatchingPartOfLastComputation() {
+        if (lastPrincipalVariation != null) {
+            int turnsSince = sit.getTurn() - lastPrincipalVariation.getFirst();
+            for (int i = 0; i < plies; i++) {
+                if (i < plies - turnsSince) {
+                    principalMoves[i] = lastPrincipalVariation.getSecond()[i + turnsSince];
+                } else {
+                    principalMoves[i] = null;
+                }
+            }
+        }
     }
 
 }

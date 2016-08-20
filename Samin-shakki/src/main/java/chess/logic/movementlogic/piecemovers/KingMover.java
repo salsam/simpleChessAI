@@ -40,30 +40,31 @@ public class KingMover extends PieceMover {
      */
     @Override
     public void move(Piece piece, Square target, GameSituation sit) {
-
+        
         if (piece == null || piece.getClass() != King.class) {
             return;
         }
-
+        
         King king = (King) piece;
         king.setHasBeenMoved(true);
         RookMover rookMover = new RookMover();
-
+        
         castleIfChosen(king, target, sit, rookMover);
-
+        
         super.move(king, target, sit);
     }
-
+    
     private void castleIfChosen(King king, Square target, GameSituation sit, RookMover rookMover) {
         if (king.getColumn() - target.getColumn() == 2) {
             Rook rook = (Rook) sit.getChessBoard().getSquare(0, king.getRow()).getPiece();
             rookMover.move(rook,
                     sit.getChessBoard().getSquare(target.getColumn() + 1, target.getRow()), sit);
+            sit.reHashBoard(true);
         } else if (king.getColumn() - target.getColumn() == -2) {
             Rook rook = (Rook) sit.getChessBoard().getSquare(7, king.getRow()).getPiece();
             rookMover.move(rook,
                     sit.getChessBoard().getSquare(target.getColumn() - 1, target.getRow()), sit);
-
+            sit.reHashBoard(true);
         }
     }
 
@@ -79,7 +80,7 @@ public class KingMover extends PieceMover {
         King king = (King) piece;
         int[] columnChange = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
         int[] rowChange = new int[]{1, 1, 1, 0, 0, -1, -1, -1};
-
+        
         return possibilities(board.getSquare(king.getColumn(), king.getRow()), columnChange, rowChange, board);
     }
 
@@ -97,21 +98,21 @@ public class KingMover extends PieceMover {
         Set<Square> moves = new MyHashSet<>();
         King king = (King) piece;
         board.updateThreatenedSquares(getOpponent(piece.getOwner()));
-
+        
         threatenedSquares(king, board).stream()
                 .filter((target) -> (legalToMoveTo(king, target, board) && !isThreatenedByOpponent(king.getOwner(), target, board)))
                 .forEach((target) -> {
                     moves.add(target);
                 });
         addCastling(king, board, moves);
-
+        
         return moves;
     }
-
+    
     private boolean isThreatenedByOpponent(Player player, Square target, ChessBoard board) {
         return board.threatenedSquares(getOpponent(player)).contains(target);
     }
-
+    
     private void addCastling(King king, ChessBoard board, Set<Square> possibilities) {
         int[] cols = new int[]{0, 7};
         if (!king.getHasBeenMoved()) {
@@ -126,7 +127,7 @@ public class KingMover extends PieceMover {
             }
         }
     }
-
+    
     private void addCastlingIfPossible(King king, Rook rook, ChessBoard board, Set<Square> possibilities) {
         if (!rook.getHasBeenMoved()) {
             if (rook.getColumn() < king.getColumn()) {
@@ -136,7 +137,7 @@ public class KingMover extends PieceMover {
             }
         }
     }
-
+    
     private void addPossibilityToCastleLeft(King king, Rook rook, ChessBoard board, Set<Square> possibilities) {
         if (squaresAreAllEmpty(board, king.getColumn(), rook.getColumn(), king.getRow())) {
             if (squaresAreAllUnthreatened(board, getOpponent(king.getOwner()), king.getColumn(), king.getColumn() + 2, king.getRow())) {
@@ -144,7 +145,7 @@ public class KingMover extends PieceMover {
             }
         }
     }
-
+    
     private void addPossibilityToCastleRight(King king, Rook rook, ChessBoard board, Set<Square> possibilities) {
         if (squaresAreAllEmpty(board, rook.getColumn(), king.getColumn(), king.getRow())) {
             if (squaresAreAllUnthreatened(board, getOpponent(king.getOwner()), king.getColumn() - 2, king.getColumn(), king.getRow())) {
@@ -152,7 +153,7 @@ public class KingMover extends PieceMover {
             }
         }
     }
-
+    
     private boolean squaresAreAllUnthreatened(ChessBoard board, Player opponent, int minCol, int maxCol, int row) {
         Set<Square> threatenedSquares = board.threatenedSquares(opponent);
         for (int col = minCol; col < maxCol + 1; col++) {
@@ -162,7 +163,7 @@ public class KingMover extends PieceMover {
         }
         return true;
     }
-
+    
     private boolean squaresAreAllEmpty(ChessBoard board, int minCol, int maxCol, int row) {
         for (int col = minCol + 1; col < maxCol; col++) {
             if (board.getSquare(col, row).containsAPiece()) {

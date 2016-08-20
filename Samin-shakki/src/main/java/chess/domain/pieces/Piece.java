@@ -56,6 +56,9 @@ public abstract class Piece {
      * @param piece piece to be made equal to
      */
     public void makeDeeplyEqualTo(Piece piece) {
+        if (piece == null) {
+            return;
+        }
         this.column = piece.getColumn();
         this.row = piece.getRow();
         this.owner = piece.getOwner();
