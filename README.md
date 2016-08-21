@@ -1,5 +1,6 @@
 # simpleChessAI
 
+###Huom. mikäli olet vertaisarvioimassa tätä työtä, suosittelen vilkaisemaan toteutusdokumeentatiossa olevia selityksiä eri käsitteistä ja työssä käytetyistä menetelmistä.
 
 ###Dokumentaatio
 - [Aihemäärittely] (https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Aiheenm%C3%A4%C3%A4rittely.md) 
