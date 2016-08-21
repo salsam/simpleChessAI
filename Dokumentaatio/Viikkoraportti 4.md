@@ -1,0 +1,11 @@
+#Viikkoraportti 4
+
+Käytin tällä viikolla tekoälyyn noin 20 tuntia. Tällä viikolla olen keskittynyt nopeuttamaan negamax-algoritmia ja lisäämään työhöni tasapelien huomioinnin. Olen lisännyt työhöni iteratiivisen sisennyksen ja pidän kirjaa toistaiseksi löydetystä parhaasta siirtoketjusta, hyödynnän dynaamista muistia mahdollisimman paljon seuraavan siirron laskemisessa ja lisäsin vielä "tappajasiirrot" karsimaan pelipuuta vielä lisää.
+
+Ohjelma on edistynyt ihan hyvin tällä viikolla, vaikka bugien korjaus on vienyt paljon aikaa turhaan :(. Ohjelmassa tekoäly ei vieläkään jostain syystä huomioi tilanteen kolmatta esiintymiskertaa, joten se täytynee korjata ensi viikolla. Toisaalta testejä on tullut myös paljon lisää ongelman ratkaisua varten, joten testaus parantunut paljon.
+
+Tällä viikolla olen oppinut lisää pelipuun läpikäynnin nopeutuksesta ja mahdollisita heuristiikoista ajattelin vielä lopuksi lisätä järjestykseen "voittavien valloitusten", eli vastustajan nappulan lyömisen pienempi arvoisella nappulalla kuin lyöty, kokeilemisen ennen "tappajasiirtoja". Nämä siirrothan tosiaan eivät ainakaan lyhyellä tähtäimellä häviä, koska vain näiden kahden nappulan vaihtaminen pelaajalle voitokas siirto. Olen myös oppinut arvostamaan testejä enemmän, sillä ne auttoivat minua ratkaisemaan turhiin tasapeleihin johtaneen bugin. Lisäksi mainittakoon, että opin läppärini olevan tehottomampi kuin olin ajatellut laitoksen koneiden ollessa jopa 10 kertaa tehokkaampia.
+
+Vaikeuksia tuottaneet eri bugit, joita ilmennyt ohjelmassa. Tällä hetkellä esimerkiksi tekoäly ei siirtoa valitessaa huomioi siiron johtavan tasapeliin, koska tilanne toistuu kolmatta kertaa. Yritin tätä bugia korjata useita kertoja viikon aikana, mutta päätin sitten lykätä tätä, sillä ongelma on varsin pieni, kun käytetään suurempaa rekursiosyvyyttä. Näin matittaessa tekoäly voi tehdä todella tyhmiä virheitä, jotka johtavat tasapeliin.
+
+Seuraavaksi tosiaan aion jatkaa edellä mainitun bugin metsästystä ja pyrkiä lisäämään voittavien valloitusten erikooiskäsittely. Ajattelin myös lisätä tekoälyn eri tasot, jotka voisin luoda antamalla tekoälylle eri sekuntimäärän vuoroon käytettäväksi. Näin annan vain rekursiosyvyydeksi todella ison luvun ja iteratiivisen syvennyksen ansiosta voin katkaista rekursion, kun aikaraja tulee umpeen.
