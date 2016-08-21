@@ -43,9 +43,9 @@ import java.util.Random;
 public class AILogic {
 
     private GameSituation sit;
+    private MovementLogic ml;
     private MyArrayList<Move> bestMoves;
     private int[] bestValues;
-    private MovementLogic ml;
     private final int plies;
     private int maxDepth;
     private int oldestIndex;
@@ -62,7 +62,7 @@ public class AILogic {
         bestValues = new int[plies + 1];
         bestMoves = new MyArrayList();
         killerCandidates = new Move[plies];
-        killerMoves = new Move[plies][2];
+        killerMoves = new Move[plies][3];
         oldestIndex = 0;
         principalMoves = new Move[plies];
         transpositionTable = new MyHashMap();
@@ -144,7 +144,7 @@ public class AILogic {
      * @return alpha value after testing killer moves.
      */
     private int testKillerMoves(int depth, Player maxingPlayer, int alpha, int beta, ChessBoard backUp) {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             Move killer = killerMoves[maxDepth - depth][i];
             if (killer == null) {
                 continue;
@@ -232,7 +232,7 @@ public class AILogic {
             if (alpha >= beta) {
                 if (killerCandidates[maxDepth - depth] != null) {
                     killerMoves[maxDepth - depth][oldestIndex] = killerCandidates[maxDepth - depth];
-                    oldestIndex = 1 - oldestIndex;
+                    oldestIndex = (oldestIndex + 1) % 3;
                     killerCandidates[maxDepth - depth] = null;
                 }
                 break;
@@ -243,7 +243,7 @@ public class AILogic {
 
     private boolean moveHasBeenTestedAlready(int depth, Piece piece, Square possibility) {
         Move tested = new Move(piece, possibility);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             if (tested.equals(killerMoves[maxDepth - depth][i])) {
                 return true;
             }
@@ -317,8 +317,8 @@ public class AILogic {
      */
     public void findBestMoves(GameSituation situation) {
         long start = System.currentTimeMillis();
-        ml = situation.getChessBoard().getMovementLogic();
         sit = situation;
+        ml = sit.getChessBoard().getMovementLogic();
         setPrinciplVariationAsMatchingPartOfLastComputation();
         for (int i = 0; i <= plies; i++) {
             maxDepth = i;
@@ -346,11 +346,13 @@ public class AILogic {
             for (int i = 0; i < plies; i++) {
                 if (i < plies - turnsSince) {
                     principalMoves[i] = lastPrincipalVariation.getSecond()[i + turnsSince];
-                    killerMoves[i][0] = killerMoves[i + turnsSince][0];
-                    killerMoves[i][1] = killerMoves[i + turnsSince][1];
+                    for (int j = 0; j < 3; j++) {
+                        killerMoves[i][j] = killerMoves[i + turnsSince][j];
+                    }
                 } else {
-                    killerMoves[i][0] = null;
-                    killerMoves[i][1] = null;
+                    for (int j = 0; j < 3; j++) {
+                        killerMoves[i][j] = null;
+                    }
                     principalMoves[i] = null;
                 }
             }
