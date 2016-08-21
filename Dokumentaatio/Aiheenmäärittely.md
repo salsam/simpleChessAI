@@ -24,6 +24,9 @@ Näin negamaxin aikavaativuus on O((m^d\*n)), missä m on pelaajan liikkuvuus el
 
 Todellisuudessa aikavaativuus tulee kuitenkin olemaan huomattavasti pienempi, sillä [käytännössä yli 60 mahdollisuutta on hyvin harvinaista](https://www.chess.com/chessopedia/view/mathematics-and-chess). Näin voisimme käyttää aikavaativuuden arviossa arvoa ns. käytännöllisenä arviona 32\*60^d saadaksemme tarkemman kuvan tekoälyn todellisuudessa vaatimasta ajasta. Lisäksi mikäli yhdellä pelaajalla on todella paljon vaihtoehtoja, toisen pelaajan vaihtoehdot ovat vastavuoroisesti suppeammat ja tämä tasoittaa tilannetta syvyyden ollessa yli 1.
 
+####Tilavaativuus
+Ohjelmani keskittyy lähinnä aikavaativuuden minimointiin, joten tilavaativuudelle ei ole mitään erityisempää rajaa kuin ohjelman toiminta. Annettakoon näin rajaksi O(160^d) eli pyrimme, ettei jokaisessa pelipuun haarassa tarvitsee laittaa jotain talteen. Eksponentiaalinen aikavaativuus rikkoisi ohjelman toiminnan muuten varsin pian ja alkaisi hidastaa tai kaataisi ohjelman.
+
 ####Lähteet:
 [Evaluation function and maximin](https://chessprogramming.wikispaces.com/Evaluation)
 
