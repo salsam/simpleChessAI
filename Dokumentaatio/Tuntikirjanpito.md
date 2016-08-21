@@ -14,3 +14,8 @@ Päivät | Tunnit | Kuvaus
 12.08.2016 | 3h | Lisätty javadoc kommentit julkisille metodeille omiin tietorakenteisiin ja korjattu bugi, jonka vuoksi tekoäly ei huomioinut sotilaiden korotusta.
 13.08.2016 | 4h | Vaihdettu tekoälyn algoritmi minmaxista negamaxiin, jotta copypaste vähenisi.
 14.08.2016 | 5h | Lisätty transpositiotaulu, jonka avulla vältetään saman tilanteen uudelleen arvioiminen. Lisäksi otetaan talteen edellisen iteraation parhaat siirrot ja yritetään niitä ensimmäisenä, jotta alfa-beeta-karsinnan teho paranisi. (Yhteensä keskimääräinen vuoroon kulunut aikatippui noin 15s:ta noin 7s:iin syvyydellä 3).
+15.08.2016 | 4h | Lisätty shakkiin sääntö tilanteen kolmannesta toisinnosta ja luotu metodi undoMove, joka kumoaa siirron tehokkaammin kuin aikaisempi reverOldSituation.
+16.08.2016 | 2h | Lisätty iteratiivinen syventäminen ja aloitettu rakenteen muuttaminen sellaiseksi, että tekoäly voi huomioida tilanteen toistokerrat
+17.08.2016 | 5h | Iteratiivisen syvennyksen aikana otetaan ylös paras siirtoketju annetullle syvyydelle asti. Peli loppuu myös tekoälyn siirron jälkee, jos tilanne toistuu kolmatta kertaa. Aloitettu korjaamaan tilanteiden Zobrist-hashauksessa ilmenneitä ongelmia.
+20.08.2016 | 6h | Tallennetaan dynaamiseen muistiin paras siirtoketju edrellistä siirtoa laskettaessa ja hyödynnetään sitä mahdollisimman paljon seuraavaa siirtoa laskettaessa. Lisätty "tappajasiirrot", joita säilytetään kaksi muistissa jokaiselle syvyydelle ja ne kokeillaan principal variationin jälkeen. Korjattu hashausongelma, joka aiheutti vääriä tasapelejä.
+21.08.2016 | 4h | Suorituskykytestauksen aloitus, toteutusdokumentaation aloitus.
