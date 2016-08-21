@@ -8,6 +8,8 @@
  
 - [Suorituskykytestaus](https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Suorituskykytestaus.md)
 
+- [Toteutusdokumentaatio](https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Toteutusdokumentti.md)
+
 - [Tuntikirjanpito] (https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Tuntikirjanpito.md)
 
 #####Viikkoraportit
