@@ -2,12 +2,7 @@ package chess.logic.chessboardinitializers;
 
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
-import chess.domain.pieces.Bishop;
-import chess.domain.pieces.King;
-import chess.domain.pieces.Knight;
-import chess.domain.pieces.Pawn;
-import chess.domain.pieces.Queen;
-import chess.domain.pieces.Rook;
+import chess.domain.pieces.*;
 
 /**
  * This class is used to initialise standard starting positions of chess. Using

@@ -230,7 +230,9 @@ public class AILogic {
             sit.setContinues(true);
 
             if (alpha >= beta) {
-                if (killerCandidates[maxDepth - depth] != null) {
+                if (killerCandidates[maxDepth - depth] != null
+                        && !moveHasBeenTestedAlready(depth, killerCandidates[maxDepth - depth].getPiece(),
+                                killerCandidates[maxDepth - depth].getTarget())) {
                     killerMoves[maxDepth - depth][oldestIndex] = killerCandidates[maxDepth - depth];
                     oldestIndex = (oldestIndex + 1) % 3;
                     killerCandidates[maxDepth - depth] = null;
@@ -257,7 +259,9 @@ public class AILogic {
      * negamax. Updates bestValue for depth and alpha value if necessary. In
      * negamax call alpha and beta are swapped and their signs are changed to
      * use formula max(a,b)=-min(-a,-b) thus preventing need of different max
-     * and min methods. This is also why value is set to -negamax.
+     * and min methods. This is also why value is set to -negamax. Saves current
+     * board situation with given iteration depth left in transposition table
+     * for future use.
      *
      * @param maxingPlayer player who's maxing value of situation this turn.
      * @param depth depth in game tree.
