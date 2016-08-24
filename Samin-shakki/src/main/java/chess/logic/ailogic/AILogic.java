@@ -49,6 +49,7 @@ public class AILogic {
     private final int plies;
     private int maxDepth;
     private int oldestIndex;
+    private Random random;
     private Pair<Integer, Move[]> lastPrincipalVariation;
     private Move[] principalMoves;
     private Move[] killerCandidates;
@@ -65,6 +66,7 @@ public class AILogic {
         killerMoves = new Move[plies][3];
         oldestIndex = 0;
         principalMoves = new Move[plies];
+        random = new Random();
         transpositionTable = new MyHashMap();
     }
 
@@ -74,8 +76,7 @@ public class AILogic {
      * @return random best move
      */
     public Move getBestMove() {
-        Random rnd = new Random();
-        return bestMoves.get(rnd.nextInt(bestMoves.size()));
+        return bestMoves.get(random.nextInt(bestMoves.size()));
     }
 
     /**
@@ -126,8 +127,31 @@ public class AILogic {
             if (piece.isTaken()) {
                 continue;
             }
-            makeaMoveAndCheckValue(backUp, piece, maxingPlayer, depth, alpha, beta);
+
+            Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
+            for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
+                if (moveHasBeenTestedAlready(depth, piece, possibility)) {
+                    continue;
+                }
+                alpha = makeAMoveAndCheckForChangeInAlphaValue(piece, possibility, alpha, maxingPlayer, depth, beta, backUp, from);
+
+                if (alpha >= beta) {
+                    saveNewKillerMove(depth);
+                    break;
+                }
+                killerCandidates[maxDepth - depth] = new Move(piece, possibility);
+            }
         }
+    }
+
+    private int makeAMoveAndCheckForChangeInAlphaValue(Piece piece, Square possibility,
+            int alpha, Player maxingPlayer, int depth, int beta, ChessBoard backUp, Square from) {
+        ml.move(piece, possibility, sit);
+        alpha = checkForChangeInBestOrAlphaValue(
+                maxingPlayer, depth, alpha, beta, piece, possibility);
+        undoMove(backUp, sit, from, possibility);
+        sit.setContinues(true);
+        return alpha;
     }
 
     /**
@@ -155,11 +179,7 @@ public class AILogic {
 
             if (piece.equals(from.getPiece())) {
                 if (ml.possibleMoves(piece, sit.getChessBoard()).contains(to)) {
-                    ml.move(piece, to, sit);
-                    alpha = checkForChangeInBestOrAlphaValue(
-                            maxingPlayer, depth, alpha, beta, piece, to);
-                    undoMove(backUp, sit, from, to);
-                    sit.setContinues(true);
+                    alpha = makeAMoveAndCheckForChangeInAlphaValue(piece, to, alpha, maxingPlayer, depth, beta, backUp, from);
                 }
             }
         }
@@ -188,11 +208,7 @@ public class AILogic {
 
             if (piece.equals(from.getPiece())) {
                 if (ml.possibleMoves(piece, sit.getChessBoard()).contains(to)) {
-                    ml.move(piece, to, sit);
-                    alpha = checkForChangeInBestOrAlphaValue(
-                            maxingPlayer, depth, alpha, beta, piece, to);
-                    undoMove(backUp, sit, from, to);
-                    sit.setContinues(true);
+                    alpha = makeAMoveAndCheckForChangeInAlphaValue(piece, to, alpha, maxingPlayer, depth, beta, backUp, from);
                 }
             }
         }
@@ -200,46 +216,13 @@ public class AILogic {
         return alpha;
     }
 
-    /**
-     * This method will first back up current situation on chessboard before
-     * trying to move piece to each possible square recursing deeper into game
-     * tree by calling negaMax. After returning to current node in recursion,
-     * reverts back to situation before move was made. If alpha value is greater
-     * than beta value, we can stop trying to find better values as no such will
-     * be found.
-     *
-     * @param backUp backup of situation on chessboard before move.
-     * @param piece piece to be moved.
-     * @param maxingPlayer player who's maxing value of heuristic this turn.
-     * @param depth depth in game tree.
-     * @param alpha alpha value for current node in game tree.
-     * @param beta beta value for current node in game tree.
-     */
-    private void makeaMoveAndCheckValue(ChessBoard backUp, Piece piece,
-            Player maxingPlayer, int depth, int alpha, int beta) {
-
-        Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
-        for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
-            if (moveHasBeenTestedAlready(depth, piece, possibility)) {
-                continue;
-            }
-            ml.move(piece, possibility, sit);
-            alpha = checkForChangeInBestOrAlphaValue(
-                    maxingPlayer, depth, alpha, beta, piece, possibility);
-            undoMove(backUp, sit, from, possibility);
-            sit.setContinues(true);
-
-            if (alpha >= beta) {
-                if (killerCandidates[maxDepth - depth] != null
-                        && !moveHasBeenTestedAlready(depth, killerCandidates[maxDepth - depth].getPiece(),
-                                killerCandidates[maxDepth - depth].getTarget())) {
-                    killerMoves[maxDepth - depth][oldestIndex] = killerCandidates[maxDepth - depth];
-                    oldestIndex = (oldestIndex + 1) % 3;
-                    killerCandidates[maxDepth - depth] = null;
-                }
-                break;
-            }
-            killerCandidates[maxDepth - depth] = new Move(piece, possibility);
+    private void saveNewKillerMove(int depth) {
+        if (killerCandidates[maxDepth - depth] != null
+                && !moveHasBeenTestedAlready(depth, killerCandidates[maxDepth - depth].getPiece(),
+                        killerCandidates[maxDepth - depth].getTarget())) {
+            killerMoves[maxDepth - depth][oldestIndex] = killerCandidates[maxDepth - depth];
+            oldestIndex = (oldestIndex + 1) % 3;
+            killerCandidates[maxDepth - depth] = null;
         }
     }
 
