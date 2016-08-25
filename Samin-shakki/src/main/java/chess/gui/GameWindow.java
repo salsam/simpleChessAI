@@ -36,6 +36,10 @@ public class GameWindow extends JFrame {
         return game;
     }
 
+    public InputProcessor getInputProcessor() {
+        return inputProcessor;
+    }
+
     private void createComponents(Container container) {
         textArea = new JLabel(game.whoseTurn() + "'s turn.");
         textArea.setFont(new Font("Serif", Font.PLAIN, 20));

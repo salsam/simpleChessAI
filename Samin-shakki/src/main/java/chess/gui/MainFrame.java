@@ -47,7 +47,7 @@ public class MainFrame extends JFrame {
         JButton startVsAi = new JButton("New game vs AI");
         startVsAi.setMaximumSize(new Dimension(250, 200));
         startVsAi.setAlignmentX(CENTER_ALIGNMENT);
-        startVsAi.addActionListener(new GameVsAiStarter(this));
+        startVsAi.addActionListener(new SideChooserOpener(this, new SideChooser(this)));
 
         JButton startAiVsAi = new JButton("New AI vs AI game");
         startAiVsAi.setMaximumSize(new Dimension(250, 200));

@@ -150,31 +150,33 @@ public class AILogicTest {
     }
 
     @Test
-    public void aiWillNotReturnToSamePositionForThirdTimeIfWinning() {
-        King bk = new King(0, 7, Player.BLACK, "bk");
-        Knight bn = new Knight(7, 3, Player.BLACK, "bn");
-        Queen wq = new Queen(1, 3, Player.WHITE, "wq");
-        King wk = new King(2, 5, Player.WHITE, "wk");
+    public void pawnRemainsPawnInComplexSituation() {
         ChessBoard cb = situation.getChessBoard();
-        MovementLogic ml = cb.getMovementLogic();
+        Pawn wp = new Pawn(1, 4, Player.WHITE, "wp");
+        Queen wq = new Queen(2, 1, Player.WHITE, "wq1");
+        King bk = new King(0, 0, Player.BLACK, "bk");
 
-        putPieceOnBoard(cb, wk);
         putPieceOnBoard(cb, bk);
-        putPieceOnBoard(cb, bn);
+        putPieceOnBoard(cb, wp);
         putPieceOnBoard(cb, wq);
         situation.reHashBoard(true);
 
-        ml.move(wq, cb.getSquare(1, 6), situation);
-        ml.move(wq, cb.getSquare(1, 4), situation);
-        ml.move(wq, cb.getSquare(1, 6), situation);
-        ml.move(wq, cb.getSquare(1, 3), situation);
-        ml.move(wq, cb.getSquare(1, 6), situation);
-        ml.move(wq, cb.getSquare(1, 3), situation);
-
+        MovementLogic ml = cb.getMovementLogic();
+        ChessBoard backUp = copy(situation.getChessBoard());
         ai.findBestMoves(situation);
-        System.out.println(ai.getBestMove().getPiece() + ":" + ai.getBestMove().getTarget());
-        assertNotEquals(new Move(wq, cb.getSquare(1, 6)), ai.getBestMove());
-        assertEquals(new Move(wq, cb.getSquare(7, 3)), ai.getBestMove());
-    }
 
+        System.out.println(ai.getBestMove());
+        for (Player player : Player.values()) {
+            for (Piece p : backUp.getPieces(player)) {
+                for (Piece newP : situation.getChessBoard().getPieces(player)) {
+                    if (p.equals(newP)) {
+                        assertEquals(p.getClass(), newP.getClass());
+                        assertEquals(p.getColumn(), newP.getColumn());
+                        assertEquals(p.getRow(), newP.getRow());
+                        assertEquals(p.getOwner(), newP.getOwner());
+                    }
+                }
+            }
+        }
+    }
 }

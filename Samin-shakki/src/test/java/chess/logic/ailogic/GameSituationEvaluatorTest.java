@@ -3,6 +3,7 @@ package chess.logic.ailogic;
 import chess.domain.GameSituation;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
+import chess.domain.pieces.King;
 import chess.domain.pieces.Pawn;
 import chess.domain.pieces.Queen;
 import chess.domain.pieces.Rook;
@@ -94,6 +95,46 @@ public class GameSituationEvaluatorTest {
         situation.getChessBoard().getMovementLogic()
                 .move(wpawn, situation.getChessBoard().getSquare(2, 6), situation);
         assertEquals(150 - 510 - 130, evaluateGameSituation(situation, Player.WHITE));
+    }
+
+    @Test
+    public void checkMateWorth100000000() {
+        King wk = new King(0, 7, Player.WHITE, "wk");
+        King bk = new King(2, 6, Player.BLACK, "bk");
+        Queen bq = new Queen(1, 2, Player.BLACK, "bq");
+        ChessBoard cb = situation.getChessBoard();
+        MovementLogic ml = cb.getMovementLogic();
+
+        putPieceOnBoard(cb, wk);
+        putPieceOnBoard(cb, bk);
+        putPieceOnBoard(cb, bq);
+        situation.reHashBoard(true);
+
+        ml.move(bq, cb.getSquare(1, 6), situation);
+
+        assertEquals(-100000000, evaluateGameSituation(situation, Player.WHITE));
+    }
+
+    @Test
+    public void thirdRepetitionOfBoardSituationIsWorthZeroEvenWhenMated() {
+        King wk = new King(0, 7, Player.WHITE, "wk");
+        King bk = new King(2, 6, Player.BLACK, "bk");
+        Queen bq = new Queen(1, 2, Player.BLACK, "bq");
+        ChessBoard cb = situation.getChessBoard();
+        MovementLogic ml = cb.getMovementLogic();
+
+        putPieceOnBoard(cb, wk);
+        putPieceOnBoard(cb, bk);
+        putPieceOnBoard(cb, bq);
+        situation.reHashBoard(true);
+
+        ml.move(bq, cb.getSquare(1, 6), situation);
+        ml.move(bq, cb.getSquare(1, 2), situation);
+        ml.move(bq, cb.getSquare(1, 6), situation);
+        ml.move(bq, cb.getSquare(1, 2), situation);
+        ml.move(bq, cb.getSquare(1, 6), situation);
+
+        assertEquals(0, evaluateGameSituation(situation, Player.WHITE));
     }
 
     @Test
