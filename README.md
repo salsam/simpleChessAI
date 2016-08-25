@@ -6,6 +6,8 @@
 - [Aihemäärittely] (https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Aiheenm%C3%A4%C3%A4rittely.md) 
 
 - [Javadoc](https://htmlpreview.github.io/?https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/site/apidocs/index.html)
+
+- [Käyttöohje](https://github.com/salsam/simpleChessAI/blob/master/K%C3%A4ytt%C3%B6ohje.md)
  
 - [Suorituskykytestaus](https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Suorituskykytestaus.md)
 
