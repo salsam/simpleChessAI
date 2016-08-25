@@ -66,7 +66,7 @@ public class AiVsAiDifficultyChooser extends JFrame {
         JButton ok = new JButton("Change difficulty");
         JRadioButton isBlack = new JRadioButton();
         if (side.equals("white")) {
-            isBlack.setSelected(false);
+            isBlack.setSelected(true);
         }
         ok.addActionListener(new DifficultySetter(main, tf, isBlack));
         this.add(text);

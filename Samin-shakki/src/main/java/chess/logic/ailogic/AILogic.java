@@ -49,7 +49,7 @@ public class AILogic {
     private int[] bestValues;
     private long timeLimit;
     private long start;
-    private final int plies = 3;
+    private final int plies = 4;
     private int lastPlies;
     private int searchDepth;
     private int oldestIndex;
@@ -164,7 +164,7 @@ public class AILogic {
 
         for (int i = 0; i < 2; i++) {
             for (Piece piece : sit.getChessBoard().getPieces(maxingPlayer)) {
-                if (System.currentTimeMillis() - start >= timeLimit) {
+                if (alpha >= beta || System.currentTimeMillis() - start >= timeLimit) {
                     break;
                 }
 
