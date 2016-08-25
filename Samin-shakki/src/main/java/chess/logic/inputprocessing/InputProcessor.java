@@ -51,7 +51,7 @@ public class InputProcessor {
      * Creates a new InputProcessor-object.
      */
     public InputProcessor() {
-        this.ai = new AILogic(3);
+        this.ai = new AILogic(5000);
     }
 
     public Piece getChosen() {

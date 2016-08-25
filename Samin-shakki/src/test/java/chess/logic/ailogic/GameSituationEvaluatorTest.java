@@ -57,7 +57,7 @@ public class GameSituationEvaluatorTest {
     public void gamesituationValuedNormallyWhenOpponentWillBeStaleMatedOnTheirTurn() {
         Queen queen = new Queen(1, 1, Player.WHITE, "wp");
         putPieceOnBoard(situation.getChessBoard(), queen);
-        assertEquals(880 + 23, evaluateGameSituation(situation, Player.WHITE));
+        assertEquals(880 + 230, evaluateGameSituation(situation, Player.WHITE));
     }
 
     @Test
@@ -78,7 +78,7 @@ public class GameSituationEvaluatorTest {
         putPieceOnBoard(situation.getChessBoard(), brook);
         putPieceOnBoard(situation.getChessBoard(), bqueen);
 
-        assertEquals(-1313, evaluateGameSituation(situation, Player.WHITE));
+        assertEquals(-1290 - 320, evaluateGameSituation(situation, Player.WHITE));
     }
 
     @Test
@@ -93,7 +93,7 @@ public class GameSituationEvaluatorTest {
 
         situation.getChessBoard().getMovementLogic()
                 .move(wpawn, situation.getChessBoard().getSquare(2, 6), situation);
-        assertEquals(150 - 510 + 1 - 14, evaluateGameSituation(situation, Player.WHITE));
+        assertEquals(150 - 510 - 130, evaluateGameSituation(situation, Player.WHITE));
     }
 
     @Test
@@ -109,5 +109,15 @@ public class GameSituationEvaluatorTest {
         ml.move(wr, cb.getSquare(0, 7), situation);
 
         assertEquals(0, evaluateGameSituation(situation, Player.WHITE));
+    }
+
+    @Test
+    public void mobilityValueCorrectForPawn() {
+        Pawn wpawn = new Pawn(1, 5, Player.WHITE, "wp");
+        ChessBoard cb = situation.getChessBoard();
+        putPieceOnBoard(cb, wpawn);
+        assertEquals(20, GameSituationEvaluator.mobilityValue(situation, Player.WHITE));
+        cb.getMovementLogic().move(wpawn, cb.getSquare(1, 6), situation);
+        assertEquals(10, GameSituationEvaluator.mobilityValue(situation, Player.WHITE));
     }
 }
