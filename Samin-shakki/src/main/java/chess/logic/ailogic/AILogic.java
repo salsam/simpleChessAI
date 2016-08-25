@@ -66,7 +66,7 @@ public class AILogic {
         bestValues = new int[plies + 1];
         bestMoves = new MyArrayList();
         killerCandidates = new Move[plies];
-        killerMoves = new Move[plies][5];
+        killerMoves = new Move[plies][3];
         lastPlies = 0;
         oldestIndex = 0;
         principalMoves = new Move[plies];

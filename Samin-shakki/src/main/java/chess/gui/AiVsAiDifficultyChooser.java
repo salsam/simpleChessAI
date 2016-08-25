@@ -23,8 +23,8 @@ import javax.swing.WindowConstants;
 public class AiVsAiDifficultyChooser extends JFrame {
 
     public AiVsAiDifficultyChooser(MainFrame main) throws HeadlessException {
-        this.setPreferredSize(new Dimension(600, 600));
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setPreferredSize(new Dimension(330, 330));
         initComponents(this.getContentPane(), main);
         this.pack();
         this.setVisible(false);
@@ -33,6 +33,7 @@ public class AiVsAiDifficultyChooser extends JFrame {
     private void initComponents(Container cont, MainFrame main) {
         JPanel topPanel = topPanel(main);
         JButton start = new JButton("Start game");
+        start.setAlignmentX(CENTER_ALIGNMENT);
         start.addActionListener(new AiVsAiGameStarter(main, this));
         cont.setLayout(new BoxLayout(cont, BoxLayout.Y_AXIS));
         cont.add(topPanel);
@@ -41,12 +42,10 @@ public class AiVsAiDifficultyChooser extends JFrame {
     }
 
     private JPanel topPanel(MainFrame main) {
-        JPanel ret = new JPanel();
-        ret.setPreferredSize(new Dimension(600, 500));
+        JPanel ret = new JPanel(new GridLayout(2, 0, 20, 20));
+        ret.setPreferredSize(new Dimension(600, 150));
         JPanel whiteSide = createAiDifficultyChooser(main, "white");
         JPanel blackSide = createAiDifficultyChooser(main, "black");
-
-        ret.setLayout(new GridLayout(1, 2));
         ret.add(blackSide);
         ret.add(whiteSide);
 
@@ -55,15 +54,17 @@ public class AiVsAiDifficultyChooser extends JFrame {
 
     private JPanel createAiDifficultyChooser(MainFrame main, String side) {
         JPanel adc = new JPanel();
-        adc.setPreferredSize(new Dimension(300, 300));
+        adc.setPreferredSize(new Dimension(300, 150));
         JTextArea text = new JTextArea("Write how long (in milliseconds) "
-                + "can " + side + " ai think each turn and\npress change difficulty to "
+                + "can " + side + " ai\nthink each turn and press change difficulty\nto "
                 + "adjust ai's difficulty upwards from 50.");
         text.setEditable(false);
+        text.setMaximumSize(new Dimension(300, 100));
         JTextField tf = new JTextField("1000");
-        tf.setPreferredSize(new Dimension(50, 50));
+        tf.setMaximumSize(new Dimension(50, 50));
         tf.setAlignmentX(CENTER_ALIGNMENT);
         JButton ok = new JButton("Change difficulty");
+        ok.setAlignmentX(CENTER_ALIGNMENT);
         JRadioButton isBlack = new JRadioButton();
         if (side.equals("white")) {
             isBlack.setSelected(true);
