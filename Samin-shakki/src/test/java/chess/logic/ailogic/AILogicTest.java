@@ -28,7 +28,7 @@ public class AILogicTest {
     @BeforeClass
     public static void setUpClass() {
         situation = new GameSituation(new EmptyBoardInitializer(), new MovementLogic());
-        ai = new AILogic(5000);
+        ai = new AILogic();
     }
 
     @Before

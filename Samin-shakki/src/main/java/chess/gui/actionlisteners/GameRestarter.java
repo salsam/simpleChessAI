@@ -1,5 +1,6 @@
-package chess.gui;
+package chess.gui.actionlisteners;
 
+import chess.gui.GameWindow;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Map;

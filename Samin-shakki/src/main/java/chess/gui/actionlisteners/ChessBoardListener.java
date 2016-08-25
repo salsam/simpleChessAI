@@ -1,4 +1,4 @@
-package chess.gui;
+package chess.gui.actionlisteners;
 
 import chess.gui.boarddrawing.ChessBoardDrawer;
 import chess.logic.inputprocessing.InputProcessor;

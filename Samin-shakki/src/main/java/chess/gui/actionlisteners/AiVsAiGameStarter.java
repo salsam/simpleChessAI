@@ -1,5 +1,7 @@
-package chess.gui;
+package chess.gui.actionlisteners;
 
+import chess.gui.AiVsAiDifficultyChooser;
+import chess.gui.MainFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,8 +12,10 @@ import java.awt.event.ActionListener;
 public class AiVsAiGameStarter implements ActionListener {
 
     private MainFrame main;
+    private AiVsAiDifficultyChooser adc;
 
-    public AiVsAiGameStarter(MainFrame main) {
+    public AiVsAiGameStarter(MainFrame main, AiVsAiDifficultyChooser adc) {
+        this.adc = adc;
         this.main = main;
     }
 
@@ -21,5 +25,6 @@ public class AiVsAiGameStarter implements ActionListener {
         main.getGameWindow().getGame().setBlackAI(true);
         main.getGameWindow().getGame().setWhiteAI(true);
         main.getGameWindow().setVisible(true);
+        adc.dispose();
     }
 }

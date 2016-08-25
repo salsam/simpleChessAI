@@ -1,5 +1,7 @@
 package chess.gui;
 
+import chess.gui.actionlisteners.WindowCloser;
+import chess.gui.actionlisteners.GameRestarter;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.HeadlessException;

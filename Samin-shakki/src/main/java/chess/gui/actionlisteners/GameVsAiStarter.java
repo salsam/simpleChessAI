@@ -1,5 +1,7 @@
-package chess.gui;
+package chess.gui.actionlisteners;
 
+import chess.gui.MainFrame;
+import chess.gui.SideChooser;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JRadioButton;
@@ -23,12 +25,12 @@ public class GameVsAiStarter implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         main.setVisible(false);
-        sc.setVisible(false);
         if (isBlack.isSelected()) {
             main.getGameWindow().getGame().setWhiteAI(true);
         } else {
             main.getGameWindow().getGame().setBlackAI(true);
         }
         main.getGameWindow().setVisible(true);
+        sc.dispose();
     }
 }

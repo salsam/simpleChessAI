@@ -1,5 +1,8 @@
 package chess.gui;
 
+import chess.gui.actionlisteners.GameStarter;
+import chess.gui.actionlisteners.DifficultyChooserOpener;
+import chess.gui.actionlisteners.SideChooserOpener;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -47,12 +50,12 @@ public class MainFrame extends JFrame {
         JButton startVsAi = new JButton("New game vs AI");
         startVsAi.setMaximumSize(new Dimension(250, 200));
         startVsAi.setAlignmentX(CENTER_ALIGNMENT);
-        startVsAi.addActionListener(new SideChooserOpener(this, new SideChooser(this)));
+        startVsAi.addActionListener(new SideChooserOpener(this));
 
         JButton startAiVsAi = new JButton("New AI vs AI game");
         startAiVsAi.setMaximumSize(new Dimension(250, 200));
         startAiVsAi.setAlignmentX(CENTER_ALIGNMENT);
-        startAiVsAi.addActionListener(new AiVsAiGameStarter(this));
+        startAiVsAi.addActionListener(new DifficultyChooserOpener(this));
 
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         container.add(head);

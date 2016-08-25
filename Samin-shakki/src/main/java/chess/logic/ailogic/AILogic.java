@@ -62,7 +62,7 @@ public class AILogic {
     private long sum = 0;
     private int count = 0;
 
-    public AILogic(long timeLimit) {
+    public AILogic() {
         bestValues = new int[plies + 1];
         bestMoves = new MyArrayList();
         killerCandidates = new Move[plies];
@@ -71,7 +71,7 @@ public class AILogic {
         oldestIndex = 0;
         principalMoves = new Move[plies];
         random = new Random();
-        this.timeLimit = timeLimit;
+        timeLimit = 1000;
         transpositionTable = new MyHashMap();
     }
 
@@ -79,10 +79,10 @@ public class AILogic {
      * Sets new time limit for ai. This will be how long ai can think of next
      * move (measured in milliseconds).
      *
-     * @param timeLimit new time limit for ai.
+     * @param newTimeLimit new time limit for chosen ai.
      */
-    public void setTimeLimit(long timeLimit) {
-        this.timeLimit = timeLimit;
+    public void setTimeLimit(long newTimeLimit) {
+        this.timeLimit = newTimeLimit;
     }
 
     /**

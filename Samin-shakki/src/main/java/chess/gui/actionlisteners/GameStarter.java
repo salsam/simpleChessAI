@@ -1,5 +1,6 @@
-package chess.gui;
+package chess.gui.actionlisteners;
 
+import chess.gui.MainFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

@@ -1,5 +1,6 @@
 package chess.gui;
 
+import chess.gui.actionlisteners.ChessBoardListener;
 import chess.gui.boarddrawing.ChessBoardDrawer;
 import chess.domain.GameSituation;
 import chess.logic.inputprocessing.InputProcessor;

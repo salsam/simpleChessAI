@@ -1,4 +1,4 @@
-package chess.gui;
+package chess.gui.actionlisteners;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
