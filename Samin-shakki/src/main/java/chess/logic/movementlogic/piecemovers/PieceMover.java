@@ -106,7 +106,6 @@ public abstract class PieceMover {
 
         piece.setColumn(target.getColumn());
         piece.setRow(target.getRow());
-        InputProcessor.promote(target, sit.getChessBoard());
     }
 
     private void possibilitiesToDirection(Square current, ChessBoard board, Set<Square> possibilities, int columnChange, int rowChange) {

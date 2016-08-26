@@ -4,7 +4,9 @@ import chess.domain.GameSituation;
 import chess.domain.Move;
 import static chess.domain.board.ChessBoardCopier.copy;
 import chess.domain.board.*;
+import static chess.domain.datastructures.MyArrayList.arrays2DeepEquals;
 import chess.domain.pieces.*;
+import static chess.logic.ailogic.GameSituationEvaluator.evaluateGameSituation;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import chess.logic.chessboardinitializers.*;
 import chess.logic.movementlogic.MovementLogic;
@@ -161,11 +163,9 @@ public class AILogicTest {
         putPieceOnBoard(cb, wq);
         situation.reHashBoard(true);
 
-        MovementLogic ml = cb.getMovementLogic();
         ChessBoard backUp = copy(situation.getChessBoard());
         ai.findBestMoves(situation);
 
-        System.out.println(ai.getBestMove());
         for (Player player : Player.values()) {
             for (Piece p : backUp.getPieces(player)) {
                 for (Piece newP : situation.getChessBoard().getPieces(player)) {
@@ -178,5 +178,189 @@ public class AILogicTest {
                 }
             }
         }
+    }
+
+    @Test
+    public void negamaxForHeightZeroReturnsValueOfSituation() {
+        ChessBoard cb = situation.getChessBoard();
+        Rook wr = new Rook(1, 4, Player.WHITE, "wr");
+        Pawn bp = new Pawn(5, 6, Player.BLACK, "bp");
+        putPieceOnBoard(cb, wr);
+        putPieceOnBoard(cb, bp);
+        situation.reHashBoard(true);
+        ai.setSituation(situation);
+        ai.setStart(System.currentTimeMillis());
+        assertEquals(evaluateGameSituation(situation, Player.WHITE), ai.negaMax(0, -123456798, 123456789, Player.WHITE));
+    }
+
+    @Test
+    public void negamaxReturnsMinus123456789IfTimeLimitIsReached() {
+        ChessBoard cb = situation.getChessBoard();
+        Rook wr = new Rook(1, 4, Player.WHITE, "wr");
+        Pawn bp = new Pawn(5, 6, Player.BLACK, "bp");
+        putPieceOnBoard(cb, wr);
+        putPieceOnBoard(cb, bp);
+        situation.reHashBoard(true);
+        ai.setStart(System.currentTimeMillis() - 1000);
+        assertEquals(-123456789, ai.negaMax(0, -12345679, 12345678, Player.WHITE));
+
+    }
+
+    @Test
+    public void checkForChangeIncreasesAlphaIfBetterValueFound() {
+        ChessBoard cb = situation.getChessBoard();
+        Pawn wp = new Pawn(1, 4, Player.WHITE, "wp");
+        Pawn bp = new Pawn(5, 6, Player.BLACK, "bp");
+        putPieceOnBoard(cb, wp);
+        putPieceOnBoard(cb, bp);
+        situation.reHashBoard(true);
+
+        ai.getBestValues()[1] = -100;
+        ai.setSituation(situation);
+        ai.setStart(System.currentTimeMillis());
+        int newAlpha = ai.checkForChange(Player.WHITE, 1, -123456789, 123456789, wp, cb.getSquare(1, 4));
+        assertEquals(evaluateGameSituation(situation, Player.WHITE), newAlpha);
+        assertEquals(evaluateGameSituation(situation, Player.WHITE), ai.getBestValues()[1]);
+    }
+
+    @Test
+    public void alphaIsNotChangedIfWorseValueFound() {
+        ChessBoard cb = situation.getChessBoard();
+        Pawn wp = new Pawn(1, 4, Player.WHITE, "wp");
+        Pawn bp = new Pawn(5, 6, Player.BLACK, "bp");
+        putPieceOnBoard(cb, wp);
+        putPieceOnBoard(cb, bp);
+        situation.reHashBoard(true);
+
+        ai.getBestValues()[1] = 100;
+        ai.setSituation(situation);
+        ai.setStart(System.currentTimeMillis());
+        int newAlpha = ai.checkForChange(Player.WHITE, 1, 100, 123456789, wp, cb.getSquare(1, 4));
+        assertEquals(100, newAlpha);
+        assertEquals(100, ai.getBestValues()[1]);
+    }
+
+    @Test
+    public void moveIsNotEvaluatedIfItIsIllegal() {
+        ChessBoard cb = situation.getChessBoard();
+        MovementLogic ml = cb.getMovementLogic();
+        King wk = new King(1, 0, Player.WHITE, "wk");
+        Bishop wb = new Bishop(1, 4, Player.WHITE, "wp");
+        Rook br = new Rook(1, 7, Player.BLACK, "br");
+        putPieceOnBoard(cb, wk);
+        putPieceOnBoard(cb, wb);
+        putPieceOnBoard(cb, br);
+        situation.reHashBoard(true);
+        ml.move(wb, cb.getSquare(2, 3), situation);
+
+        ai.setSituation(situation);
+        ai.getBestValues()[1] = -250;
+        ai.setStart(System.currentTimeMillis());
+        int newAlpha = ai.checkForChange(Player.WHITE, 1, -250, 123456789, wb, cb.getSquare(1, 4));
+        assertEquals(-250, newAlpha);
+        assertEquals(-250, ai.getBestValues()[1]);
+    }
+
+//    @Test
+//    public void checkForChangeSavesFoundValueInTranspositionTable() {
+//        ChessBoard cb = situation.getChessBoard();
+//        Pawn wp = new Pawn(1, 4, Player.WHITE, "wp");
+//        Pawn bp = new Pawn(5, 6, Player.BLACK, "bp");
+//        putPieceOnBoard(cb, wp);
+//        putPieceOnBoard(cb, bp);
+//        situation.reHashBoard(true);
+//
+//        ai.setSituation(situation);
+//        ai.setStart(System.currentTimeMillis());
+//        ai.checkForChange(Player.WHITE, 1, -123456789, 123456789, wp, cb.getSquare(1, 5));
+//        TranspositionKey key = new TranspositionKey(1, Player.WHITE, situation.getBoardHash());
+//        assertTrue(ai.getTranspositionTable().containsKey(key));
+//        assertEquals(evaluateGameSituation(situation, Player.WHITE), (int) ai.getTranspositionTable().get(key));
+//    }
+    @Test
+    public void testAMoveReturnsAlphaIfTimeIsUpAndDoesNotChangeBoard() {
+        ChessBoard cb = situation.getChessBoard();
+        ChessBoard backUp = copy(cb);
+        Rook wr = new Rook(1, 4, Player.WHITE, "wr");
+        Pawn bp = new Pawn(5, 6, Player.BLACK, "bp");
+        putPieceOnBoard(cb, wr);
+        putPieceOnBoard(cb, bp);
+        situation.reHashBoard(true);
+        ai.setStart(System.currentTimeMillis() - 1000);
+        assertEquals(-12345, ai.testAMove(wr, cb.getSquare(1, 6), -12345, Player.WHITE, 1, 123456789, backUp, cb.getSquare(1, 4)));
+        assertTrue(arrays2DeepEquals(cb.getTable(), backUp.getTable()));
+    }
+
+    @Test
+    public void boardDoesNotChangeWhenTestingAMove() {
+        ChessBoard cb = situation.getChessBoard();
+        Rook wr = new Rook(1, 4, Player.WHITE, "wr");
+        Pawn bp = new Pawn(5, 6, Player.BLACK, "bp");
+        putPieceOnBoard(cb, wr);
+        putPieceOnBoard(cb, bp);
+        situation.reHashBoard(true);
+        ChessBoard backUp = copy(cb);
+        ai.setStart(System.currentTimeMillis());
+        ai.setSituation(situation);
+        ai.testAMove(wr, cb.getSquare(1, 6), -12345, Player.WHITE, 1, 1234567, backUp, cb.getSquare(1, 4));
+        assertTrue(arrays2DeepEquals(cb.getTable(), backUp.getTable()));
+    }
+
+    @Test
+    public void testAMoveReturnsValueOfSituationAfterMakingChosenMove() {
+        ChessBoard cb = situation.getChessBoard();
+        Rook wr = new Rook(1, 4, Player.WHITE, "wr");
+        Pawn bp = new Pawn(5, 6, Player.BLACK, "bp");
+        putPieceOnBoard(cb, wr);
+        putPieceOnBoard(cb, bp);
+        situation.reHashBoard(true);
+        ChessBoard backUp = copy(cb);
+        ai.setSituation(situation);
+        ai.setStart(System.currentTimeMillis());
+        assertEquals(510, ai.testAMove(wr, cb.getSquare(1, 6), -12345, Player.WHITE, 1, 1234567, backUp, cb.getSquare(1, 4)));
+    }
+
+    @Test
+    public void testAMoveRevertsPossiblePromotion() {
+        ChessBoard cb = situation.getChessBoard();
+        Pawn wp = new Pawn(1, 6, Player.WHITE, "wp");
+        Pawn bp = new Pawn(5, 6, Player.BLACK, "bp");
+        putPieceOnBoard(cb, wp);
+        putPieceOnBoard(cb, bp);
+        situation.reHashBoard(true);
+        ai.setStart(System.currentTimeMillis());
+        ai.setSituation(situation);
+        ChessBoard backUp = copy(cb);
+        ai.testAMove(wp, cb.getSquare(1, 7), -12345, Player.WHITE, 1, 1234567, backUp, cb.getSquare(1, 6));
+        assertTrue(arrays2DeepEquals(cb.getTable(), backUp.getTable()));
+        assertEquals(Pawn.class, cb.getSquare(1, 6).getPiece().getClass());
+    }
+
+    @Test
+    public void tryMovingPieceStopsIfTimeLimitReached() {
+        ChessBoard cb = situation.getChessBoard();
+        Rook wr = new Rook(1, 4, Player.WHITE, "wr");
+        Pawn bp = new Pawn(5, 6, Player.BLACK, "bp");
+        putPieceOnBoard(cb, wr);
+        putPieceOnBoard(cb, bp);
+        situation.reHashBoard(true);
+        ChessBoard backUp = copy(cb);
+        ai.setSituation(situation);
+        ai.setStart(System.currentTimeMillis() - 1000);
+        assertEquals(-12345, ai.tryMovingPiece(wr, 1, 1, -12345, Player.WHITE, 123456, backUp, cb.getSquare(1, 4)));
+    }
+
+    @Test
+    public void tryMovingPieceReturnsHighestValueForSituationAfterMovingPiece() {
+        ChessBoard cb = situation.getChessBoard();
+        Rook wr = new Rook(1, 4, Player.WHITE, "wr");
+        Pawn bp = new Pawn(5, 6, Player.BLACK, "bp");
+        putPieceOnBoard(cb, wr);
+        putPieceOnBoard(cb, bp);
+        situation.reHashBoard(true);
+        ChessBoard backUp = copy(cb);
+        ai.setSituation(situation);
+        ai.setStart(System.currentTimeMillis());
+        assertEquals(520, ai.tryMovingPiece(wr, 1, 1, -12345, Player.WHITE, 123456, backUp, cb.getSquare(1, 4)));
     }
 }

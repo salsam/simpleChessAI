@@ -29,5 +29,4 @@ public class Queen extends Piece {
         clone.setTaken(taken);
         return clone;
     }
-
 }

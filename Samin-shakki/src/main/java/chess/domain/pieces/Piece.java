@@ -56,8 +56,12 @@ public abstract class Piece {
      * @param piece piece to be made equal to
      */
     public void makeDeeplyEqualTo(Piece piece) {
+//        if (piece == null) {
+//            return;
+//        }
+
         if (piece == null) {
-            return;
+            System.out.println(piece.pieceCode + " (" + piece.column + "," + piece.getRow() + ")");
         }
         this.column = piece.getColumn();
         this.row = piece.getRow();

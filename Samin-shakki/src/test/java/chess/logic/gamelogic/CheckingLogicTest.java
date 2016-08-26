@@ -26,11 +26,13 @@ public class CheckingLogicTest {
 
     private static CheckingLogic cl;
     private static GameSituation game;
+    private static MovementLogic ml;
     private static EmptyBoardInitializer emptyinit;
 
     public CheckingLogicTest() {
         emptyinit = new EmptyBoardInitializer();
-        game = new GameSituation(emptyinit, new MovementLogic());
+        ml = new MovementLogic();
+        game = new GameSituation(emptyinit, ml);
         cl = new CheckingLogic(game);
     }
 
@@ -119,19 +121,20 @@ public class CheckingLogicTest {
 
     @Test
     public void checkMateFalseInComplexSituationWhereKingThreatenedByProtectedPieceButCanBeAvoided() {
-        MovementLogic mvl = game.getChessBoard().getMovementLogic();
+        game = new GameSituation(new StandardBoardInitializer(), ml);
         King whiteKing = game.getChessBoard().getKings().get(Player.WHITE);
         Pawn whitePawn = (Pawn) game.getChessBoard().getSquare(5, 1).getPiece();
         Pawn blackPawn1 = (Pawn) game.getChessBoard().getSquare(5, 6).getPiece();
         Pawn blackPawn2 = (Pawn) game.getChessBoard().getSquare(4, 6).getPiece();
 
-        mvl.move(whitePawn, game.getChessBoard().getSquare(5, 2), game);
-        mvl.move(blackPawn1, game.getChessBoard().getSquare(5, 4), game);
-        mvl.move(whiteKing, game.getChessBoard().getSquare(5, 1), game);
-        mvl.move(blackPawn2, game.getChessBoard().getSquare(4, 4), game);
-        mvl.move(whiteKing, game.getChessBoard().getSquare(6, 2), game);
-        mvl.move(blackPawn1, game.getChessBoard().getSquare(5, 3), game);
+        ml.move(whitePawn, game.getChessBoard().getSquare(5, 2), game);
+        ml.move(blackPawn1, game.getChessBoard().getSquare(5, 4), game);
+        ml.move(whiteKing, game.getChessBoard().getSquare(5, 1), game);
+        ml.move(blackPawn2, game.getChessBoard().getSquare(4, 4), game);
+        ml.move(whiteKing, game.getChessBoard().getSquare(6, 2), game);
+        ml.move(blackPawn1, game.getChessBoard().getSquare(5, 3), game);
         assertFalse(cl.checkMate(Player.WHITE));
+        game = new GameSituation(emptyinit, ml);
     }
 
     @Test

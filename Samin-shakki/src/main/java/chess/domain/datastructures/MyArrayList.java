@@ -252,4 +252,57 @@ public class MyArrayList<T extends Object> implements List<T> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Returns true if arrays are deeply equal. Returns true if both null or
+     * neither null and all contained elements with same index are equal.
+     *
+     * @param a first object array.
+     * @param b second object array.
+     * @return true if a and b deeply equal.
+     *
+     */
+    public static boolean arraysDeepEquals(Object[] a, Object[] b) {
+        if (a == null || b == null) {
+            return a == null && b == null;
+        }
+
+        if (a.length != b.length) {
+            return false;
+        }
+
+        for (int i = 0; i < a.length; i++) {
+            if (!a[i].equals(b[i])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns true if arrays are deeply equal. Returns true if both null or
+     * neither null and all contained arrays with same index are deeply equal.
+     *
+     * @param a first object array.
+     * @param b second object array.
+     * @return true if a and b deeply equal.
+     */
+    public static boolean arrays2DeepEquals(Object[][] a, Object[][] b) {
+        if (a == null || b == null) {
+            return a == null && b == null;
+        }
+
+        if (a.length != b.length) {
+            return false;
+        }
+
+        for (int i = 0; i < a.length; i++) {
+            if (!arraysDeepEquals(a[i], b[i])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }

@@ -32,9 +32,10 @@ public class Rook extends Piece {
 
     @Override
     public void makeDeeplyEqualTo(Piece piece) {
-        if (piece.getClass() != Rook.class) {
-            return;
-        }
+//        if (piece == null || piece.getClass() != Rook.class) {
+//            return;
+//        }
+
         Rook rook = (Rook) piece;
         this.hasBeenMoved = rook.getHasBeenMoved();
         super.makeDeeplyEqualTo(piece);

@@ -117,9 +117,6 @@ public class MovementLogic {
      * @param sit situation before move.
      */
     public void move(Piece piece, Square target, GameSituation sit) {
-        if (piece == null) {
-            return;
-        }
 
         if (piece.getClass() == Bishop.class) {
             bishopMover.move(piece, target, sit);

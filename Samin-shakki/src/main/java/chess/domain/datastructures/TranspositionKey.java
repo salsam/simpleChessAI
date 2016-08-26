@@ -12,24 +12,22 @@ import java.util.Objects;
  */
 public class TranspositionKey {
 
-    private int depth;
+    private int height;
     private Player whoseTurn;
-    private Player player;
     private long hashedBoard;
 
-    public TranspositionKey(int depth, Player whoseTurn, Player player, long hash) {
-        this.depth = depth;
+    public TranspositionKey(int height, Player whoseTurn, long hash) {
+        this.height = height;
         this.whoseTurn = whoseTurn;
-        this.player = player;
         this.hashedBoard = hash;
     }
 
-    public int getDepth() {
-        return depth;
+    public int getHeight() {
+        return height;
     }
 
-    public void setDepth(int first) {
-        this.depth = first;
+    public void setHeight(int first) {
+        this.height = first;
     }
 
     public Player getWhoseTurn() {
@@ -38,14 +36,6 @@ public class TranspositionKey {
 
     public void setWhoseTurn(Player second) {
         this.whoseTurn = second;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void setPlayer(Player third) {
-        this.player = third;
     }
 
     public long getHashedBoard() {
@@ -58,16 +48,15 @@ public class TranspositionKey {
 
     public TranspositionKey opposingKey() {
         TranspositionKey ret = new TranspositionKey(
-                depth, whoseTurn, getOpponent(player), hashedBoard);
+                height, getOpponent(whoseTurn), hashedBoard);
         return ret;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 47 * hash + this.depth;
+        hash = 47 * hash + this.height;
         hash = 47 * hash + Objects.hashCode(this.whoseTurn);
-        hash = 47 * hash + Objects.hashCode(this.player);
         hash = 47 * hash + (int) (this.hashedBoard ^ (this.hashedBoard >>> 32));
         return hash;
     }
@@ -84,16 +73,13 @@ public class TranspositionKey {
             return false;
         }
         final TranspositionKey other = (TranspositionKey) obj;
-        if (this.depth != other.depth) {
+        if (this.height != other.height) {
             return false;
         }
         if (this.hashedBoard != other.hashedBoard) {
             return false;
         }
         if (this.whoseTurn != other.whoseTurn) {
-            return false;
-        }
-        if (this.player != other.player) {
             return false;
         }
         return true;

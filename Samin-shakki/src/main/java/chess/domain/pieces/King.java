@@ -32,9 +32,9 @@ public class King extends Piece {
 
     @Override
     public void makeDeeplyEqualTo(Piece piece) {
-        if (piece.getClass() != King.class) {
-            return;
-        }
+//        if (piece == null || piece.getClass() != King.class) {
+//            return;
+//        }
         King king = (King) piece;
         super.makeDeeplyEqualTo(piece);
         this.hasBeenMoved = king.getHasBeenMoved();

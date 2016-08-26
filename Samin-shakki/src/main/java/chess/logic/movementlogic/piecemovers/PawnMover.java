@@ -7,6 +7,7 @@ import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
 import chess.domain.pieces.Pawn;
 import chess.domain.pieces.Piece;
+import chess.logic.inputprocessing.InputProcessor;
 
 /**
  * This class is responsible for containing all pawn-related movement logic.
@@ -53,6 +54,7 @@ public class PawnMover extends PieceMover {
         }
 
         super.move(piece, target, sit);
+        InputProcessor.promote(target, sit.getChessBoard());
     }
 
     /**

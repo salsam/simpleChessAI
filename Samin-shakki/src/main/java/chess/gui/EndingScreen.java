@@ -27,7 +27,7 @@ public class EndingScreen extends JFrame {
 
     private void initComponents(Container container, Map<String, JFrame> frames) {
         JButton playAgain = new JButton("Play again");
-        playAgain.addMouseListener(new GameRestarter(frames));
+        playAgain.addActionListener(new GameRestarter(frames));
         playAgain.setMaximumSize(new Dimension(300, 150));
 
         JButton exit = new JButton("Exit");
