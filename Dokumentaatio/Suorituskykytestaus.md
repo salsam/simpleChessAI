@@ -40,3 +40,19 @@ Siirtoja\Suorituskerta | 1 | 2 | 3 | Keskiarvo
 Lisähuomautus: 3. kerta loppui tasapeliin vuorolla 45 tekoälyn toistaessa saman tilanteen kolmannen kerran (tämä johtunee bugista, joka aiheuttaa sen, ettei tekoäly tajua tilanteen toistuneen jo kolme kertaa). Tällä kertaa emme huomaa aikavaativuuden kasvua aluksi, vaan aikavaativuus laskee koko matkan alusta loppuun. Tämä johtunee siitä, että ensimmäisen sirron jälkeen tekoälyni hyödyntää dynaamista muistia kokeillen edellisen siirron laskuissa havaitut parhaat siirrot ensin. Näin ensimmäinen siirto on luonnostaan muita raskaampi ja rekursiosyvyyden ollessa pieni, ovat muut siirrot niin nopeita laskea, että tämä painottuu suuresti. Siirtojen nopeus johtunee siitä, että liikkuvuus ei ehdi vaikuttaa läheskään samalla tavoin rekursiosyvyydellä 2 kuin 3, kuten eksponentiaalinen aikavaativuus 160^d aavistikin. 
 
 Toisaalta aikavaativuuden pienuuteen vaikuttaa myös se, että molemmat teoälyt tekevät huomattavasti tyhmempiä siirtoja, kuin rekursiosyvyyttä 3 käytettäessä. Näin pelaajat uhraavat jatkuvasti nappuloita ilman syytä, jolloin liikkuvuus vähenee nopeasti. Hassua kyllä, pelaajat myös shakkaavat vastustajan kuningasta koko ajan, jolloin vain pieni osa siirroista on laillisia ja liikkuvuus pienenee entisestään. Paras keksimäni selitys jatkuvalle shakkaukselle on vastustajan siirtojen rajoittaminen tajuamatta omien nappuloiden uhraamista prosessin aikana.
+
+
+###Rekursiosyvyys 3, 3 ts, liikkuvuuden paino 10 ja korjattu alfa-beeta. 2 tietokonetta vastakkain 3s aikarajalle, maksimirekursiosyvyys 3. Lisäksi valloitukset tutkitaan ennen muita siirtoja, toisin kuin aikaisemmissa testeissä.
+
+Testissä käytetään korjattua alfa-beeta karsintaa, jossa olen muistanu lopettaa nappuloiden testaamisen, kun beeta-katkaisu tapahtuu toisin kuin edellisissä testeissä. Alla on kirjattu kahdesta eri pelistä valkoisen ja mustan tekoälyn siirtoihin käyttämän ajan keskiarvo (millisekunteina)  tiettyihin siirtojen määriin asti. Siirtoja tarkoittaa montako siirtoa kyseinen pelaaja on tehnyt eli yhden testin aikana pelissä tehdään yhteensä 60 siirtoa.Keskiarvot on pyöristetty lähimpään kokonaislukuun.
+
+Siirtoja\Pelaaja | valkoinen1 | musta1 | valkoinen2 | musta2 | Keskiarvo(valkoinen) | Keskiarvo(musta) | Keskiarvo
+------ | ----- | ----- | ----- | ------ | ------ | ------ | ----- | -----
+5 | 932 | 695 | 1116 | 627 | 1024 | 661 | 843
+10 | 1064 | 765 | 1095 | 723 | 1080 | 744 | 912
+15 | 909 | 799 | 1090 | 724 | 1000 | 762 | 883
+20 | 881 | 879 | 922 | 623 | 902 | 751 | 827
+25 | 780 | 785 | 808 | 623 | 794 | 704 | 749
+30 | 698 | 697 | 721 | 608 | 710 | 653 | 682
+
+Tuloksista näemme jälleen kerran pelitilanteen aluksi monimutkaistuvan, mutta alkavan sitten yksinkertaistua npappuloiden vähetessä. Lisäksi huomaamme, että alfa-beeta karsinnassa tekemäni moka vaikutti aikavaativuuteen todella paljon, sillä aikavaativuus on enimmillään kahdeksasosa aikaisemmasta. Tämä moka siis selittää myös aiemmin kurssilla yhtäkkiä tapahtuneen hitanemisen, sillä olin luultavasti tuolloin poistanut "turhan" katkaisun. Hieman yllättäen huomaamme myös eron eri pelaajien välillä, pelin alussa valkoinen käyttää huomattavasti enemmän aikaa siirtojen laskemiseen kuin musta. Pelin loppupuolella tilanne kuitenkin tasaantuu. Oma veikkaukseni tämän syystä on se, että valkoisen siirtäessä ensin on valkoisella enemmän mahdollisia siirtoja kuin mustalla. Tämä heuristiikka perustuu siihen, että valkoisen tehdessä siirron, mustan mahdolliset siirrot todennäköisesti vähenevät valkoisen lyödessä nappuloita ja tukkiessa lautaa. Näin valkoisen saama kehitysetu antaa toisaalta valkoiselle edun mustaa vastaan, mutta myös hidastaa laskentaa mahdollisuuksien ollessa lukuisampia. Pelin vanhetessa vuoron kehitysetu kuitenkin laskee prosentuaalista osuuttaan ja pelitilanne tasoittuu.
