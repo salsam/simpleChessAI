@@ -19,3 +19,9 @@ Päivät | Tunnit | Kuvaus
 17.08.2016 | 5h | Iteratiivisen syvennyksen aikana otetaan ylös paras siirtoketju annetullle syvyydelle asti. Peli loppuu myös tekoälyn siirron jälkee, jos tilanne toistuu kolmatta kertaa. Aloitettu korjaamaan tilanteiden Zobrist-hashauksessa ilmenneitä ongelmia.
 20.08.2016 | 6h | Tallennetaan dynaamiseen muistiin paras siirtoketju edrellistä siirtoa laskettaessa ja hyödynnetään sitä mahdollisimman paljon seuraavaa siirtoa laskettaessa. Lisätty "tappajasiirrot", joita säilytetään kaksi muistissa jokaiselle syvyydelle ja ne kokeillaan principal variationin jälkeen. Korjattu hashausongelma, joka aiheutti vääriä tasapelejä.
 21.08.2016 | 4h | Suorituskykytestauksen aloitus, toteutusdokumentaation aloitus.
+22.08.2016 | 1h | Tappajasiirrot ovat nyt varmasti eri siirtoja
+23.08.2016 | 1h | Refaktoroitu luokkaa AILogic
+24.08.2016 | 8h | Lisätty käliin puolen valinta AIta vastaan, AI:n vaikeustason valinta AivsAi tai pelaajaa vastaan ja käsitellään nyt valloitukset ennen muita siirtoja.
+25.08.2016 | 5h | Sotilaiden korotus kumotaan nyt siirtoja testatessa, AILogic luokan metodeille lisää testejä ja metodit siis muutettu julkisiksi. Yritetty ratkaista pelin kaatuminen Play Again-valinna jälkeen.
+26.08.2016 | 5h | Toteutusdokumentaatio tehty, suorityskykytestausta eteenpäin, lisää testejä AILogicille ja Play Again-bugin metsästystä.
+
