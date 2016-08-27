@@ -54,7 +54,7 @@ public class PawnMover extends PieceMover {
         }
 
         super.move(piece, target, sit);
-        InputProcessor.promote(target, sit.getChessBoard());
+        InputProcessor.promotePiece(piece, sit.getChessBoard());
     }
 
     /**

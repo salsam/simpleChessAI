@@ -137,15 +137,29 @@ public class InputProcessor {
         startNextTurn(game);
     }
 
-    public static void promote(Square target, ChessBoard cbl) {
+    public static void promote(Square target, ChessBoard cb) {
         Piece piece = target.getPiece();
         if (piece.getClass() == Pawn.class) {
             Pawn chosenPawn = (Pawn) piece;
             if (chosenPawn.opposingEnd() == target.getRow()) {
-                putPieceOnBoard(cbl,
+                putPieceOnBoard(cb,
                         new Queen(chosenPawn.getColumn(), chosenPawn.getRow(),
                                 chosenPawn.getOwner(), chosenPawn.getPieceCode()));
-                ChessBoardInitializer.removePieceFromOwner(chosenPawn, cbl);
+                ChessBoardInitializer.removePieceFromOwner(chosenPawn, cb);
+            }
+        }
+    }
+
+    public static void promotePiece(Piece piece, ChessBoard cb) {
+        if (piece.getClass() == Pawn.class) {
+            Pawn chosenPawn = (Pawn) piece;
+            if (chosenPawn.opposingEnd() == piece.getRow()) {
+
+                Queen promoted = new Queen(chosenPawn.getColumn(), chosenPawn.getRow(),
+                        chosenPawn.getOwner(), chosenPawn.getPieceCode());
+                ChessBoardInitializer.removePieceFromOwner(chosenPawn, cb);
+                putPieceOnBoard(cb, promoted);
+                piece = promoted;
             }
         }
     }

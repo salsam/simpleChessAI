@@ -80,6 +80,14 @@ public class AILogic {
         return bestValues;
     }
 
+    public Move[] getKillerCandidates() {
+        return killerCandidates;
+    }
+
+    public void setSearchDepth(int searchDepth) {
+        this.searchDepth = searchDepth;
+    }
+
     public Map<TranspositionKey, Integer> getTranspositionTable() {
         return transpositionTable;
     }
@@ -263,7 +271,7 @@ public class AILogic {
         ml.move(piece, possibility, sit);
         alpha = checkForChange(
                 maxingPlayer, height, alpha, beta, piece, possibility);
-        undoMove(backUp, sit, from, possibility);
+        undoMove(backUp, sit, from, piece);
         sit.setContinues(true);
         return alpha;
     }
@@ -339,7 +347,8 @@ public class AILogic {
      */
     private void saveNewKillerMove(int height) {
         if (killerCandidates[searchDepth - height] != null
-                && !moveHasBeenTestedAlready(height, killerCandidates[searchDepth - height].getPiece(),
+                && !moveHasBeenTestedAlready(height,
+                        killerCandidates[searchDepth - height].getPiece(),
                         killerCandidates[searchDepth - height].getTarget())) {
             killerMoves[searchDepth - height][oldestIndex] = killerCandidates[searchDepth - height];
             oldestIndex = (oldestIndex + 1) % 3;

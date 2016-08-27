@@ -118,6 +118,9 @@ public class ChessBoardCopier {
         sit.updateHashForUndoingMove(backUp, from, to);
         from.setPiece(to.getPiece());
         Piece old = backUp.getSquare(from.getColumn(), from.getRow()).getPiece();
+        if (from.getPiece() == null || old == null) {
+            System.out.println("old: " + old + "cur: " + from.getPiece() + " from: " + from + " to " + to);
+        }
         if (old.getClass() != from.getPiece().getClass()) {
             ChessBoardInitializer.removePieceFromOwner(from.getPiece(), sit.getChessBoard());
             ChessBoardInitializer.putPieceOnBoard(sit.getChessBoard(), old.clone());
@@ -125,6 +128,30 @@ public class ChessBoardCopier {
             from.getPiece().makeDeeplyEqualTo(old);
         }
 
+        handleDestination(backUp, to, sit, from);
+    }
+
+    public static void undoMove(ChessBoard backUp, GameSituation sit, Square from, Piece moved) {
+        Square to = sit.getChessBoard().getSquare(moved.getColumn(), moved.getRow());
+        sit.decrementCountOfCurrentBoardSituation();
+        sit.updateHashForUndoingMove(backUp, from, to);
+        from.setPiece(to.getPiece());
+        Piece old = backUp.getSquare(from.getColumn(), from.getRow()).getPiece();
+        if (from.getPiece() == null || old == null) {
+            System.out.println("old: " + old + "cur: " + from.getPiece() + " from: " + from + " to " + to);
+        }
+        if (old.getClass() != from.getPiece().getClass()) {
+            ChessBoardInitializer.removePieceFromOwner(from.getPiece(), sit.getChessBoard());
+            ChessBoardInitializer.putPieceOnBoard(sit.getChessBoard(), old.clone());
+        } else {
+            from.getPiece().makeDeeplyEqualTo(old);
+        }
+        moved = from.getPiece();
+
+        handleDestination(backUp, to, sit, from);
+    }
+
+    private static void handleDestination(ChessBoard backUp, Square to, GameSituation sit, Square from) {
         Piece taken = backUp.getSquare(to.getColumn(), to.getRow()).getPiece();
         if (taken != null) {
             putTakenPieceBackOnBoard(sit.getChessBoard(), taken, to);
