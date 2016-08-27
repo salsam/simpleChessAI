@@ -25,4 +25,4 @@
 
 - [Viikkoraportti 4](https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Viikkoraportti%204.md)
 
-- [Viikkoraportti 4](https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Viikkoraportti%205.md)
+- [Viikkoraportti 5](https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Viikkoraportti%205.md)
