@@ -4,6 +4,7 @@ chess.domain.board
 chess.domain.datastructures
 chess.domain.pieces
 chess.gui
+chess.gui.actionlisteners
 chess.gui.boarddrawing
 chess.io
 chess.logic.ailogic

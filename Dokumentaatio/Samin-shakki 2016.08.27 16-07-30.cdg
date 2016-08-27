@@ -1,0 +1,1832 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Samin-shakki">
+  <ClassDiagramComponents>
+    <Class name="Main" package="" visibility="public" xPosition="20.0" yPosition="20.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="main" returnType="void" visibility="public" isStatic="true">
+          <Argument type="String[]" name="args"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="LegalityChecker" package="chess.logic.gamelogic" visibility="public" xPosition="320.0" yPosition="20.0">
+      <Fields>
+        <Field name="board" type="ChessBoard" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="ChessBoard" name="board"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="setBoard" returnType="void" visibility="public">
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="checkPlayerOwnsPieceOnTargetSquare" returnType="Boolean" visibility="public">
+          <Argument type="Player" name="player"/>
+          <Argument type="int" name="column"/>
+          <Argument type="int" name="row"/>
+        </Method>
+        <Method name="checkThatMovementIsLegal" returnType="boolean" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="int" name="column"/>
+          <Argument type="int" name="row"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="CheckingLogic" package="chess.logic.gamelogic" visibility="public" xPosition="620.0" yPosition="20.0">
+      <Fields>
+        <Field name="game" type="GameSituation" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="GameSituation" name="game"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="checkIfCheckedAndMated" returnType="boolean" visibility="public">
+          <Argument type="Player" name="player"/>
+        </Method>
+        <Method name="checkIfChecked" returnType="boolean" visibility="public">
+          <Argument type="Player" name="player"/>
+        </Method>
+        <Method name="checkMate" returnType="boolean" visibility="public">
+          <Argument type="Player" name="player"/>
+        </Method>
+        <Method name="stalemate" returnType="boolean" visibility="public">
+          <Argument type="Player" name="player"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="BishopMover" package="chess.logic.movementlogic.piecemovers" visibility="public" xPosition="920.0" yPosition="20.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="threatenedSquares" returnType="Set&lt;Square&gt;" visibility="public">
+          <Argument type="Piece" name="bishop"/>
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="PawnMover" package="chess.logic.movementlogic.piecemovers" visibility="public" xPosition="1220.0" yPosition="20.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="move" returnType="void" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="Square" name="target"/>
+          <Argument type="GameSituation" name="sit"/>
+        </Method>
+        <Method name="threatenedSquares" returnType="Set&lt;Square&gt;" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="addPossibleEnPassant" returnType="void" visibility="private">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="Set&lt;Square&gt;" name="squares"/>
+        </Method>
+        <Method name="targetContainsAnEnemyPawn" returnType="boolean" visibility="private">
+          <Argument type="Piece" name="chosen"/>
+          <Argument type="Square" name="target"/>
+        </Method>
+        <Method name="possibleMoves" returnType="Set&lt;Square&gt;" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="addPossibilitiesToTakeOpposingPieces" returnType="void" visibility="private">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="Set&lt;Square&gt;" name="moves"/>
+        </Method>
+        <Method name="addSquareIfWithinTableAndEmpty" returnType="boolean" visibility="private">
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="int" name="column"/>
+          <Argument type="int" name="newrow"/>
+          <Argument type="Set&lt;Square&gt;" name="moves"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="QueenMover" package="chess.logic.movementlogic.piecemovers" visibility="public" xPosition="1520.0" yPosition="20.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="threatenedSquares" returnType="Set&lt;Square&gt;" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="KingMover" package="chess.logic.movementlogic.piecemovers" visibility="public" xPosition="1820.0" yPosition="20.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="move" returnType="void" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="Square" name="target"/>
+          <Argument type="GameSituation" name="sit"/>
+        </Method>
+        <Method name="castleIfChosen" returnType="void" visibility="private">
+          <Argument type="King" name="king"/>
+          <Argument type="Square" name="target"/>
+          <Argument type="GameSituation" name="sit"/>
+          <Argument type="RookMover" name="rookMover"/>
+        </Method>
+        <Method name="threatenedSquares" returnType="Set&lt;Square&gt;" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="possibleMoves" returnType="Set&lt;Square&gt;" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="isThreatenedByOpponent" returnType="boolean" visibility="private">
+          <Argument type="Player" name="player"/>
+          <Argument type="Square" name="target"/>
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="addCastling" returnType="void" visibility="private">
+          <Argument type="King" name="king"/>
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="Set&lt;Square&gt;" name="possibilities"/>
+        </Method>
+        <Method name="addCastlingIfPossible" returnType="void" visibility="private">
+          <Argument type="King" name="king"/>
+          <Argument type="Rook" name="rook"/>
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="Set&lt;Square&gt;" name="possibilities"/>
+        </Method>
+        <Method name="addPossibilityToCastleLeft" returnType="void" visibility="private">
+          <Argument type="King" name="king"/>
+          <Argument type="Rook" name="rook"/>
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="Set&lt;Square&gt;" name="possibilities"/>
+        </Method>
+        <Method name="addPossibilityToCastleRight" returnType="void" visibility="private">
+          <Argument type="King" name="king"/>
+          <Argument type="Rook" name="rook"/>
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="Set&lt;Square&gt;" name="possibilities"/>
+        </Method>
+        <Method name="squaresAreAllUnthreatened" returnType="boolean" visibility="private">
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="Player" name="opponent"/>
+          <Argument type="int" name="minCol"/>
+          <Argument type="int" name="maxCol"/>
+          <Argument type="int" name="row"/>
+        </Method>
+        <Method name="squaresAreAllEmpty" returnType="boolean" visibility="private">
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="int" name="minCol"/>
+          <Argument type="int" name="maxCol"/>
+          <Argument type="int" name="row"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="KnightMover" package="chess.logic.movementlogic.piecemovers" visibility="public" xPosition="2120.0" yPosition="20.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="threatenedSquares" returnType="Set&lt;Square&gt;" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="RookMover" package="chess.logic.movementlogic.piecemovers" visibility="public" xPosition="20.0" yPosition="420.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="move" returnType="void" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="Square" name="target"/>
+          <Argument type="GameSituation" name="sit"/>
+        </Method>
+        <Method name="threatenedSquares" returnType="Set&lt;Square&gt;" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="PieceMover" package="chess.logic.movementlogic.piecemovers" visibility="public" isAbstract="true" xPosition="320.0" yPosition="420.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="threatenedSquares" returnType="Set&lt;Square&gt;" visibility="public" isAbstract="true">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="possibleMoves" returnType="Set&lt;Square&gt;" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="addDiagonalPossibilities" returnType="void" visibility="protected">
+          <Argument type="Square" name="current"/>
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="Set&lt;Square&gt;" name="possibilities"/>
+        </Method>
+        <Method name="addHorizontalPossibilities" returnType="void" visibility="protected">
+          <Argument type="Square" name="current"/>
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="Set&lt;Square&gt;" name="possibilities"/>
+        </Method>
+        <Method name="addVerticalPossibilities" returnType="void" visibility="protected">
+          <Argument type="Square" name="current"/>
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="Set&lt;Square&gt;" name="possibilities"/>
+        </Method>
+        <Method name="possibilities" returnType="Set&lt;Square&gt;" visibility="protected">
+          <Argument type="Square" name="location"/>
+          <Argument type="int[]" name="columnChange"/>
+          <Argument type="int[]" name="rowChange"/>
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="legalToMoveTo" returnType="boolean" visibility="protected">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="Square" name="target"/>
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="move" returnType="void" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="Square" name="target"/>
+          <Argument type="GameSituation" name="sit"/>
+        </Method>
+        <Method name="possibilitiesToDirection" returnType="void" visibility="private">
+          <Argument type="Square" name="current"/>
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="Set&lt;Square&gt;" name="possibilities"/>
+          <Argument type="int" name="columnChange"/>
+          <Argument type="int" name="rowChange"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="MovementLogic" package="chess.logic.movementlogic" visibility="public" xPosition="620.0" yPosition="420.0">
+      <Fields>
+        <Field name="bishopMover" type="BishopMover" visibility="private"/>
+        <Field name="kingMover" type="KingMover" visibility="private"/>
+        <Field name="knightMover" type="KnightMover" visibility="private"/>
+        <Field name="pawnMover" type="PawnMover" visibility="private"/>
+        <Field name="queenMover" type="QueenMover" visibility="private"/>
+        <Field name="rookMover" type="RookMover" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="threatenedSquares" returnType="Set&lt;Square&gt;" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="possibleMoves" returnType="Set&lt;Square&gt;" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="move" returnType="void" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="Square" name="target"/>
+          <Argument type="GameSituation" name="sit"/>
+        </Method>
+        <Method name="squaresThreatenedByPlayer" returnType="Set&lt;Square&gt;" visibility="public">
+          <Argument type="Player" name="player"/>
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="possibleMovesByPlayer" returnType="Set&lt;Square&gt;" visibility="public">
+          <Argument type="Player" name="player"/>
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="InputProcessor" package="chess.logic.inputprocessing" visibility="public" xPosition="920.0" yPosition="420.0">
+      <Fields>
+        <Field name="textArea" type="JLabel" visibility="private"/>
+        <Field name="frames" type="Map&lt;String, JFrame&gt;" visibility="private"/>
+        <Field name="chosen" type="Piece" visibility="private"/>
+        <Field name="possibilities" type="Set&lt;Square&gt;" visibility="private"/>
+        <Field name="ais" type="AILogic[]" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="getChosen" returnType="Piece" visibility="public"/>
+        <Method name="setChosen" returnType="void" visibility="public">
+          <Argument type="Piece" name="chosen"/>
+        </Method>
+        <Method name="setFrames" returnType="void" visibility="public">
+          <Argument type="Map&lt;String, JFrame&gt;" name="frames"/>
+        </Method>
+        <Method name="setAiDifficulty" returnType="void" visibility="public">
+          <Argument type="int" name="whose"/>
+          <Argument type="long" name="timeLimit"/>
+        </Method>
+        <Method name="setTextArea" returnType="void" visibility="public">
+          <Argument type="JLabel" name="textArea"/>
+        </Method>
+        <Method name="getPossibilities" returnType="Set&lt;Square&gt;" visibility="public"/>
+        <Method name="setPossibilities" returnType="void" visibility="public">
+          <Argument type="Set&lt;Square&gt;" name="possibilities"/>
+        </Method>
+        <Method name="processClick" returnType="void" visibility="public">
+          <Argument type="int" name="column"/>
+          <Argument type="int" name="row"/>
+          <Argument type="GameSituation" name="game"/>
+        </Method>
+        <Method name="makeBestMoveAccordingToAILogic" returnType="void" visibility="private">
+          <Argument type="GameSituation" name="game"/>
+        </Method>
+        <Method name="moveToTargetLocation" returnType="void" visibility="private">
+          <Argument type="int" name="column"/>
+          <Argument type="int" name="row"/>
+          <Argument type="GameSituation" name="game"/>
+        </Method>
+        <Method name="promote" returnType="void" visibility="public" isStatic="true">
+          <Argument type="Square" name="target"/>
+          <Argument type="ChessBoard" name="cb"/>
+        </Method>
+        <Method name="promotePiece" returnType="void" visibility="public" isStatic="true">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="ChessBoard" name="cb"/>
+        </Method>
+        <Method name="startNextTurn" returnType="void" visibility="private">
+          <Argument type="GameSituation" name="game"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="ZobristHasher" package="chess.logic.ailogic" visibility="public" xPosition="1220.0" yPosition="420.0">
+      <Fields>
+        <Field name="squareHashes" type="long[][]" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="numberOfPieceAtSquare" returnType="int" visibility="private">
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="Square" name="square"/>
+        </Method>
+        <Method name="kingCanCastle" returnType="boolean" visibility="private">
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="Square" name="sq"/>
+        </Method>
+        <Method name="hash" returnType="long" visibility="public">
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="getHashAfterMove" returnType="long" visibility="public">
+          <Argument type="long" name="hash"/>
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="Square" name="from"/>
+          <Argument type="Square" name="to"/>
+        </Method>
+        <Method name="getHashBeforeMove" returnType="long" visibility="public">
+          <Argument type="long" name="hash"/>
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="ChessBoard" name="backup"/>
+          <Argument type="Square" name="from"/>
+          <Argument type="Square" name="to"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="GameSituationEvaluator" package="chess.logic.ailogic" visibility="public" xPosition="1520.0" yPosition="420.0">
+      <Fields>
+        <Field name="values" type="Map&lt;Class, Integer&gt;" visibility="private" isStatic="true"/>
+        <Field name="positionalValues" type="Map&lt;Class, Integer[][]&gt;" visibility="private" isStatic="true"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="initValues" returnType="void" visibility="private" isStatic="true"/>
+        <Method name="initPositionValues" returnType="void" visibility="private" isStatic="true"/>
+        <Method name="initBishopPositionalValues" returnType="void" visibility="private" isStatic="true"/>
+        <Method name="initKingPositionalValues" returnType="void" visibility="private" isStatic="true"/>
+        <Method name="initKnightPositionalValues" returnType="void" visibility="private" isStatic="true"/>
+        <Method name="initPawnPositionalValues" returnType="void" visibility="private" isStatic="true"/>
+        <Method name="initQueenPositionalValues" returnType="void" visibility="private" isStatic="true"/>
+        <Method name="initRookPositionalValues" returnType="void" visibility="private" isStatic="true"/>
+        <Method name="getPositionalValue" returnType="int" visibility="private" isStatic="true">
+          <Argument type="Piece" name="piece"/>
+        </Method>
+        <Method name="evaluateGameSituation" returnType="int" visibility="public" isStatic="true">
+          <Argument type="GameSituation" name="sit"/>
+          <Argument type="Player" name="player"/>
+        </Method>
+        <Method name="materialValue" returnType="int" visibility="public" isStatic="true">
+          <Argument type="GameSituation" name="situation"/>
+          <Argument type="Player" name="player"/>
+        </Method>
+        <Method name="mobilityValue" returnType="int" visibility="public" isStatic="true">
+          <Argument type="GameSituation" name="sit"/>
+          <Argument type="Player" name="player"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="AILogic" package="chess.logic.ailogic" visibility="public" xPosition="1820.0" yPosition="420.0">
+      <Fields>
+        <Field name="sit" type="GameSituation" visibility="private"/>
+        <Field name="ml" type="MovementLogic" visibility="private"/>
+        <Field name="bestMoves" type="MyArrayList&lt;Move&gt;" visibility="private"/>
+        <Field name="bestValues" type="int[]" visibility="private"/>
+        <Field name="timeLimit" type="long" visibility="private"/>
+        <Field name="start" type="long" visibility="private"/>
+        <Field name="plies" type="int" visibility="private" isFinal="true"/>
+        <Field name="lastPlies" type="int" visibility="private"/>
+        <Field name="searchDepth" type="int" visibility="private"/>
+        <Field name="oldestIndex" type="int" visibility="private"/>
+        <Field name="random" type="Random" visibility="private"/>
+        <Field name="lastPrincipalVariation" type="Pair&lt;Integer, Move[]&gt;" visibility="private"/>
+        <Field name="principalMoves" type="Move[]" visibility="private"/>
+        <Field name="killerCandidates" type="Move[]" visibility="private"/>
+        <Field name="killerMoves" type="Move[][]" visibility="private"/>
+        <Field name="transpositionTable" type="Map&lt;TranspositionKey, Integer&gt;" visibility="private"/>
+        <Field name="sum" type="long" visibility="private"/>
+        <Field name="count" type="int" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="getBestValues" returnType="int[]" visibility="public"/>
+        <Method name="getKillerCandidates" returnType="Move[]" visibility="public"/>
+        <Method name="setSearchDepth" returnType="void" visibility="public">
+          <Argument type="int" name="searchDepth"/>
+        </Method>
+        <Method name="getTranspositionTable" returnType="Map&lt;TranspositionKey, Integer&gt;" visibility="public"/>
+        <Method name="setSituation" returnType="void" visibility="public">
+          <Argument type="GameSituation" name="sit"/>
+        </Method>
+        <Method name="setStart" returnType="void" visibility="public">
+          <Argument type="long" name="start"/>
+        </Method>
+        <Method name="setTimeLimit" returnType="void" visibility="public">
+          <Argument type="long" name="newTimeLimit"/>
+        </Method>
+        <Method name="getBestMove" returnType="Move" visibility="public"/>
+        <Method name="negaMax" returnType="int" visibility="public">
+          <Argument type="int" name="height"/>
+          <Argument type="int" name="alpha"/>
+          <Argument type="int" name="beta"/>
+          <Argument type="Player" name="maxingPlayer"/>
+        </Method>
+        <Method name="tryAllPossibleMoves" returnType="void" visibility="public">
+          <Argument type="int" name="height"/>
+          <Argument type="int" name="alpha"/>
+          <Argument type="Player" name="maxingPlayer"/>
+          <Argument type="int" name="beta"/>
+        </Method>
+        <Method name="tryMovingPiece" returnType="int" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="int" name="i"/>
+          <Argument type="int" name="height"/>
+          <Argument type="int" name="alpha"/>
+          <Argument type="Player" name="maxingPlayer"/>
+          <Argument type="int" name="beta"/>
+          <Argument type="ChessBoard" name="backUp"/>
+          <Argument type="Square" name="from"/>
+        </Method>
+        <Method name="testAMove" returnType="int" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="Square" name="possibility"/>
+          <Argument type="int" name="alpha"/>
+          <Argument type="Player" name="maxingPlayer"/>
+          <Argument type="int" name="height"/>
+          <Argument type="int" name="beta"/>
+          <Argument type="ChessBoard" name="backUp"/>
+          <Argument type="Square" name="from"/>
+        </Method>
+        <Method name="testKillerMoves" returnType="int" visibility="private">
+          <Argument type="int" name="height"/>
+          <Argument type="Player" name="maxingPlayer"/>
+          <Argument type="int" name="alpha"/>
+          <Argument type="int" name="beta"/>
+          <Argument type="ChessBoard" name="backUp"/>
+        </Method>
+        <Method name="testPrincipalMove" returnType="int" visibility="private">
+          <Argument type="int" name="height"/>
+          <Argument type="Player" name="maxingPlayer"/>
+          <Argument type="int" name="alpha"/>
+          <Argument type="int" name="beta"/>
+          <Argument type="ChessBoard" name="backUp"/>
+        </Method>
+        <Method name="saveNewKillerMove" returnType="void" visibility="private">
+          <Argument type="int" name="height"/>
+        </Method>
+        <Method name="moveHasBeenTestedAlready" returnType="boolean" visibility="private">
+          <Argument type="int" name="height"/>
+          <Argument type="Piece" name="piece"/>
+          <Argument type="Square" name="possibility"/>
+        </Method>
+        <Method name="checkForChange" returnType="int" visibility="public">
+          <Argument type="Player" name="maxingPlayer"/>
+          <Argument type="int" name="height"/>
+          <Argument type="int" name="alpha"/>
+          <Argument type="int" name="beta"/>
+          <Argument type="Piece" name="piece"/>
+          <Argument type="Square" name="possibility"/>
+        </Method>
+        <Method name="keepTrackOfBestMoves" returnType="void" visibility="private">
+          <Argument type="int" name="height"/>
+          <Argument type="int" name="value"/>
+          <Argument type="Piece" name="piece"/>
+          <Argument type="Square" name="possibility"/>
+        </Method>
+        <Method name="findBestMoves" returnType="void" visibility="public">
+          <Argument type="GameSituation" name="situation"/>
+        </Method>
+        <Method name="salvageLastPrincipalVariation" returnType="void" visibility="private"/>
+      </Methods>
+    </Class>
+    <Class name="ChessBoardInitializer" package="chess.logic.chessboardinitializers" visibility="public" isAbstract="true" xPosition="2120.0" yPosition="420.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="initialize" returnType="void" visibility="public" isAbstract="true">
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="addPieceToOwner" returnType="void" visibility="public" isStatic="true">
+          <Argument type="Square" name="target"/>
+          <Argument type="ChessBoard" name="chessBoard"/>
+        </Method>
+        <Method name="removePieceFromOwner" returnType="void" visibility="public" isStatic="true">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="ChessBoard" name="chessBoard"/>
+        </Method>
+        <Method name="clearBoard" returnType="void" visibility="protected">
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="putPieceOnBoard" returnType="void" visibility="public" isStatic="true">
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="Piece" name="piece"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="EmptyBoardInitializer" package="chess.logic.chessboardinitializers" visibility="public" xPosition="20.0" yPosition="820.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="initialize" returnType="void" visibility="public">
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="StandardBoardInitializer" package="chess.logic.chessboardinitializers" visibility="public" xPosition="320.0" yPosition="820.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="initialize" returnType="void" visibility="public">
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="initialiseBishops" returnType="void" visibility="private">
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="initialiseKingsAndQueens" returnType="void" visibility="private">
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="initialiseKnights" returnType="void" visibility="private">
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="initialiseRooks" returnType="void" visibility="private">
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="initialisePawns" returnType="void" visibility="private">
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Move" package="chess.domain" visibility="public" xPosition="620.0" yPosition="820.0">
+      <Fields>
+        <Field name="piece" type="Piece" visibility="private"/>
+        <Field name="target" type="Square" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="Square" name="target"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getPiece" returnType="Piece" visibility="public"/>
+        <Method name="setPiece" returnType="void" visibility="public">
+          <Argument type="Piece" name="piece"/>
+        </Method>
+        <Method name="getTarget" returnType="Square" visibility="public"/>
+        <Method name="setTarget" returnType="void" visibility="public">
+          <Argument type="Square" name="target"/>
+        </Method>
+        <Method name="equals" returnType="boolean" visibility="public">
+          <Argument type="Object" name="obj"/>
+        </Method>
+        <Method name="toString" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="ChessBoard" package="chess.domain.board" visibility="public" xPosition="920.0" yPosition="820.0">
+      <Fields>
+        <Field name="table" type="Square[][]" visibility="private"/>
+        <Field name="whitePieces" type="List&lt;Piece&gt;" visibility="private"/>
+        <Field name="blackPieces" type="List&lt;Piece&gt;" visibility="private"/>
+        <Field name="squaresThreatenedByBlack" type="Set&lt;Square&gt;" visibility="private"/>
+        <Field name="squaresThreatenedByWhite" type="Set&lt;Square&gt;" visibility="private"/>
+        <Field name="movementLogic" type="MovementLogic" visibility="private"/>
+        <Field name="kings" type="Map&lt;Player, King&gt;" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="MovementLogic" name="movementLogic"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="initializeBoard" returnType="void" visibility="private"/>
+        <Method name="getTable" returnType="Square[][]" visibility="public"/>
+        <Method name="getMovementLogic" returnType="MovementLogic" visibility="public"/>
+        <Method name="setTable" returnType="void" visibility="public">
+          <Argument type="Square[][]" name="newBoard"/>
+        </Method>
+        <Method name="getKings" returnType="Map&lt;Player, King&gt;" visibility="public"/>
+        <Method name="updateThreatenedSquares" returnType="void" visibility="public">
+          <Argument type="Player" name="player"/>
+        </Method>
+        <Method name="getPieces" returnType="List&lt;Piece&gt;" visibility="public">
+          <Argument type="Player" name="player"/>
+        </Method>
+        <Method name="setBlackPieces" returnType="void" visibility="public">
+          <Argument type="List&lt;Piece&gt;" name="blackPieces"/>
+        </Method>
+        <Method name="setWhitePieces" returnType="void" visibility="public">
+          <Argument type="List&lt;Piece&gt;" name="whitePieces"/>
+        </Method>
+        <Method name="getSquare" returnType="Square" visibility="public">
+          <Argument type="int" name="column"/>
+          <Argument type="int" name="row"/>
+        </Method>
+        <Method name="withinTable" returnType="boolean" visibility="public">
+          <Argument type="int" name="column"/>
+          <Argument type="int" name="row"/>
+        </Method>
+        <Method name="threatenedSquares" returnType="Set&lt;Square&gt;" visibility="public">
+          <Argument type="Player" name="player"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Enum name="Player" package="chess.domain.board" visibility="public" xPosition="1220.0" yPosition="820.0">
+      <Literals>
+        <Literal name="WHITE"/>
+        <Literal name="BLACK"/>
+      </Literals>
+    </Enum>
+    <Class name="Square" package="chess.domain.board" visibility="public" xPosition="1520.0" yPosition="820.0">
+      <Fields>
+        <Field name="column" type="int" visibility="private"/>
+        <Field name="row" type="int" visibility="private"/>
+        <Field name="piece" type="Piece" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="column"/>
+          <Argument type="int" name="row"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getColumn" returnType="int" visibility="public"/>
+        <Method name="getRow" returnType="int" visibility="public"/>
+        <Method name="getPiece" returnType="Piece" visibility="public"/>
+        <Method name="setPiece" returnType="void" visibility="public">
+          <Argument type="Piece" name="piece"/>
+        </Method>
+        <Method name="equals" returnType="boolean" visibility="public">
+          <Argument type="Object" name="obj"/>
+        </Method>
+        <Method name="hashCode" returnType="int" visibility="public"/>
+        <Method name="containsAPiece" returnType="boolean" visibility="public"/>
+        <Method name="toString" returnType="String" visibility="public"/>
+        <Method name="clone" returnType="Square" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="ChessBoardCopier" package="chess.domain.board" visibility="public" xPosition="1820.0" yPosition="820.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="copy" returnType="ChessBoard" visibility="public" isStatic="true">
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="copyTable" returnType="Square[][]" visibility="private" isStatic="true">
+          <Argument type="Square[][]" name="table"/>
+        </Method>
+        <Method name="setPieces" returnType="void" visibility="private" isStatic="true">
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="revertOldSituation" returnType="void" visibility="public" isStatic="true">
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="ChessBoard" name="chessboard"/>
+        </Method>
+        <Method name="putAllPiecesOnBoard" returnType="void" visibility="private" isStatic="true">
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="makePieceListsEqual" returnType="void" visibility="private" isStatic="true">
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="ChessBoard" name="chessboard"/>
+        </Method>
+        <Method name="clearBoardOfPieces" returnType="void" visibility="private" isStatic="true">
+          <Argument type="ChessBoard" name="board"/>
+        </Method>
+        <Method name="undoMove" returnType="void" visibility="public" isStatic="true">
+          <Argument type="ChessBoard" name="backUp"/>
+          <Argument type="GameSituation" name="sit"/>
+          <Argument type="Square" name="from"/>
+          <Argument type="Square" name="to"/>
+        </Method>
+        <Method name="undoMove" returnType="void" visibility="public" isStatic="true">
+          <Argument type="ChessBoard" name="backUp"/>
+          <Argument type="GameSituation" name="sit"/>
+          <Argument type="Square" name="from"/>
+          <Argument type="Piece" name="moved"/>
+        </Method>
+        <Method name="handleDestination" returnType="void" visibility="private" isStatic="true">
+          <Argument type="ChessBoard" name="backUp"/>
+          <Argument type="Square" name="to"/>
+          <Argument type="GameSituation" name="sit"/>
+          <Argument type="Square" name="from"/>
+        </Method>
+        <Method name="putTakenPieceBackOnBoard" returnType="void" visibility="private" isStatic="true">
+          <Argument type="ChessBoard" name="board"/>
+          <Argument type="Piece" name="taken"/>
+          <Argument type="Square" name="to"/>
+        </Method>
+        <Method name="handleEnPassant" returnType="void" visibility="private" isStatic="true">
+          <Argument type="Square" name="from"/>
+          <Argument type="Square" name="to"/>
+          <Argument type="GameSituation" name="sit"/>
+          <Argument type="ChessBoard" name="backUp"/>
+        </Method>
+        <Method name="handleCastling" returnType="void" visibility="private" isStatic="true">
+          <Argument type="Square" name="from"/>
+          <Argument type="Square" name="to"/>
+          <Argument type="GameSituation" name="sit"/>
+          <Argument type="ChessBoard" name="backUp"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="TranspositionKey" package="chess.domain.datastructures" visibility="public" xPosition="2120.0" yPosition="820.0">
+      <Fields>
+        <Field name="height" type="int" visibility="private"/>
+        <Field name="whoseTurn" type="Player" visibility="private"/>
+        <Field name="hashedBoard" type="long" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="height"/>
+          <Argument type="Player" name="whoseTurn"/>
+          <Argument type="long" name="hash"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getHeight" returnType="int" visibility="public"/>
+        <Method name="setHeight" returnType="void" visibility="public">
+          <Argument type="int" name="first"/>
+        </Method>
+        <Method name="getWhoseTurn" returnType="Player" visibility="public"/>
+        <Method name="setWhoseTurn" returnType="void" visibility="public">
+          <Argument type="Player" name="second"/>
+        </Method>
+        <Method name="getHashedBoard" returnType="long" visibility="public"/>
+        <Method name="setHashedBoard" returnType="void" visibility="public">
+          <Argument type="long" name="hashedBoard"/>
+        </Method>
+        <Method name="opposingKey" returnType="TranspositionKey" visibility="public"/>
+        <Method name="hashCode" returnType="int" visibility="public"/>
+        <Method name="equals" returnType="boolean" visibility="public">
+          <Argument type="Object" name="obj"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Pair" package="chess.domain.datastructures" visibility="public" xPosition="20.0" yPosition="1220.0">
+      <Fields>
+        <Field name="first" type="Type1" visibility="private"/>
+        <Field name="second" type="Type2" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Type1" name="first"/>
+          <Argument type="Type2" name="second"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getFirst" returnType="Type1" visibility="public"/>
+        <Method name="setFirst" returnType="void" visibility="public">
+          <Argument type="Type1" name="first"/>
+        </Method>
+        <Method name="getSecond" returnType="Type2" visibility="public"/>
+        <Method name="setSecond" returnType="void" visibility="public">
+          <Argument type="Type2" name="second"/>
+        </Method>
+        <Method name="hashCode" returnType="int" visibility="public"/>
+        <Method name="equals" returnType="boolean" visibility="public">
+          <Argument type="Object" name="obj"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="MyHashMap" package="chess.domain.datastructures" visibility="public" xPosition="320.0" yPosition="1220.0">
+      <Fields>
+        <Field name="keys" type="K[]" visibility="private"/>
+        <Field name="values" type="V[]" visibility="private"/>
+        <Field name="indices" type="MyLinkedList&lt;Integer&gt;[]" visibility="private"/>
+        <Field name="freedIndices" type="MyLimitedStack&lt;Integer&gt;" visibility="private"/>
+        <Field name="capacity" type="int" visibility="private"/>
+        <Field name="size" type="int" visibility="private"/>
+        <Field name="loadFactor" type="double" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="initializeLinkedLists" returnType="void" visibility="private">
+          <Argument type="MyLinkedList[]" name="linkedListTable"/>
+        </Method>
+        <Method name="size" returnType="int" visibility="public"/>
+        <Method name="isEmpty" returnType="boolean" visibility="public"/>
+        <Method name="containsKey" returnType="boolean" visibility="public">
+          <Argument type="Object" name="o"/>
+        </Method>
+        <Method name="containsValue" returnType="boolean" visibility="public">
+          <Argument type="Object" name="o"/>
+        </Method>
+        <Method name="get" returnType="Object" visibility="public">
+          <Argument type="Object" name="o"/>
+        </Method>
+        <Method name="put" returnType="Object" visibility="public">
+          <Argument type="Object" name="key"/>
+          <Argument type="Object" name="value"/>
+        </Method>
+        <Method name="findOldIndex" returnType="int" visibility="private">
+          <Argument type="int" name="hash"/>
+          <Argument type="Object" name="key"/>
+        </Method>
+        <Method name="ensureCapacity" returnType="void" visibility="private"/>
+        <Method name="rehashToNewIndices" returnType="void" visibility="private">
+          <Argument type="K[]" name="newKeys"/>
+          <Argument type="V[]" name="newValues"/>
+          <Argument type="MyLinkedList&lt;Integer&gt;[]" name="newIndices"/>
+        </Method>
+        <Method name="remove" returnType="Object" visibility="public">
+          <Argument type="Object" name="o"/>
+        </Method>
+        <Method name="putAll" returnType="void" visibility="public">
+          <Argument type="Map" name="map"/>
+        </Method>
+        <Method name="clear" returnType="void" visibility="public"/>
+        <Method name="keySet" returnType="Set" visibility="public"/>
+        <Method name="values" returnType="Collection" visibility="public"/>
+        <Method name="entrySet" returnType="Set" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="MyLimitedStack" package="chess.domain.datastructures" visibility="public" xPosition="620.0" yPosition="1220.0">
+      <Fields>
+        <Field name="array" type="T[]" visibility="private"/>
+        <Field name="head" type="int" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="capacity"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="isEmpty" returnType="boolean" visibility="public"/>
+        <Method name="pop" returnType="T" visibility="public"/>
+        <Method name="push" returnType="void" visibility="public">
+          <Argument type="T" name="element"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="MyHashSet" package="chess.domain.datastructures" visibility="public" xPosition="920.0" yPosition="1220.0">
+      <Fields>
+        <Field name="loadFactor" type="double" visibility="private" isFinal="true"/>
+        <Field name="capacity" type="int" visibility="private"/>
+        <Field name="size" type="int" visibility="private"/>
+        <Field name="buckets" type="MyLinkedList&lt;T&gt;[]" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="size" returnType="int" visibility="public"/>
+        <Method name="isEmpty" returnType="boolean" visibility="public"/>
+        <Method name="contains" returnType="boolean" visibility="public">
+          <Argument type="Object" name="o"/>
+        </Method>
+        <Method name="iterator" returnType="Iterator&lt;T&gt;" visibility="public"/>
+        <Method name="toArray" returnType="Object[]" visibility="public"/>
+        <Method name="toArray" returnType="T[]" visibility="public">
+          <Argument type="T[]" name="ts"/>
+        </Method>
+        <Method name="add" returnType="boolean" visibility="public">
+          <Argument type="T" name="e"/>
+        </Method>
+        <Method name="ensureCapacity" returnType="void" visibility="private"/>
+        <Method name="initializeLinkedLists" returnType="void" visibility="private">
+          <Argument type="MyLinkedList[]" name="linkedListTable"/>
+        </Method>
+        <Method name="remove" returnType="boolean" visibility="public">
+          <Argument type="Object" name="o"/>
+        </Method>
+        <Method name="containsAll" returnType="boolean" visibility="public">
+          <Argument type="Collection&lt;?&gt;" name="clctn"/>
+        </Method>
+        <Method name="addAll" returnType="boolean" visibility="public">
+          <Argument type="Collection&lt;? extends T&gt;" name="clctn"/>
+        </Method>
+        <Method name="rehashValues" returnType="void" visibility="private">
+          <Argument type="int" name="oldCapacity"/>
+        </Method>
+        <Method name="retainAll" returnType="boolean" visibility="public">
+          <Argument type="Collection&lt;?&gt;" name="clctn"/>
+        </Method>
+        <Method name="removeAll" returnType="boolean" visibility="public">
+          <Argument type="Collection&lt;?&gt;" name="clctn"/>
+        </Method>
+        <Method name="clear" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Node" package="chess.domain.datastructures" visibility="public" xPosition="1220.0" yPosition="1220.0">
+      <Fields>
+        <Field name="value" type="T" visibility="private"/>
+        <Field name="next" type="Node" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="T" name="value"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getValue" returnType="T" visibility="public"/>
+        <Method name="setValue" returnType="void" visibility="public">
+          <Argument type="T" name="value"/>
+        </Method>
+        <Method name="getNext" returnType="Node" visibility="public"/>
+        <Method name="setNext" returnType="void" visibility="public">
+          <Argument type="Node" name="next"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="MyLinkedList" package="chess.domain.datastructures" visibility="public" xPosition="1520.0" yPosition="1220.0">
+      <Fields>
+        <Field name="first" type="Node&lt;T&gt;" visibility="private"/>
+        <Field name="last" type="Node&lt;T&gt;" visibility="private"/>
+        <Field name="size" type="int" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="size" returnType="int" visibility="public"/>
+        <Method name="isEmpty" returnType="boolean" visibility="public"/>
+        <Method name="contains" returnType="boolean" visibility="public">
+          <Argument type="Object" name="o"/>
+        </Method>
+        <Method name="iterator" returnType="Iterator&lt;T&gt;" visibility="public"/>
+        <Method name="toArray" returnType="Object[]" visibility="public"/>
+        <Method name="toArray" returnType="T[]" visibility="public">
+          <Argument type="T[]" name="ts"/>
+        </Method>
+        <Method name="add" returnType="boolean" visibility="public">
+          <Argument type="T" name="e"/>
+        </Method>
+        <Method name="remove" returnType="boolean" visibility="public">
+          <Argument type="Object" name="o"/>
+        </Method>
+        <Method name="containsAll" returnType="boolean" visibility="public">
+          <Argument type="Collection&lt;?&gt;" name="clctn"/>
+        </Method>
+        <Method name="addAll" returnType="boolean" visibility="public">
+          <Argument type="Collection&lt;? extends T&gt;" name="clctn"/>
+        </Method>
+        <Method name="addAll" returnType="boolean" visibility="public">
+          <Argument type="int" name="i"/>
+          <Argument type="Collection&lt;? extends T&gt;" name="clctn"/>
+        </Method>
+        <Method name="removeAll" returnType="boolean" visibility="public">
+          <Argument type="Collection&lt;?&gt;" name="clctn"/>
+        </Method>
+        <Method name="retainAll" returnType="boolean" visibility="public">
+          <Argument type="Collection&lt;?&gt;" name="clctn"/>
+        </Method>
+        <Method name="clear" returnType="void" visibility="public"/>
+        <Method name="get" returnType="T" visibility="public">
+          <Argument type="int" name="i"/>
+        </Method>
+        <Method name="set" returnType="T" visibility="public">
+          <Argument type="int" name="i"/>
+          <Argument type="T" name="e"/>
+        </Method>
+        <Method name="add" returnType="void" visibility="public">
+          <Argument type="int" name="i"/>
+          <Argument type="T" name="e"/>
+        </Method>
+        <Method name="remove" returnType="T" visibility="public">
+          <Argument type="int" name="i"/>
+        </Method>
+        <Method name="indexOf" returnType="int" visibility="public">
+          <Argument type="Object" name="o"/>
+        </Method>
+        <Method name="lastIndexOf" returnType="int" visibility="public">
+          <Argument type="Object" name="o"/>
+        </Method>
+        <Method name="listIterator" returnType="ListIterator&lt;T&gt;" visibility="public"/>
+        <Method name="listIterator" returnType="ListIterator&lt;T&gt;" visibility="public">
+          <Argument type="int" name="i"/>
+        </Method>
+        <Method name="subList" returnType="List&lt;T&gt;" visibility="public">
+          <Argument type="int" name="i"/>
+          <Argument type="int" name="i1"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="MyArrayList" package="chess.domain.datastructures" visibility="public" xPosition="1820.0" yPosition="1220.0">
+      <Fields>
+        <Field name="array" type="T[]" visibility="private"/>
+        <Field name="capacity" type="int" visibility="private"/>
+        <Field name="size" type="int" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="size" returnType="int" visibility="public"/>
+        <Method name="isEmpty" returnType="boolean" visibility="public"/>
+        <Method name="contains" returnType="boolean" visibility="public">
+          <Argument type="Object" name="o"/>
+        </Method>
+        <Method name="iterator" returnType="Iterator&lt;T&gt;" visibility="public"/>
+        <Method name="toArray" returnType="Object[]" visibility="public"/>
+        <Method name="toArray" returnType="T[]" visibility="public">
+          <Argument type="T[]" name="a"/>
+        </Method>
+        <Method name="add" returnType="boolean" visibility="public">
+          <Argument type="T" name="e"/>
+        </Method>
+        <Method name="ensureCapacity" returnType="void" visibility="private"/>
+        <Method name="remove" returnType="boolean" visibility="public">
+          <Argument type="Object" name="o"/>
+        </Method>
+        <Method name="containsAll" returnType="boolean" visibility="public">
+          <Argument type="Collection&lt;?&gt;" name="c"/>
+        </Method>
+        <Method name="addAll" returnType="boolean" visibility="public">
+          <Argument type="Collection&lt;? extends T&gt;" name="c"/>
+        </Method>
+        <Method name="addAll" returnType="boolean" visibility="public">
+          <Argument type="int" name="index"/>
+          <Argument type="Collection&lt;? extends T&gt;" name="c"/>
+        </Method>
+        <Method name="removeAll" returnType="boolean" visibility="public">
+          <Argument type="Collection&lt;?&gt;" name="c"/>
+        </Method>
+        <Method name="retainAll" returnType="boolean" visibility="public">
+          <Argument type="Collection&lt;?&gt;" name="c"/>
+        </Method>
+        <Method name="clear" returnType="void" visibility="public"/>
+        <Method name="get" returnType="T" visibility="public">
+          <Argument type="int" name="index"/>
+        </Method>
+        <Method name="set" returnType="T" visibility="public">
+          <Argument type="int" name="index"/>
+          <Argument type="T" name="element"/>
+        </Method>
+        <Method name="add" returnType="void" visibility="public">
+          <Argument type="int" name="index"/>
+          <Argument type="T" name="element"/>
+        </Method>
+        <Method name="remove" returnType="T" visibility="public">
+          <Argument type="int" name="index"/>
+        </Method>
+        <Method name="indexOf" returnType="int" visibility="public">
+          <Argument type="Object" name="o"/>
+        </Method>
+        <Method name="lastIndexOf" returnType="int" visibility="public">
+          <Argument type="Object" name="o"/>
+        </Method>
+        <Method name="listIterator" returnType="ListIterator&lt;T&gt;" visibility="public"/>
+        <Method name="listIterator" returnType="ListIterator&lt;T&gt;" visibility="public">
+          <Argument type="int" name="index"/>
+        </Method>
+        <Method name="subList" returnType="List&lt;T&gt;" visibility="public">
+          <Argument type="int" name="fromIndex"/>
+          <Argument type="int" name="toIndex"/>
+        </Method>
+        <Method name="arraysDeepEquals" returnType="boolean" visibility="public" isStatic="true">
+          <Argument type="Object[]" name="a"/>
+          <Argument type="Object[]" name="b"/>
+        </Method>
+        <Method name="arrays2DeepEquals" returnType="boolean" visibility="public" isStatic="true">
+          <Argument type="Object[][]" name="a"/>
+          <Argument type="Object[][]" name="b"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Bishop" package="chess.domain.pieces" visibility="public" xPosition="2120.0" yPosition="1220.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="column"/>
+          <Argument type="int" name="row"/>
+          <Argument type="Player" name="owner"/>
+          <Argument type="String" name="pieceCode"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="clone" returnType="Piece" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Queen" package="chess.domain.pieces" visibility="public" xPosition="20.0" yPosition="1620.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="column"/>
+          <Argument type="int" name="row"/>
+          <Argument type="Player" name="player"/>
+          <Argument type="String" name="pieceCode"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="clone" returnType="Piece" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Knight" package="chess.domain.pieces" visibility="public" xPosition="320.0" yPosition="1620.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="column"/>
+          <Argument type="int" name="row"/>
+          <Argument type="Player" name="player"/>
+          <Argument type="String" name="pieceCode"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="clone" returnType="Piece" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Piece" package="chess.domain.pieces" visibility="public" isAbstract="true" xPosition="620.0" yPosition="1620.0">
+      <Fields>
+        <Field name="column" type="int" visibility="protected"/>
+        <Field name="row" type="int" visibility="protected"/>
+        <Field name="owner" type="Player" visibility="protected"/>
+        <Field name="pieceCode" type="String" visibility="protected"/>
+        <Field name="taken" type="boolean" visibility="protected"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="column"/>
+          <Argument type="int" name="row"/>
+          <Argument type="Player" name="owner"/>
+          <Argument type="String" name="pieceCode"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="makeDeeplyEqualTo" returnType="void" visibility="public">
+          <Argument type="Piece" name="piece"/>
+        </Method>
+        <Method name="clone" returnType="Piece" visibility="public" isAbstract="true"/>
+        <Method name="equals" returnType="boolean" visibility="public">
+          <Argument type="Object" name="obj"/>
+        </Method>
+        <Method name="getColumn" returnType="int" visibility="public"/>
+        <Method name="setColumn" returnType="void" visibility="public">
+          <Argument type="int" name="column"/>
+        </Method>
+        <Method name="getRow" returnType="int" visibility="public"/>
+        <Method name="setRow" returnType="void" visibility="public">
+          <Argument type="int" name="row"/>
+        </Method>
+        <Method name="getOwner" returnType="Player" visibility="public"/>
+        <Method name="isTaken" returnType="boolean" visibility="public"/>
+        <Method name="setTaken" returnType="void" visibility="public">
+          <Argument type="boolean" name="taken"/>
+        </Method>
+        <Method name="getPieceCode" returnType="String" visibility="public"/>
+        <Method name="setPieceCode" returnType="void" visibility="public">
+          <Argument type="String" name="pieceCode"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Pawn" package="chess.domain.pieces" visibility="public" xPosition="920.0" yPosition="1620.0">
+      <Fields>
+        <Field name="movedTwoSquaresLastTurn" type="boolean" visibility="private"/>
+        <Field name="hasBeenMoved" type="boolean" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="column"/>
+          <Argument type="int" name="row"/>
+          <Argument type="Player" name="owner"/>
+          <Argument type="String" name="pieceCode"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="makeDeeplyEqualTo" returnType="void" visibility="public">
+          <Argument type="Piece" name="piece"/>
+        </Method>
+        <Method name="getHasBeenMoved" returnType="boolean" visibility="public"/>
+        <Method name="setHasBeenMoved" returnType="void" visibility="public">
+          <Argument type="boolean" name="hasBeenMoved"/>
+        </Method>
+        <Method name="getMovedTwoSquaresLastTurn" returnType="boolean" visibility="public"/>
+        <Method name="setMovedTwoSquaresLastTurn" returnType="void" visibility="public">
+          <Argument type="boolean" name="movedTwoSquaresLastTurn"/>
+        </Method>
+        <Method name="clone" returnType="Piece" visibility="public"/>
+        <Method name="opposingEnd" returnType="int" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="King" package="chess.domain.pieces" visibility="public" xPosition="1220.0" yPosition="1620.0">
+      <Fields>
+        <Field name="hasBeenMoved" type="boolean" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="column"/>
+          <Argument type="int" name="row"/>
+          <Argument type="Player" name="player"/>
+          <Argument type="String" name="pieceCode"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="makeDeeplyEqualTo" returnType="void" visibility="public">
+          <Argument type="Piece" name="piece"/>
+        </Method>
+        <Method name="getHasBeenMoved" returnType="boolean" visibility="public"/>
+        <Method name="setHasBeenMoved" returnType="void" visibility="public">
+          <Argument type="boolean" name="hasBeenMoved"/>
+        </Method>
+        <Method name="clone" returnType="Piece" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Rook" package="chess.domain.pieces" visibility="public" xPosition="1520.0" yPosition="1620.0">
+      <Fields>
+        <Field name="hasBeenMoved" type="boolean" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="column"/>
+          <Argument type="int" name="row"/>
+          <Argument type="Player" name="player"/>
+          <Argument type="String" name="pieceCode"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="makeDeeplyEqualTo" returnType="void" visibility="public">
+          <Argument type="Piece" name="piece"/>
+        </Method>
+        <Method name="getHasBeenMoved" returnType="boolean" visibility="public"/>
+        <Method name="setHasBeenMoved" returnType="void" visibility="public">
+          <Argument type="boolean" name="hasBeenMoved"/>
+        </Method>
+        <Method name="clone" returnType="Piece" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="GameSituation" package="chess.domain" visibility="public" xPosition="1820.0" yPosition="1620.0">
+      <Fields>
+        <Field name="board" type="ChessBoard" visibility="private"/>
+        <Field name="init" type="ChessBoardInitializer" visibility="private"/>
+        <Field name="turn" type="int" visibility="private"/>
+        <Field name="legalityChecker" type="LegalityChecker" visibility="private"/>
+        <Field name="checkLogic" type="CheckingLogic" visibility="private"/>
+        <Field name="continues" type="boolean" visibility="private"/>
+        <Field name="ais" type="boolean[]" visibility="private"/>
+        <Field name="chessBoardSituationCounter" type="Map&lt;Long, Integer&gt;" visibility="private"/>
+        <Field name="hasher" type="ZobristHasher" visibility="private"/>
+        <Field name="boardHash" type="long" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="ChessBoardInitializer" name="init"/>
+          <Argument type="MovementLogic" name="movementLogic"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="whoseTurn" returnType="Player" visibility="public"/>
+        <Method name="getContinues" returnType="boolean" visibility="public"/>
+        <Method name="setContinues" returnType="void" visibility="public">
+          <Argument type="boolean" name="continues"/>
+        </Method>
+        <Method name="getChecker" returnType="LegalityChecker" visibility="public"/>
+        <Method name="getChessBoard" returnType="ChessBoard" visibility="public"/>
+        <Method name="getCheckLogic" returnType="CheckingLogic" visibility="public"/>
+        <Method name="getAis" returnType="boolean[]" visibility="public"/>
+        <Method name="getHasher" returnType="ZobristHasher" visibility="public"/>
+        <Method name="getTurn" returnType="int" visibility="public"/>
+        <Method name="setBlackAI" returnType="void" visibility="public">
+          <Argument type="boolean" name="isAi"/>
+        </Method>
+        <Method name="setWhiteAI" returnType="void" visibility="public">
+          <Argument type="boolean" name="isAi"/>
+        </Method>
+        <Method name="getBoardHash" returnType="long" visibility="public"/>
+        <Method name="getCountOfCurrentSituation" returnType="int" visibility="public"/>
+        <Method name="decrementCountOfCurrentBoardSituation" returnType="void" visibility="public"/>
+        <Method name="incrementCountOfCurrentBoardSituation" returnType="void" visibility="public"/>
+        <Method name="reHashBoard" returnType="void" visibility="public">
+          <Argument type="boolean" name="increment"/>
+        </Method>
+        <Method name="updateHashForMoving" returnType="void" visibility="public">
+          <Argument type="Square" name="from"/>
+          <Argument type="Square" name="to"/>
+        </Method>
+        <Method name="updateHashForUndoingMove" returnType="void" visibility="public">
+          <Argument type="ChessBoard" name="backup"/>
+          <Argument type="Square" name="from"/>
+          <Argument type="Square" name="to"/>
+        </Method>
+        <Method name="setChessBoard" returnType="void" visibility="public">
+          <Argument type="ChessBoard" name="chessBoard"/>
+        </Method>
+        <Method name="nextTurn" returnType="void" visibility="public"/>
+        <Method name="makePawnsUnEnPassantable" returnType="void" visibility="public">
+          <Argument type="Player" name="player"/>
+        </Method>
+        <Method name="reset" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="ImageLoader" package="chess.io" visibility="public" xPosition="2120.0" yPosition="1620.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="getFile" returnType="File" visibility="public" isStatic="true">
+          <Argument type="String" name="fileName"/>
+        </Method>
+        <Method name="getImage" returnType="BufferedImage" visibility="public" isStatic="true">
+          <Argument type="String" name="fileName"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="SideChooser" package="chess.gui" visibility="public" xPosition="20.0" yPosition="2020.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="MainFrame" name="main"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="initComponents" returnType="void" visibility="private">
+          <Argument type="Container" name="container"/>
+          <Argument type="MainFrame" name="main"/>
+        </Method>
+        <Method name="createAiDifficultyChooser" returnType="JPanel" visibility="private">
+          <Argument type="MainFrame" name="main"/>
+          <Argument type="JRadioButton" name="black"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="MainFrame" package="chess.gui" visibility="public" xPosition="320.0" yPosition="2020.0">
+      <Fields>
+        <Field name="gameWindow" type="GameWindow" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="JFrame" name="gameWindow"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getGameWindow" returnType="GameWindow" visibility="public"/>
+        <Method name="initComponents" returnType="void" visibility="private">
+          <Argument type="Container" name="container"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="AiVsAiDifficultyChooser" package="chess.gui" visibility="public" xPosition="620.0" yPosition="2020.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="MainFrame" name="main"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="initComponents" returnType="void" visibility="private">
+          <Argument type="Container" name="cont"/>
+          <Argument type="MainFrame" name="main"/>
+        </Method>
+        <Method name="topPanel" returnType="JPanel" visibility="private">
+          <Argument type="MainFrame" name="main"/>
+        </Method>
+        <Method name="createAiDifficultyChooser" returnType="JPanel" visibility="private">
+          <Argument type="MainFrame" name="main"/>
+          <Argument type="String" name="side"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="EndingScreen" package="chess.gui" visibility="public" xPosition="920.0" yPosition="2020.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Map&lt;String, JFrame&gt;" name="frames"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="initComponents" returnType="void" visibility="private">
+          <Argument type="Container" name="container"/>
+          <Argument type="Map&lt;String, JFrame&gt;" name="frames"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="PieceDrawer" package="chess.gui.boarddrawing" visibility="public" xPosition="1220.0" yPosition="2020.0">
+      <Fields>
+        <Field name="images" type="Map&lt;Pair, Image&gt;" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="addImages" returnType="void" visibility="private"/>
+        <Method name="draw" returnType="void" visibility="public">
+          <Argument type="Piece" name="piece"/>
+          <Argument type="Graphics" name="graphics"/>
+          <Argument type="int" name="sideLength"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="ChessBoardDrawer" package="chess.gui.boarddrawing" visibility="public" xPosition="1520.0" yPosition="2020.0">
+      <Fields>
+        <Field name="game" type="GameSituation" visibility="private"/>
+        <Field name="guiLogic" type="InputProcessor" visibility="private"/>
+        <Field name="sideLength" type="int" visibility="private"/>
+        <Field name="pieceDrawer" type="PieceDrawer" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="InputProcessor" name="guiLogic"/>
+          <Argument type="GameSituation" name="game"/>
+          <Argument type="int" name="sideLength"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getGame" returnType="GameSituation" visibility="public"/>
+        <Method name="paintComponent" returnType="void" visibility="protected">
+          <Argument type="Graphics" name="graphics"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="GameWindow" package="chess.gui" visibility="public" xPosition="1820.0" yPosition="2020.0">
+      <Fields>
+        <Field name="game" type="GameSituation" visibility="private"/>
+        <Field name="inputProcessor" type="InputProcessor" visibility="private"/>
+        <Field name="textArea" type="JLabel" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="InputProcessor" name="inputProcessor"/>
+          <Argument type="GameSituation" name="game"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getGame" returnType="GameSituation" visibility="public"/>
+        <Method name="getInputProcessor" returnType="InputProcessor" visibility="public"/>
+        <Method name="createComponents" returnType="void" visibility="private">
+          <Argument type="Container" name="container"/>
+        </Method>
+        <Method name="repaint" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="ChessBoardListener" package="chess.gui.actionlisteners" visibility="public" xPosition="2120.0" yPosition="2020.0">
+      <Fields>
+        <Field name="board" type="ChessBoardDrawer" visibility="private"/>
+        <Field name="sideLength" type="int" visibility="private"/>
+        <Field name="logic" type="InputProcessor" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="InputProcessor" name="guiLogic"/>
+          <Argument type="ChessBoardDrawer" name="board"/>
+          <Argument type="int" name="sideLength"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="mouseClicked" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+        </Method>
+        <Method name="mouseEntered" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+        </Method>
+        <Method name="mouseExited" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+        </Method>
+        <Method name="mousePressed" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+        </Method>
+        <Method name="mouseReleased" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="SideChooserOpener" package="chess.gui.actionlisteners" visibility="public" xPosition="20.0" yPosition="2420.0">
+      <Fields>
+        <Field name="mf" type="MainFrame" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="MainFrame" name="mf"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="actionPerformed" returnType="void" visibility="public">
+          <Argument type="ActionEvent" name="ae"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="DifficultySetter" package="chess.gui.actionlisteners" visibility="public" xPosition="320.0" yPosition="2420.0">
+      <Fields>
+        <Field name="mf" type="MainFrame" visibility="private"/>
+        <Field name="isBlack" type="JRadioButton" visibility="private"/>
+        <Field name="text" type="JTextField" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="MainFrame" name="mf"/>
+          <Argument type="JTextField" name="text"/>
+          <Argument type="JRadioButton" name="isBlack"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="actionPerformed" returnType="void" visibility="public">
+          <Argument type="ActionEvent" name="ae"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="DifficultyChooserOpener" package="chess.gui.actionlisteners" visibility="public" xPosition="620.0" yPosition="2420.0">
+      <Fields>
+        <Field name="main" type="MainFrame" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="MainFrame" name="main"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="actionPerformed" returnType="void" visibility="public">
+          <Argument type="ActionEvent" name="ae"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="GameRestarter" package="chess.gui.actionlisteners" visibility="public" xPosition="920.0" yPosition="2420.0">
+      <Fields>
+        <Field name="frames" type="Map&lt;String, JFrame&gt;" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Map&lt;String, JFrame&gt;" name="frames"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="actionPerformed" returnType="void" visibility="public">
+          <Argument type="ActionEvent" name="ae"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="WindowCloser" package="chess.gui.actionlisteners" visibility="public" xPosition="1220.0" yPosition="2420.0">
+      <Fields>
+        <Field name="frames" type="Map&lt;String, JFrame&gt;" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Map&lt;String, JFrame&gt;" name="frames"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="mouseClicked" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+        </Method>
+        <Method name="mouseEntered" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+        </Method>
+        <Method name="mouseExited" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+        </Method>
+        <Method name="mousePressed" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+        </Method>
+        <Method name="mouseReleased" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="GameVsAiStarter" package="chess.gui.actionlisteners" visibility="public" xPosition="1520.0" yPosition="2420.0">
+      <Fields>
+        <Field name="main" type="MainFrame" visibility="private"/>
+        <Field name="sc" type="SideChooser" visibility="private"/>
+        <Field name="isBlack" type="JRadioButton" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="MainFrame" name="main"/>
+          <Argument type="SideChooser" name="sc"/>
+          <Argument type="JRadioButton" name="isBlack"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="actionPerformed" returnType="void" visibility="public">
+          <Argument type="ActionEvent" name="e"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="AiVsAiGameStarter" package="chess.gui.actionlisteners" visibility="public" xPosition="1820.0" yPosition="2420.0">
+      <Fields>
+        <Field name="main" type="MainFrame" visibility="private"/>
+        <Field name="adc" type="AiVsAiDifficultyChooser" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="MainFrame" name="main"/>
+          <Argument type="AiVsAiDifficultyChooser" name="adc"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="actionPerformed" returnType="void" visibility="public">
+          <Argument type="ActionEvent" name="e"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="GameStarter" package="chess.gui.actionlisteners" visibility="public" xPosition="2120.0" yPosition="2420.0">
+      <Fields>
+        <Field name="main" type="MainFrame" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="MainFrame" name="main"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="actionPerformed" returnType="void" visibility="public">
+          <Argument type="ActionEvent" name="e"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="GraphicalUserInterface" package="chess.gui" visibility="public" xPosition="20.0" yPosition="2820.0">
+      <Fields>
+        <Field name="frames" type="Map&lt;String, JFrame&gt;" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="InputProcessor" name="inputProcessor"/>
+          <Argument type="GameSituation" name="game"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="run" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <HasRelation name="transpositionTable" source="chess.logic.ailogic.AILogic" target="chess.domain.datastructures.TranspositionKey" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="Map&lt;TranspositionKey, Integer&gt;"/>
+    <UseRelation source="chess.domain.pieces.King" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="main" source="chess.gui.actionlisteners.AiVsAiGameStarter" target="chess.gui.MainFrame" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.Move" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.PieceMover" target="chess.domain.board.Square" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.PawnMover" target="chess.domain.board.Square" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="board" source="chess.domain.GameSituation" target="chess.domain.board.ChessBoard" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.KnightMover" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.gui.MainFrame" target="chess.gui.GameWindow" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.gui.AiVsAiDifficultyChooser" target="chess.gui.MainFrame" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.ailogic.ZobristHasher" target="chess.domain.board.Square" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.RookMover" target="chess.domain.GameSituation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.board.ChessBoardCopier" target="chess.domain.GameSituation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="chess.logic.movementlogic.piecemovers.KnightMover" target="chess.logic.movementlogic.piecemovers.PieceMover"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.PieceMover" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="main" source="chess.gui.actionlisteners.DifficultyChooserOpener" target="chess.gui.MainFrame" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.GameSituation" target="chess.logic.gamelogic.CheckingLogic" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="chess.domain.pieces.Pawn" target="chess.domain.pieces.Piece"/>
+    <HasRelation name="squaresThreatenedByWhite" source="chess.domain.board.ChessBoard" target="chess.domain.board.Square" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="Set&lt;Square&gt;"/>
+    <HasRelation name="legalityChecker" source="chess.domain.GameSituation" target="chess.logic.gamelogic.LegalityChecker" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.Move" target="chess.domain.board.Square" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.board.ChessBoardCopier" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="game" source="chess.gui.boarddrawing.ChessBoardDrawer" target="chess.domain.GameSituation" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="owner" source="chess.domain.pieces.Piece" target="chess.domain.board.Player" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="main" source="chess.gui.actionlisteners.GameVsAiStarter" target="chess.gui.MainFrame" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.PawnMover" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.board.ChessBoardCopier" target="chess.domain.board.Square" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="gameWindow" source="chess.gui.MainFrame" target="chess.gui.GameWindow" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.gamelogic.LegalityChecker" target="chess.domain.board.ChessBoard" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.pieces.Pawn" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.GameSituation" target="chess.domain.board.Player" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="logic" source="chess.gui.actionlisteners.ChessBoardListener" target="chess.logic.inputprocessing.InputProcessor" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.RookMover" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.PieceMover" target="chess.domain.GameSituation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="chess.logic.movementlogic.piecemovers.KingMover" target="chess.logic.movementlogic.piecemovers.PieceMover"/>
+    <UseRelation source="chess.domain.pieces.Bishop" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="hasher" source="chess.domain.GameSituation" target="chess.logic.ailogic.ZobristHasher" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="game" source="chess.gui.GameWindow" target="chess.domain.GameSituation" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="chess.domain.pieces.Queen" target="chess.domain.pieces.Piece"/>
+    <UseRelation source="chess.logic.inputprocessing.InputProcessor" target="chess.domain.GameSituation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="init" source="chess.domain.GameSituation" target="chess.logic.chessboardinitializers.ChessBoardInitializer" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.MovementLogic" target="chess.domain.board.Square" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.chessboardinitializers.EmptyBoardInitializer" target="chess.domain.board.ChessBoard" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.MovementLogic" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.gui.SideChooser" target="chess.gui.MainFrame" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="chess.logic.movementlogic.piecemovers.QueenMover" target="chess.logic.movementlogic.piecemovers.PieceMover"/>
+    <UseRelation source="chess.domain.board.ChessBoard" target="chess.domain.board.Square" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.pieces.Rook" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.ailogic.AILogic" target="chess.domain.datastructures.TranspositionKey" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.datastructures.MyHashSet" target="chess.domain.datastructures.MyLinkedList" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="mf" source="chess.gui.actionlisteners.DifficultySetter" target="chess.gui.MainFrame" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="squaresThreatenedByBlack" source="chess.domain.board.ChessBoard" target="chess.domain.board.Square" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="Set&lt;Square&gt;"/>
+    <HasRelation name="kingMover" source="chess.logic.movementlogic.MovementLogic" target="chess.logic.movementlogic.piecemovers.KingMover" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.datastructures.TranspositionKey" target="chess.domain.datastructures.TranspositionKey" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="game" source="chess.logic.gamelogic.CheckingLogic" target="chess.domain.GameSituation" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.gamelogic.CheckingLogic" target="chess.domain.board.Player" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.datastructures.MyHashMap" target="chess.domain.datastructures.MyLinkedList" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="chess.logic.movementlogic.piecemovers.PawnMover" target="chess.logic.movementlogic.piecemovers.PieceMover"/>
+    <HasRelation name="piece" source="chess.domain.board.Square" target="chess.domain.pieces.Piece" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="ml" source="chess.logic.ailogic.AILogic" target="chess.logic.movementlogic.MovementLogic" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.gamelogic.LegalityChecker" target="chess.domain.board.Player" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.KingMover" target="chess.domain.board.ChessBoard" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="next" source="chess.domain.datastructures.Node" target="chess.domain.datastructures.Node" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.KingMover" target="chess.domain.board.Square" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="sit" source="chess.logic.ailogic.AILogic" target="chess.domain.GameSituation" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="chess.logic.chessboardinitializers.EmptyBoardInitializer" target="chess.logic.chessboardinitializers.ChessBoardInitializer"/>
+    <UseRelation source="chess.domain.datastructures.Node" target="chess.domain.datastructures.Node" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.GameSituation" target="chess.domain.board.ChessBoard" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.GameSituation" target="chess.domain.board.Square" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="chess.domain.pieces.Bishop" target="chess.domain.pieces.Piece"/>
+    <HasRelation name="adc" source="chess.gui.actionlisteners.AiVsAiGameStarter" target="chess.gui.AiVsAiDifficultyChooser" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.inputprocessing.InputProcessor" target="chess.domain.board.Square" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="target" source="chess.domain.Move" target="chess.domain.board.Square" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="pawnMover" source="chess.logic.movementlogic.MovementLogic" target="chess.logic.movementlogic.piecemovers.PawnMover" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.ailogic.AILogic" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="kings" source="chess.domain.board.ChessBoard" target="chess.domain.pieces.King" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="Map&lt;Player, King&gt;"/>
+    <UseRelation source="chess.domain.board.ChessBoard" target="chess.domain.Move" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.chessboardinitializers.ChessBoardInitializer" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="chess.logic.chessboardinitializers.StandardBoardInitializer" target="chess.logic.chessboardinitializers.ChessBoardInitializer"/>
+    <UseRelation source="chess.domain.board.ChessBoard" target="chess.domain.board.Player" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.KingMover" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.pieces.Piece" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="guiLogic" source="chess.gui.boarddrawing.ChessBoardDrawer" target="chess.logic.inputprocessing.InputProcessor" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.pieces.Queen" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.ailogic.AILogic" target="chess.domain.Move" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.gamelogic.LegalityChecker" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="chess.logic.movementlogic.piecemovers.RookMover" target="chess.logic.movementlogic.piecemovers.PieceMover"/>
+    <UseRelation source="chess.gui.boarddrawing.ChessBoardDrawer" target="chess.domain.GameSituation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="mf" source="chess.gui.actionlisteners.SideChooserOpener" target="chess.gui.MainFrame" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.inputprocessing.InputProcessor" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.pieces.Knight" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="pieceDrawer" source="chess.gui.boarddrawing.ChessBoardDrawer" target="chess.gui.boarddrawing.PieceDrawer" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="possibilities" source="chess.logic.inputprocessing.InputProcessor" target="chess.domain.board.Square" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="Set&lt;Square&gt;"/>
+    <UseRelation source="chess.logic.ailogic.ZobristHasher" target="chess.domain.board.ChessBoard" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="checkLogic" source="chess.domain.GameSituation" target="chess.logic.gamelogic.CheckingLogic" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.KingMover" target="chess.domain.GameSituation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.KingMover" target="chess.domain.pieces.King" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="knightMover" source="chess.logic.movementlogic.MovementLogic" target="chess.logic.movementlogic.piecemovers.KnightMover" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="chess.logic.movementlogic.piecemovers.BishopMover" target="chess.logic.movementlogic.piecemovers.PieceMover"/>
+    <UseRelation source="chess.domain.board.ChessBoard" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.gui.GameWindow" target="chess.domain.GameSituation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.board.ChessBoard" target="chess.domain.pieces.King" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.KingMover" target="chess.domain.board.Player" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="main" source="chess.gui.actionlisteners.GameStarter" target="chess.gui.MainFrame" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.board.ChessBoardCopier" target="chess.domain.board.ChessBoard" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="queenMover" source="chess.logic.movementlogic.MovementLogic" target="chess.logic.movementlogic.piecemovers.QueenMover" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.MovementLogic" target="chess.domain.GameSituation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.datastructures.TranspositionKey" target="chess.domain.board.Player" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="movementLogic" source="chess.domain.board.ChessBoard" target="chess.logic.movementlogic.MovementLogic" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.PawnMover" target="chess.domain.GameSituation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.QueenMover" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="rookMover" source="chess.logic.movementlogic.MovementLogic" target="chess.logic.movementlogic.piecemovers.RookMover" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.GameSituation" target="chess.logic.ailogic.ZobristHasher" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.ailogic.AILogic" target="chess.domain.board.Player" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="whoseTurn" source="chess.domain.datastructures.TranspositionKey" target="chess.domain.board.Player" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="chess.domain.pieces.Knight" target="chess.domain.pieces.Piece"/>
+    <UseRelation source="chess.gui.GameWindow" target="chess.logic.inputprocessing.InputProcessor" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.board.Square" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="sc" source="chess.gui.actionlisteners.GameVsAiStarter" target="chess.gui.SideChooser" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.pieces.Piece" target="chess.domain.board.Player" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.BishopMover" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.movementlogic.piecemovers.KingMover" target="chess.domain.pieces.Rook" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="images" source="chess.gui.boarddrawing.PieceDrawer" target="chess.domain.datastructures.Pair" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="Map&lt;Pair, Image&gt;"/>
+    <HasRelation name="inputProcessor" source="chess.gui.GameWindow" target="chess.logic.inputprocessing.InputProcessor" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.ailogic.GameSituationEvaluator" target="chess.domain.GameSituation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="bestMoves" source="chess.logic.ailogic.AILogic" target="chess.domain.Move" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="MyArrayList&lt;Move&gt;"/>
+    <UseRelation source="chess.gui.boarddrawing.PieceDrawer" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.ailogic.AILogic" target="chess.domain.GameSituation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="board" source="chess.logic.gamelogic.LegalityChecker" target="chess.domain.board.ChessBoard" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.domain.GameSituation" target="chess.logic.gamelogic.LegalityChecker" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="chess.domain.pieces.King" target="chess.domain.pieces.Piece"/>
+    <HasRelation name="chosen" source="chess.logic.inputprocessing.InputProcessor" target="chess.domain.pieces.Piece" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="chess.domain.pieces.Rook" target="chess.domain.pieces.Piece"/>
+    <HasRelation name="board" source="chess.gui.actionlisteners.ChessBoardListener" target="chess.gui.boarddrawing.ChessBoardDrawer" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.ailogic.GameSituationEvaluator" target="chess.domain.pieces.Piece" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.chessboardinitializers.ChessBoardInitializer" target="chess.domain.board.Square" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.chessboardinitializers.ChessBoardInitializer" target="chess.domain.board.ChessBoard" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="whitePieces" source="chess.domain.board.ChessBoard" target="chess.domain.pieces.Piece" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List&lt;Piece&gt;"/>
+    <HasRelation name="piece" source="chess.domain.Move" target="chess.domain.pieces.Piece" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="blackPieces" source="chess.domain.board.ChessBoard" target="chess.domain.pieces.Piece" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List&lt;Piece&gt;"/>
+    <UseRelation source="chess.domain.board.Square" target="chess.domain.board.Square" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="bishopMover" source="chess.logic.movementlogic.MovementLogic" target="chess.logic.movementlogic.piecemovers.BishopMover" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="chess.logic.chessboardinitializers.StandardBoardInitializer" target="chess.domain.board.ChessBoard" sourceCardinality="1..1" targetCardinality="1..1"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

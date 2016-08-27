@@ -131,6 +131,16 @@ public class ChessBoardCopier {
         handleDestination(backUp, to, sit, from);
     }
 
+    /**
+     * Does exactly the same as above method but also updates piece to point to
+     * new piece in square from. Thus piece will still point to same piece after
+     * reverting promotion unlike above method.
+     *
+     * @param backUp backUp of situation before move was made.
+     * @param sit current game situation.
+     * @param from square that piece was situated on before movement.
+     * @param moved piece that was moved.
+     */
     public static void undoMove(ChessBoard backUp, GameSituation sit, Square from, Piece moved) {
         Square to = sit.getChessBoard().getSquare(moved.getColumn(), moved.getRow());
         sit.decrementCountOfCurrentBoardSituation();

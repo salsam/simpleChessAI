@@ -20,7 +20,7 @@ import javax.swing.WindowConstants;
  * @author sami
  */
 public class SideChooser extends JFrame {
-    
+
     public SideChooser(MainFrame main) {
         this.setPreferredSize(new Dimension(450, 300));
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -28,7 +28,7 @@ public class SideChooser extends JFrame {
         this.pack();
         this.setVisible(false);
     }
-    
+
     private void initComponents(Container container, MainFrame main) {
         JLabel label = new JLabel("Choose which side you'd like to play.");
         label.setAlignmentX(CENTER_ALIGNMENT);
@@ -37,18 +37,18 @@ public class SideChooser extends JFrame {
         JRadioButton white = new JRadioButton("White");
         bg.add(black);
         bg.add(white);
-        
+
         black.setAlignmentX(CENTER_ALIGNMENT);
         white.setAlignmentX(CENTER_ALIGNMENT);
-        
+
         JPanel adc = createAiDifficultyChooser(main, black);
         adc.setPreferredSize(new Dimension(300, 100));
         adc.setAlignmentX(CENTER_ALIGNMENT);
-        
+
         JButton start = new JButton("Start game");
         start.setAlignmentX(CENTER_ALIGNMENT);
         start.addActionListener(new GameVsAiStarter(main, this, black));
-        
+
         container.setPreferredSize(new Dimension(450, 300));
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         container.add(label);
@@ -57,7 +57,7 @@ public class SideChooser extends JFrame {
         container.add(adc);
         container.add(start);
     }
-    
+
     private JPanel createAiDifficultyChooser(MainFrame main, JRadioButton black) {
         JPanel adc = new JPanel();
         JTextArea text = new JTextArea("Write how long (in milliseconds) "
@@ -74,5 +74,5 @@ public class SideChooser extends JFrame {
         adc.add(ok);
         return adc;
     }
-    
+
 }

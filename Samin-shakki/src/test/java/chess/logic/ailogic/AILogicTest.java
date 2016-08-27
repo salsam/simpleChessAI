@@ -381,7 +381,6 @@ public class AILogicTest {
 //        ai.setStart(System.currentTimeMillis());
 //        assertEquals(520, ai.tryMovingPiece(wr, 1, 1, -12345, Player.WHITE, 123456, backUp, cb.getSquare(1, 4)));
 //    }
-
     @Test
     public void whenMoveDoesNotProduceBetaCutOffItIsSavedAsKillerCandidate() {
         ChessBoard cb = situation.getChessBoard();

@@ -19,9 +19,9 @@ public class DifficultyChooserOpener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-    main.setVisible(false);
-    AiVsAiDifficultyChooser adc = new AiVsAiDifficultyChooser(main);
-    adc.setVisible(true);
+        main.setVisible(false);
+        AiVsAiDifficultyChooser adc = new AiVsAiDifficultyChooser(main);
+        adc.setVisible(true);
     }
 
 }
