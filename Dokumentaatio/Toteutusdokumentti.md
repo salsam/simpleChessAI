@@ -22,7 +22,7 @@ Tekoälyn hyödyntämät tietorakenteet on koottu kansioon datastructures. Raken
 
 ###Saavutetut aika- ja tilavaativuudet
 
-Ohjelmani aikavaativuus on kaikkien tehostustenkin jälkeen O(160^d) eli tehostukset eivät vaikuta pahimman tapauksen aikavaativuuteen ollenkaan. Päin vastoin lisäämäni iteratiivinen syvennys lisää pahimman tapauksen aikavaativuutta hieman (noin 160^(d-1) lisää työtä eli 1/160 kokonaistyöstä). Sen sijaan ohjelmani keskimääräinen aikavaativuus lienee parantunut kivasti, sillä aluksi rekursiosyvyyden 3 tutkimiseen vaadittiin jopa 20 sekuntia, kun taas lopuksi siitä selvitään alle sekunnissa lähes aina.
+Ohjelmani aikavaativuus on kaikkien tehostustenkin jälkeen O(160^d) eli tehostukset eivät vaikuta pahimman tapauksen aikavaativuuteen ollenkaan. Päin vastoin lisäämäni iteratiivinen syvennys lisää pahimman tapauksen aikavaativuutta hieman (noin 160^(d-1) lisää työtä eli 1/160 kokonaistyöstä). Sen sijaan ohjelmani keskimääräinen aikavaativuus lienee parantunut kivasti, sillä aluksi rekursiosyvyyden 3 tutkimiseen vaadittiin jopa 20 sekuntia, kun taas lopuksi siitä selvitään alle sekunnissa lähes aina. Tämä O-notaatiohan ei todellakaan vastaa pelini todellista aikavaativuutta, sillä O-notaatiota laskiessa on oletettu kaikkien käyttämieni heuristiikkojen olevan aina väärässä, vaikka tämä on hyvin epätodennäköistä. Ohjelmani muistuttaakin tässä QuickSorttia, jolla havaitaan samanlainen ilmiö.
 
 Ohjelmani on rakennettu periaatteella, jossa aikavaativuus on paljon tilavaativuutta olennaisempi eli käytän niin paljon dynaamista muistia kuin mahdollista. Tämän vuoksi ohjelmani tilavaativuuskin on karu O(160^d), sillä joudumme pahimmassa tapauksessa tallentamaan jokaisen tutkimamme pelitilanteen muistiin. Tätä voisi laskea esimerkiksi ottamalla vain tietyn määrän yleisimpiä pelitilanteita muistiin, mutta en tämän kurssin aikana ole ehtinyt suunnitell tähän mitään monimutkaisempaa vaan keskittynyt algoritmin nopeuttamiseen.
 
@@ -36,5 +36,7 @@ Lisäksi käyttämäni lineaarinen evaluaatiofunktio on hyvin minimalistinen, jo
 
 ###Lähteet
 [Pelitilanteen arviointi](https://chessprogramming.wikispaces.com/Evaluation)
+
 [Nappuloiden arvot](https://en.wikipedia.org/wiki/Chess_piece_relative_value)
+
 [Haun tehostusmenetelmät](https://chessprogramming.wikispaces.com/Search)
