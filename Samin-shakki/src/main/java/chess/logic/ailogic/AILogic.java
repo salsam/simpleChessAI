@@ -15,10 +15,8 @@ import chess.domain.datastructures.MyHashMap;
 import chess.domain.datastructures.Pair;
 import chess.domain.datastructures.TranspositionKey;
 import chess.domain.pieces.Piece;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 /**
  * This class is responsible for calculating AI's next move and then returning
@@ -183,10 +181,9 @@ public class AILogic {
         ChessBoard backUp = copy(sit.getChessBoard());
         alpha = testPrincipalMove(height, maxingPlayer, alpha, beta, backUp);
         alpha = testKillerMoves(height, maxingPlayer, alpha, beta, backUp);
-        List<Piece> pieces = sit.getChessBoard().getPieces(maxingPlayer);
 
         for (int i = 0; i < 2; i++) {
-            for (Piece piece : pieces) {
+            for (Piece piece : sit.getChessBoard().getPieces(maxingPlayer)) {
                 if (alpha >= beta || System.currentTimeMillis() - start >= timeLimit) {
                     break;
                 }
@@ -223,9 +220,8 @@ public class AILogic {
      */
     public int tryMovingPiece(Piece piece, int i, int height,
             int alpha, Player maxingPlayer, int beta, ChessBoard backUp, Square from) {
-        Set<Square> possibilities = ml.possibleMoves(piece, sit.getChessBoard());
 
-        for (Square possibility : possibilities) {
+        for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
             if (System.currentTimeMillis() - start >= timeLimit) {
                 break;
             }
@@ -266,11 +262,19 @@ public class AILogic {
             return alpha;
         }
         ml.move(piece, possibility, sit);
-        if (!possibility.containsAPiece()) {
+        if (!possibility.containsAPiece()
+                || !backUp.getSquare(from.getColumn(), from.getRow()).containsAPiece()) {
             System.out.println("square that was moved to is empty! seachDepth:"
                     + searchDepth + " height:" + height);
+            System.out.println("backUp: " + backUp.getSquare(from.getColumn(),
+                    from.getRow()).getPiece() + " at square: ("
+                    + from.getColumn() + "," + from.getRow() + ")");
+            System.out.println("backUp: " + backUp.getSquare(possibility.getColumn(),
+                    possibility.getRow()).getPiece() + " at square: ("
+                    + possibility.getColumn() + "," + possibility.getRow() + ")");
             if (piece.isTaken()) {
-                System.out.println("piece is taken!" + piece);
+                System.out.println("piece is taken!" + piece + " at square ("
+                        + piece.getColumn() + "," + piece.getRow() + ")");
             }
         }
         alpha = checkForChange(

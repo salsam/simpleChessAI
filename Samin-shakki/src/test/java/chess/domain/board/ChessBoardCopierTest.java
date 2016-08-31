@@ -178,17 +178,17 @@ public class ChessBoardCopierTest {
     public void undoMoveReturnsBoardToSituationBeforeEnpassant() {
         ChessBoard cb = sit.getChessBoard();
         MovementLogic ml = cb.getMovementLogic();
-        Pawn pawn = new Pawn(2, 1, Player.WHITE, "wp");
+        Pawn pawn = new Pawn(2, 5, Player.WHITE, "wp");
         Pawn opposingPawn = new Pawn(3, 3, Player.BLACK, "op");
 
         putPieceOnBoard(cb, pawn);
         putPieceOnBoard(cb, opposingPawn);
         sit.reHashBoard(true);
 
-        ml.move(opposingPawn, cb.getSquare(3, 1), sit);
+        ml.move(opposingPawn, cb.getSquare(3, 5), sit);
         ChessBoard before = ChessBoardCopier.copy(cb);
-        ml.move(pawn, cb.getSquare(3, 2), sit);
-        ChessBoardCopier.undoMove(before, sit, cb.getSquare(2, 1), cb.getSquare(3, 2));
+        ml.move(pawn, cb.getSquare(3, 4), sit);
+        ChessBoardCopier.undoMove(before, sit, cb.getSquare(2, 5), cb.getSquare(3, 4));
         assertTrue(ChessBoardCopier.chessBoardsAreDeeplyEqual(before, cb));
     }
 
@@ -196,18 +196,18 @@ public class ChessBoardCopierTest {
     public void undoMoveReturnsHashToSituationBeforeEnpassant() {
         ChessBoard cb = sit.getChessBoard();
         MovementLogic ml = cb.getMovementLogic();
-        Pawn pawn = new Pawn(2, 1, Player.WHITE, "wp");
+        Pawn pawn = new Pawn(2, 5, Player.WHITE, "wp");
         Pawn opposingPawn = new Pawn(3, 3, Player.BLACK, "op");
 
         putPieceOnBoard(cb, pawn);
         putPieceOnBoard(cb, opposingPawn);
         sit.reHashBoard(true);
 
-        ml.move(opposingPawn, cb.getSquare(3, 1), sit);
+        ml.move(opposingPawn, cb.getSquare(3, 5), sit);
         ChessBoard backup = ChessBoardCopier.copy(cb);
         long oldHash = sit.getBoardHash();
-        ml.move(pawn, cb.getSquare(3, 2), sit);
-        ChessBoardCopier.undoMove(backup, sit, cb.getSquare(2, 1), cb.getSquare(3, 2));
+        ml.move(pawn, cb.getSquare(3, 4), sit);
+        ChessBoardCopier.undoMove(backup, sit, cb.getSquare(2, 5), cb.getSquare(3, 4));
 
         assertEquals(oldHash, sit.getBoardHash());
         assertEquals(sit.getHasher().hash(cb), sit.getBoardHash());
@@ -219,18 +219,18 @@ public class ChessBoardCopierTest {
         ChessBoard cb = sit.getChessBoard();
         emptier.initialize(cb);
         MovementLogic ml = cb.getMovementLogic();
-        Pawn pawn = new Pawn(2, 6, Player.WHITE, "wp");
-        Pawn opposingPawn = new Pawn(3, 3, Player.BLACK, "op");
+        Pawn pawn = new Pawn(2, 1, Player.WHITE, "wp");
+        Pawn opposingPawn = new Pawn(3, 5, Player.BLACK, "op");
 
         putPieceOnBoard(cb, pawn);
         putPieceOnBoard(cb, opposingPawn);
         sit.reHashBoard(true);
 
         ChessBoard backup = ChessBoardCopier.copy(cb);
-        ml.move(pawn, cb.getSquare(2, 7), sit);
-        ChessBoardCopier.undoMove(backup, sit, cb.getSquare(2, 6), cb.getSquare(2, 7));
-        assertTrue(cb.getSquare(2, 6).containsAPiece());
-        assertEquals(Pawn.class, cb.getSquare(2, 6).getPiece().getClass());
+        ml.move(pawn, cb.getSquare(2, 0), sit);
+        ChessBoardCopier.undoMove(backup, sit, cb.getSquare(2, 1), cb.getSquare(2, 0));
+        assertTrue(cb.getSquare(2, 1).containsAPiece());
+        assertEquals(Pawn.class, cb.getSquare(2, 1).getPiece().getClass());
         for (Piece p : cb.getPieces(Player.WHITE)) {
             assertNotEquals(Queen.class, p.getClass());
         }
