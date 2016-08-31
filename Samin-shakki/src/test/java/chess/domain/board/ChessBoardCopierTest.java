@@ -11,7 +11,6 @@ import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import chess.logic.chessboardinitializers.EmptyBoardInitializer;
 import chess.logic.chessboardinitializers.StandardBoardInitializer;
-import java.util.Arrays;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -45,7 +44,7 @@ public class ChessBoardCopierTest {
         init.initialize(sit.getChessBoard());
         ChessBoard copy = ChessBoardCopier.copy(sit.getChessBoard());
 
-        assertTrue(Arrays.deepEquals(sit.getChessBoard().getTable(), copy.getTable()));
+        assertTrue(ChessBoardCopier.chessBoardsAreDeeplyEqual(sit.getChessBoard(), copy));
     }
 
     @Test
@@ -113,7 +112,7 @@ public class ChessBoardCopierTest {
         assertTrue(to.containsAPiece());
         assertTrue(backup.getSquare(from.getColumn(), from.getRow()).containsAPiece());
         ChessBoardCopier.undoMove(backup, sit, from, to);
-        assertTrue(Arrays.deepEquals(backup.getTable(), cb.getTable()));
+        assertTrue(ChessBoardCopier.chessBoardsAreDeeplyEqual(backup, cb));
     }
 
     @Test
@@ -148,7 +147,7 @@ public class ChessBoardCopierTest {
         Square to = cb.getSquare(1, 0);
         ml.move(from.getPiece(), to, sit);
         ChessBoardCopier.undoMove(backup, sit, from, to);
-        assertTrue(Arrays.deepEquals(backup.getTable(), cb.getTable()));
+        assertTrue(ChessBoardCopier.chessBoardsAreDeeplyEqual(backup, cb));
     }
 
     @Test
@@ -190,7 +189,7 @@ public class ChessBoardCopierTest {
         ChessBoard before = ChessBoardCopier.copy(cb);
         ml.move(pawn, cb.getSquare(3, 2), sit);
         ChessBoardCopier.undoMove(before, sit, cb.getSquare(2, 1), cb.getSquare(3, 2));
-        assertTrue(Arrays.deepEquals(before.getTable(), cb.getTable()));
+        assertTrue(ChessBoardCopier.chessBoardsAreDeeplyEqual(before, cb));
     }
 
     @Test

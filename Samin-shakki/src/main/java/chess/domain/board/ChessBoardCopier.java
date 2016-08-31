@@ -221,4 +221,23 @@ public class ChessBoardCopier {
             }
         }
     }
+
+    /**
+     * Checks if both chessboard have deeply equal pieces on same squares.
+     *
+     * @param cb1 first chessboard.
+     * @param cb2 secod chessboard.
+     * @return true if all squares contain deeply equal pieces.
+     */
+    public static boolean chessBoardsAreDeeplyEqual(ChessBoard cb1, ChessBoard cb2) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (!cb1.getSquare(i, j).getPiece().deepEquals(cb2.getSquare(i, j).getPiece())) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 }

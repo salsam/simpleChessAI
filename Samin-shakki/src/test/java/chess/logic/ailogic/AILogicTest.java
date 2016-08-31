@@ -1,12 +1,9 @@
 package chess.logic.ailogic;
 
 import chess.domain.GameSituation;
-import chess.domain.Move;
 import static chess.domain.board.ChessBoardCopier.copy;
 import chess.domain.board.*;
-import static chess.domain.datastructures.MyArrayList.arrays2DeepEquals;
 import chess.domain.pieces.*;
-import static chess.logic.ailogic.GameSituationEvaluator.evaluateGameSituation;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import chess.logic.chessboardinitializers.*;
 import chess.logic.movementlogic.MovementLogic;

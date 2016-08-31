@@ -37,6 +37,21 @@ public class Pawn extends Piece {
     }
 
     @Override
+    public boolean deepEquals(Piece piece) {
+        if (!super.deepEquals(piece)) {
+            return false;
+        }
+
+        Pawn pawn = (Pawn) piece;
+
+        if (this.hasBeenMoved != pawn.getHasBeenMoved()) {
+            return false;
+        }
+        
+        return this.movedTwoSquaresLastTurn == pawn.getMovedTwoSquaresLastTurn();
+    }
+
+    @Override
     public void makeDeeplyEqualTo(Piece piece) {
 //        if (piece == null || piece.getClass() != Pawn.class) {
 //            return;

@@ -1,7 +1,5 @@
 package chess.domain.board;
 
-import chess.domain.board.Player;
-import chess.domain.board.Square;
 import chess.domain.pieces.Pawn;
 import java.util.HashSet;
 import java.util.Set;

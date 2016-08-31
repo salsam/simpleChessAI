@@ -1,6 +1,5 @@
 package chess.domain.pieces;
 
-import chess.domain.pieces.Knight;
 import chess.domain.board.Player;
 import org.junit.Before;
 import org.junit.Test;

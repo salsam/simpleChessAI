@@ -87,6 +87,30 @@ public abstract class Piece {
         return this.pieceCode.equals(piece.getPieceCode());
     }
 
+    public boolean deepEquals(Piece piece) {
+        if (piece == null) {
+            return false;
+        }
+
+        if (piece.getClass() != this.getClass()) {
+            return false;
+        }
+
+        if (!this.pieceCode.equals(piece.getPieceCode())) {
+            return false;
+        }
+
+        if (this.column != piece.getColumn() || this.row != piece.getRow()) {
+            return false;
+        }
+
+        if (this.taken != piece.isTaken()) {
+            return false;
+        }
+
+        return this.owner == piece.getOwner();
+    }
+
     public int getColumn() {
         return column;
     }

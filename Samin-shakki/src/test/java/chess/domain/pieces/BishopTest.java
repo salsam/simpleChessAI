@@ -1,7 +1,5 @@
 package chess.domain.pieces;
 
-import chess.domain.pieces.Bishop;
-import chess.domain.pieces.King;
 import chess.domain.board.Player;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

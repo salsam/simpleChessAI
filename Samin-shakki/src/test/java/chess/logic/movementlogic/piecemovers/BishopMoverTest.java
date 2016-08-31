@@ -1,6 +1,5 @@
 package chess.logic.movementlogic.piecemovers;
 
-import chess.logic.movementlogic.piecemovers.BishopMover;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.domain.board.Square;

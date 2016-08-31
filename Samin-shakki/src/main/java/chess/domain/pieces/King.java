@@ -29,7 +29,7 @@ public class King extends Piece {
         super(column, row, player, pieceCode);
         this.hasBeenMoved = false;
     }
-    
+
     @Override
     public void makeDeeplyEqualTo(Piece piece) {
 //        if (piece == null || piece.getClass() != King.class) {
@@ -39,15 +39,15 @@ public class King extends Piece {
         super.makeDeeplyEqualTo(piece);
         this.hasBeenMoved = king.getHasBeenMoved();
     }
-    
+
     public boolean getHasBeenMoved() {
         return hasBeenMoved;
     }
-    
+
     public void setHasBeenMoved(boolean hasBeenMoved) {
         this.hasBeenMoved = hasBeenMoved;
     }
-    
+
     @Override
     public Piece clone() {
         King clone = new King(column, row, owner, pieceCode);
@@ -55,5 +55,16 @@ public class King extends Piece {
         clone.setHasBeenMoved(hasBeenMoved);
         return clone;
     }
-    
+
+    @Override
+    public boolean deepEquals(Piece piece) {
+        if (!super.deepEquals(piece)) {
+            return false;
+        }
+
+        King king = (King) piece;
+
+        return this.hasBeenMoved == king.getHasBeenMoved();
+    }
+
 }

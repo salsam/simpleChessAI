@@ -4,7 +4,6 @@ import chess.domain.GameSituation;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.ChessBoardCopier;
 import chess.domain.board.Player;
-import static chess.domain.datastructures.MyArrayList.arrays2DeepEquals;
 import chess.domain.pieces.King;
 import chess.domain.pieces.Pawn;
 import chess.domain.pieces.Queen;
@@ -14,7 +13,6 @@ import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceO
 import chess.logic.chessboardinitializers.EmptyBoardInitializer;
 import chess.logic.chessboardinitializers.StandardBoardInitializer;
 import chess.logic.movementlogic.MovementLogic;
-import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -81,7 +79,7 @@ public class CheckingLogicTest {
         putPieceOnBoard(game.getChessBoard(), new Rook(4, 1, Player.WHITE, "wr"));
         cl.checkMate(Player.WHITE);
         assertTrue(game.getChessBoard().getTable() == game.getChessBoard().getTable());
-        assertTrue(Arrays.deepEquals(copy.getTable(), game.getChessBoard().getTable()));
+        assertTrue(ChessBoardCopier.chessBoardsAreDeeplyEqual(copy, game.getChessBoard()));
     }
 
     @Test
@@ -101,7 +99,7 @@ public class CheckingLogicTest {
         ChessBoard backUp = ChessBoardCopier.copy(game.getChessBoard());
         cl.checkMate(Player.BLACK);
 
-        assertTrue(arrays2DeepEquals(backUp.getTable(), game.getChessBoard().getTable()));
+        assertTrue(ChessBoardCopier.chessBoardsAreDeeplyEqual(backUp, game.getChessBoard()));
     }
 
     @Test

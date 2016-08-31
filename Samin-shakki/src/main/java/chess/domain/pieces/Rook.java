@@ -31,6 +31,17 @@ public class Rook extends Piece {
     }
 
     @Override
+    public boolean deepEquals(Piece piece) {
+        if (!super.deepEquals(piece)) {
+            return false;
+        }
+
+        Rook rook = (Rook) piece;
+
+        return this.hasBeenMoved == rook.getHasBeenMoved();
+    }
+
+    @Override
     public void makeDeeplyEqualTo(Piece piece) {
 //        if (piece == null || piece.getClass() != Rook.class) {
 //            return;
