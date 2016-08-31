@@ -72,13 +72,12 @@ public class CheckingLogicTest {
 
     @Test
     public void chessBoardIsNotAffectedByCheckingIfKingIsCheckMated() {
-        ChessBoard copy = ChessBoardCopier.copy(game.getChessBoard());
         putPieceOnBoard(game.getChessBoard(), new Queen(6, 6, Player.BLACK, "bq"));
         putPieceOnBoard(game.getChessBoard(), new Rook(1, 6, Player.BLACK, "br1"));
         putPieceOnBoard(game.getChessBoard(), new Rook(6, 1, Player.BLACK, "br2"));
         putPieceOnBoard(game.getChessBoard(), new Rook(4, 1, Player.WHITE, "wr"));
-        cl.checkMate(Player.WHITE);
-        assertTrue(game.getChessBoard().getTable() == game.getChessBoard().getTable());
+        ChessBoard copy = ChessBoardCopier.copy(game.getChessBoard());
+        assertFalse(cl.checkMate(Player.WHITE));
         assertTrue(ChessBoardCopier.chessBoardsAreDeeplyEqual(copy, game.getChessBoard()));
     }
 
@@ -90,14 +89,14 @@ public class CheckingLogicTest {
 
         mvl.move(game.getChessBoard().getSquare(4, 6).getPiece(), game.getChessBoard().getSquare(4, 5), game);
         mvl.move(game.getChessBoard().getSquare(5, 1).getPiece(), game.getChessBoard().getSquare(5, 2), game);
-        mvl.move(game.getChessBoard().getSquare(5, 7).getPiece(), game.getChessBoard().getSquare(1, 4), game);
+        mvl.move(game.getChessBoard().getSquare(5, 7).getPiece(), game.getChessBoard().getSquare(1, 3), game);
         mvl.move(game.getChessBoard().getSquare(3, 1).getPiece(), game.getChessBoard().getSquare(3, 2), game);
         mvl.move(game.getChessBoard().getSquare(3, 7).getPiece(), game.getChessBoard().getSquare(7, 3), game);
         mvl.move(game.getChessBoard().getSquare(5, 2).getPiece(), game.getChessBoard().getSquare(5, 3), game);
         mvl.move(game.getChessBoard().getSquare(7, 3).getPiece(), game.getChessBoard().getSquare(4, 0), game);
         game.getChessBoard().updateThreatenedSquares(Player.WHITE);
         ChessBoard backUp = ChessBoardCopier.copy(game.getChessBoard());
-        cl.checkMate(Player.BLACK);
+        assertTrue(cl.checkMate(Player.BLACK));
 
         assertTrue(ChessBoardCopier.chessBoardsAreDeeplyEqual(backUp, game.getChessBoard()));
     }
