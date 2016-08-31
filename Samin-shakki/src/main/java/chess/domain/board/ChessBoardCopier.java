@@ -150,7 +150,7 @@ public class ChessBoardCopier {
         sit.updateHashForUndoingMove(backUp, from, to);
 
         if (!to.containsAPiece()) {
-            System.out.println("AAAAAAAAAAAA");
+            System.out.println("Square that was moved to contains no pieces!");
         }
 
         from.setPiece(to.getPiece());

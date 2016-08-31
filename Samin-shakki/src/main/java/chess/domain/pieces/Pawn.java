@@ -80,8 +80,8 @@ public class Pawn extends Piece {
      */
     public int opposingEnd() {
         if (owner == Player.BLACK) {
-            return 0;
+            return 7;
         }
-        return 7;
+        return 0;
     }
 }

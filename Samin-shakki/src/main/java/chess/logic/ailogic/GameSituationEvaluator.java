@@ -95,7 +95,7 @@ public class GameSituationEvaluator {
     }
 
     private static int getPositionalValue(Piece piece) {
-        if (piece.getOwner() == Player.WHITE) {
+        if (piece.getOwner() == Player.BLACK) {
             return positionalValues.get(piece.getClass())[piece.getRow()][piece.getColumn()];
         }
         return positionalValues.get(piece.getClass())[7 - piece.getRow()][7 - piece.getColumn()];

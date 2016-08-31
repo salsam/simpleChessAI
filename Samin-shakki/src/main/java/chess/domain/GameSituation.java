@@ -85,8 +85,7 @@ public class GameSituation {
         chessBoardSituationCounter = new MyHashMap();
         continues = true;
         hasher = new ZobristHasher();
-        boardHash = hasher.hash(board);
-        incrementCountOfCurrentBoardSituation();
+        reHashBoard(true);
         ais = new boolean[2];
     }
 

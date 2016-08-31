@@ -119,9 +119,6 @@ public class AILogic {
      * @return random best move
      */
     public Move getBestMove() {
-//        if (bestMoves.isEmpty()) {
-//            return null;
-//        }
         return bestMoves.get(random.nextInt(bestMoves.size()));
     }
 
@@ -130,15 +127,7 @@ public class AILogic {
      * using negaMax sped up with alpha-beta pruning. For each depth
      * corresponding bestValue is initialized to -12456789 representing negative
      * infinity. If leaf isn't reached yet, method will recurse forward by
-     * calling submethod makeMoveAndCheckValue for each piece player owns on
-     * board.
-     *
-     * Alpha-beta pruning will cut branches that can't possibly give better
-     * values than earlier. For example if highest value so far for node n is 10
-     * and now we find that a child of n's child m has value 5 we don't have to
-     * search through rest of m's children. Since m's value is at least -5 and
-     * now this means function may at most return 5 to node n which is strictly
-     * less than 10.
+     * calling submethod tryAllPossibleMoves.
      *
      * @param height Height from leaf nodes.
      * @param alpha current alpha value.
@@ -278,14 +267,15 @@ public class AILogic {
         }
         ml.move(piece, possibility, sit);
         if (!possibility.containsAPiece()) {
-            System.out.println(searchDepth + " " + height);
+            System.out.println("square that was moved to is empty! seachDepth:"
+                    + searchDepth + " height:" + height);
             if (piece.isTaken()) {
-                System.out.println("BBBB");
+                System.out.println("piece is taken!");
             }
         }
         alpha = checkForChange(
                 maxingPlayer, height, alpha, beta, piece, possibility);
-        piece = undoMove(backUp, sit, from, piece);
+        undoMove(backUp, sit, from, piece);
         sit.setContinues(true);
         return alpha;
     }
