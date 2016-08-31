@@ -94,6 +94,11 @@ public abstract class PieceMover {
         if (piece == null) {
             return;
         }
+        Square t = sit.getChessBoard().getSquare(target.getColumn(), target.getRow());
+        if (!((target.getPiece() == null && t.getPiece() == null)
+                || target.getPiece().equals(t.getPiece()))) {
+            System.out.println("MMMMMMMM");
+        }
 
         Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
         sit.updateHashForMoving(from, target);

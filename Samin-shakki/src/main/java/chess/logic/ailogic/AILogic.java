@@ -15,8 +15,10 @@ import chess.domain.datastructures.MyHashMap;
 import chess.domain.datastructures.Pair;
 import chess.domain.datastructures.TranspositionKey;
 import chess.domain.pieces.Piece;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * This class is responsible for calculating AI's next move and then returning
@@ -117,6 +119,9 @@ public class AILogic {
      * @return random best move
      */
     public Move getBestMove() {
+//        if (bestMoves.isEmpty()) {
+//            return null;
+//        }
         return bestMoves.get(random.nextInt(bestMoves.size()));
     }
 
@@ -189,9 +194,10 @@ public class AILogic {
         ChessBoard backUp = copy(sit.getChessBoard());
         alpha = testPrincipalMove(height, maxingPlayer, alpha, beta, backUp);
         alpha = testKillerMoves(height, maxingPlayer, alpha, beta, backUp);
+        List<Piece> pieces = sit.getChessBoard().getPieces(maxingPlayer);
 
         for (int i = 0; i < 2; i++) {
-            for (Piece piece : sit.getChessBoard().getPieces(maxingPlayer)) {
+            for (Piece piece : pieces) {
                 if (alpha >= beta || System.currentTimeMillis() - start >= timeLimit) {
                     break;
                 }
@@ -228,7 +234,9 @@ public class AILogic {
      */
     public int tryMovingPiece(Piece piece, int i, int height,
             int alpha, Player maxingPlayer, int beta, ChessBoard backUp, Square from) {
-        for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
+        Set<Square> possibilities = ml.possibleMoves(piece, sit.getChessBoard());
+
+        for (Square possibility : possibilities) {
             if (System.currentTimeMillis() - start >= timeLimit) {
                 break;
             }
@@ -277,7 +285,7 @@ public class AILogic {
         }
         alpha = checkForChange(
                 maxingPlayer, height, alpha, beta, piece, possibility);
-        undoMove(backUp, sit, from, piece);
+        piece = undoMove(backUp, sit, from, piece);
         sit.setContinues(true);
         return alpha;
     }

@@ -13,7 +13,7 @@ package chess.domain.board;
  */
 public enum Player {
 
-    WHITE(1), BLACK(-1);
+    WHITE(-1), BLACK(1);
     private int direction;
 
     private Player(int direction) {

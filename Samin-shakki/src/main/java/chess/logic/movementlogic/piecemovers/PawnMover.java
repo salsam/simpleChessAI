@@ -153,9 +153,9 @@ public class PawnMover extends PieceMover {
         addPossibleEnPassant(piece, board, moves);
     }
 
-    private boolean addSquareIfWithinTableAndEmpty(ChessBoard board, int column, int newrow, Set<Square> moves) {
-        if (board.withinTable(column, newrow)) {
-            Square target = board.getSquare(column, newrow);
+    private boolean addSquareIfWithinTableAndEmpty(ChessBoard board, int column, int row, Set<Square> moves) {
+        if (board.withinTable(column, row)) {
+            Square target = board.getSquare(column, row);
 
             if (!target.containsAPiece()) {
                 moves.add(target);

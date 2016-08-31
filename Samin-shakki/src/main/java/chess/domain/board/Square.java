@@ -105,7 +105,7 @@ public class Square {
     public Square clone() {
         Square clone = new Square(this.column, this.row);
 
-        if (containsAPiece()) {
+        if (this.piece != null) {
             clone.setPiece(this.piece.clone());
         }
 
