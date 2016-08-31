@@ -403,8 +403,8 @@ public class AILogicTest {
     @Test
     public void whenMoveDoesProduceBetaCutOffItIsNotSavedAsKillerCandidate() {
         ChessBoard cb = situation.getChessBoard();
-        Pawn wp = new Pawn(1, 6, Player.WHITE, "wp");
-        Pawn bp = new Pawn(5, 6, Player.BLACK, "bp");
+        Pawn wp = new Pawn(1, 1, Player.WHITE, "wp");
+        Pawn bp = new Pawn(5, 1, Player.BLACK, "bp");
         putPieceOnBoard(cb, wp);
         putPieceOnBoard(cb, bp);
         situation.reHashBoard(true);
@@ -415,7 +415,7 @@ public class AILogicTest {
         ai.getKillerCandidates()[0] = null;
 
         ai.setStart(System.currentTimeMillis());
-        ai.tryMovingPiece(wp, 1, 1, -12345, Player.WHITE, 0, backUp, cb.getSquare(1, 6));
+        ai.tryMovingPiece(wp, 1, 1, -12345, Player.WHITE, 0, backUp, cb.getSquare(1, 1));
         assertEquals(null, ai.getKillerCandidates()[0]);
     }
 }

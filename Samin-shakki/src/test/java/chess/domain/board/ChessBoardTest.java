@@ -1,8 +1,5 @@
 package chess.domain.board;
 
-import chess.domain.board.ChessBoard;
-import chess.domain.board.Player;
-import chess.domain.board.Square;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import chess.logic.chessboardinitializers.StandardBoardInitializer;
@@ -62,7 +59,7 @@ public class ChessBoardTest {
     }
 
     @Test
-    public void whiteThreatenedSquaresReturnsAllSquaresThreatenedByWhiteInStandardStart() {
+    public void blackThreatenedSquaresReturnsAllSquaresThreatenedByBlackInStandardStart() {
         init.initialize(board);
         Set<Square> correct = new HashSet();
         int[] rows = new int[]{0, 0, 0, 0, 0, 0};
@@ -78,14 +75,14 @@ public class ChessBoardTest {
             }
         }
 
-        board.updateThreatenedSquares(Player.WHITE);
+        board.updateThreatenedSquares(Player.BLACK);
         for (Square possible : correct) {
-            assertTrue(board.threatenedSquares(Player.WHITE).contains(possible));
+            assertTrue(board.threatenedSquares(Player.BLACK).contains(possible));
         }
     }
 
     @Test
-    public void whiteThreatenedSquaresReturnsOnlyThreatenedSquares() {
+    public void blackThreatenedSquaresReturnsOnlyThreatenedSquares() {
         init.initialize(board);
         Set<Square> wrong = new HashSet();
         int[] cols = new int[]{0, 7};
@@ -101,14 +98,14 @@ public class ChessBoardTest {
             }
         }
 
-        board.updateThreatenedSquares(Player.WHITE);
+        board.updateThreatenedSquares(Player.BLACK);
         for (Square possible : wrong) {
-            assertFalse(board.threatenedSquares(Player.WHITE).contains(possible));
+            assertFalse(board.threatenedSquares(Player.BLACK).contains(possible));
         }
     }
 
     @Test
-    public void blackThreatenedSquaresReturnsAllSquaresThreatenedByBlackInStandardStart() {
+    public void whiteThreatenedSquaresReturnsAllSquaresThreatenedByWhiteInStandardStart() {
         init.initialize(board);
         Set<Square> correct = new HashSet();
         int[] rows = new int[]{7, 7, 7, 7, 7, 7};
@@ -124,14 +121,14 @@ public class ChessBoardTest {
             }
         }
 
-        board.updateThreatenedSquares(Player.BLACK);
+        board.updateThreatenedSquares(Player.WHITE);
         for (Square possible : correct) {
-            assertTrue(board.threatenedSquares(Player.BLACK).contains(possible));
+            assertTrue(board.threatenedSquares(Player.WHITE).contains(possible));
         }
     }
 
     @Test
-    public void blackThreatenedSquaresReturnsOnlySquaresThreatenedByBlack() {
+    public void whiteThreatenedSquaresReturnsOnlySquaresThreatenedByWhite() {
         init.initialize(board);
         Set<Square> wrong = new HashSet();
         int[] cols = new int[]{0, 7};
@@ -147,9 +144,9 @@ public class ChessBoardTest {
             }
         }
 
-        board.updateThreatenedSquares(Player.BLACK);
+        board.updateThreatenedSquares(Player.WHITE);
         for (Square possible : wrong) {
-            assertFalse(board.threatenedSquares(Player.BLACK).contains(possible));
+            assertFalse(board.threatenedSquares(Player.WHITE).contains(possible));
         }
     }
 
@@ -169,7 +166,7 @@ public class ChessBoardTest {
         init.initialize(board);
         King whiteKing = board.getKings().get(Player.WHITE);
         King blackKing = board.getKings().get(Player.BLACK);
-        assertEquals(board.getSquare(4, 0), board.getSquare(whiteKing.getColumn(), whiteKing.getRow()));
-        assertEquals(board.getSquare(3, 7), board.getSquare(blackKing.getColumn(), blackKing.getRow()));
+        assertEquals(board.getSquare(4, 7), board.getSquare(whiteKing.getColumn(), whiteKing.getRow()));
+        assertEquals(board.getSquare(3, 0), board.getSquare(blackKing.getColumn(), blackKing.getRow()));
     }
 }

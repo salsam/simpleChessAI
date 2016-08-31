@@ -4,6 +4,7 @@ import chess.domain.GameSituation;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.ChessBoardCopier;
 import chess.domain.board.Player;
+import static chess.domain.datastructures.MyArrayList.arrays2DeepEquals;
 import chess.domain.pieces.King;
 import chess.domain.pieces.Pawn;
 import chess.domain.pieces.Queen;
@@ -89,18 +90,18 @@ public class CheckingLogicTest {
         stdinit.initialize(game.getChessBoard());
         MovementLogic mvl = game.getChessBoard().getMovementLogic();
 
-        mvl.move(game.getChessBoard().getSquare(4, 1).getPiece(), game.getChessBoard().getSquare(4, 2), game);
-        mvl.move(game.getChessBoard().getSquare(5, 6).getPiece(), game.getChessBoard().getSquare(5, 5), game);
-        mvl.move(game.getChessBoard().getSquare(5, 0).getPiece(), game.getChessBoard().getSquare(1, 4), game);
-        mvl.move(game.getChessBoard().getSquare(3, 6).getPiece(), game.getChessBoard().getSquare(3, 5), game);
-        mvl.move(game.getChessBoard().getSquare(3, 0).getPiece(), game.getChessBoard().getSquare(7, 4), game);
-        mvl.move(game.getChessBoard().getSquare(5, 5).getPiece(), game.getChessBoard().getSquare(5, 4), game);
-        mvl.move(game.getChessBoard().getSquare(7, 4).getPiece(), game.getChessBoard().getSquare(4, 7), game);
+        mvl.move(game.getChessBoard().getSquare(4, 6).getPiece(), game.getChessBoard().getSquare(4, 5), game);
+        mvl.move(game.getChessBoard().getSquare(5, 1).getPiece(), game.getChessBoard().getSquare(5, 2), game);
+        mvl.move(game.getChessBoard().getSquare(5, 7).getPiece(), game.getChessBoard().getSquare(1, 4), game);
+        mvl.move(game.getChessBoard().getSquare(3, 1).getPiece(), game.getChessBoard().getSquare(3, 2), game);
+        mvl.move(game.getChessBoard().getSquare(3, 7).getPiece(), game.getChessBoard().getSquare(7, 3), game);
+        mvl.move(game.getChessBoard().getSquare(5, 2).getPiece(), game.getChessBoard().getSquare(5, 3), game);
+        mvl.move(game.getChessBoard().getSquare(7, 3).getPiece(), game.getChessBoard().getSquare(4, 0), game);
         game.getChessBoard().updateThreatenedSquares(Player.WHITE);
         ChessBoard backUp = ChessBoardCopier.copy(game.getChessBoard());
+        cl.checkMate(Player.BLACK);
 
-        assertTrue(cl.checkMate(Player.BLACK));
-        assertTrue(Arrays.deepEquals(backUp.getTable(), game.getChessBoard().getTable()));
+        assertTrue(arrays2DeepEquals(backUp.getTable(), game.getChessBoard().getTable()));
     }
 
     @Test

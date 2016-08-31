@@ -40,7 +40,7 @@ public class PawnMoverTest {
     @Before
     public void setUp() {
         init.initialize(board);
-        pawn = new Pawn(2, 1, Player.WHITE, "wp");
+        pawn = new Pawn(2, 6, Player.WHITE, "wp");
         putPieceOnBoard(board, pawn);
     }
 
@@ -51,88 +51,88 @@ public class PawnMoverTest {
 
     @Test
     public void startingrowCorrect() {
-        assertEquals(1, pawn.getRow());
+        assertEquals(6, pawn.getRow());
     }
 
     @Test
     public void pawnCannotStayStillWhenMoving() {
-        assertFalse(pawnMover.possibleMoves(pawn, board).contains(new Square(2, 1)));
+        assertFalse(pawnMover.possibleMoves(pawn, board).contains(new Square(2, 6)));
     }
 
     @Test
     public void pawnCannotMoveThreeStepsUp() {
-        assertFalse(pawnMover.possibleMoves(pawn, board).contains(new Square(2, 4)));
+        assertFalse(pawnMover.possibleMoves(pawn, board).contains(new Square(2, 3)));
     }
 
     @Test
     public void pawnCannotMoveSideways() {
-        assertFalse(pawnMover.possibleMoves(pawn, board).contains(new Square(1, 1)));
+        assertFalse(pawnMover.possibleMoves(pawn, board).contains(new Square(1, 6)));
     }
 
     @Test
     public void pawnCanMoveTwoStepsUpFromStartingLocation() {
-        assertTrue(pawnMover.possibleMoves(pawn, board).contains(new Square(2, 3)));
+        assertTrue(pawnMover.possibleMoves(pawn, board).contains(new Square(2, 4)));
     }
 
     @Test
     public void pawnCannotMoveTwoStepsAfterMovingOnce() {
-        pawn = new Pawn(2, 2, Player.WHITE, "wp");
-        pawnMover.move(pawn, board.getSquare(2, 3), sit);
-        assertFalse(pawnMover.possibleMoves(pawn, board).contains(new Square(2, 5)));
+        pawn = new Pawn(2, 6, Player.WHITE, "wp");
+        pawnMover.move(pawn, board.getSquare(2, 5), sit);
+        assertFalse(pawnMover.possibleMoves(pawn, board).contains(new Square(2, 3)));
     }
 
     @Test
     public void pawnCanTakeAPieceDiagonallyForwardToRight() {
-        Pawn enemyPawn = new Pawn(3, 2, Player.BLACK, "ep");
+        Pawn enemyPawn = new Pawn(3, 5, Player.BLACK, "ep");
         putPieceOnBoard(board, enemyPawn);
-        assertTrue(pawnMover.possibleMoves(pawn, board).contains(new Square(3, 2)));
+        assertTrue(pawnMover.possibleMoves(pawn, board).contains(new Square(3, 5)));
     }
 
     @Test
     public void pawnCanTakeAPieceDiagonallyForwardToLeft() {
-        Pawn enemyPawn = new Pawn(1, 2, Player.BLACK, "ep");
+        Pawn enemyPawn = new Pawn(1, 5, Player.BLACK, "ep");
         putPieceOnBoard(board, enemyPawn);
-        assertTrue(pawnMover.possibleMoves(pawn, board).contains(new Square(1, 2)));
+        assertTrue(pawnMover.possibleMoves(pawn, board).contains(new Square(1, 5)));
     }
 
     @Test
     public void pawnCannotTakeOwnPieceDiagonallyForward() {
-        Pawn enemyPawn = new Pawn(3, 2, Player.WHITE, "ep");
+        Pawn enemyPawn = new Pawn(3, 5, Player.WHITE, "ep");
         putPieceOnBoard(board, enemyPawn);
-        assertFalse(pawnMover.possibleMoves(pawn, board).contains(new Square(3, 2)));
+        assertFalse(pawnMover.possibleMoves(pawn, board).contains(new Square(3, 5)));
     }
 
     @Test
     public void pawnCannotMoveOverTheEdge() {
-        pawn = new Pawn(0, 7, Player.WHITE, "wp");
+        pawn = new Pawn(0, 0, Player.WHITE, "wp");
         putPieceOnBoard(board, pawn);
-        assertFalse(pawnMover.possibleMoves(pawn, board).contains(new Square(0, 8)));
+        assertFalse(pawnMover.possibleMoves(pawn, board).contains(new Square(0, -1)));
     }
 
     @Test
     public void pawnCanEnPassantOpposingPawnThatMovedTwoSquaresLastTurn() {
-        Pawn opposingPawn = new Pawn(3, 3, Player.BLACK, "op");
+        Pawn opposingPawn = new Pawn(3, 4, Player.BLACK, "op");
         putPieceOnBoard(board, opposingPawn);
-        pawnMover.move(opposingPawn, board.getSquare(3, 1), sit);
-        assertTrue(pawnMover.possibleMoves(pawn, board).contains(new Square(3, 2)));
+        pawnMover.move(opposingPawn, board.getSquare(3, 6), sit);
+        assertTrue(pawnMover.possibleMoves(pawn, board).contains(new Square(3, 5)));
     }
 
     @Test
     public void whenEnPassantingOpposingPawnIsRemovedFromBoard() {
-        Pawn opposingPawn = new Pawn(3, 3, Player.BLACK, "op");
+        Pawn opposingPawn = new Pawn(3, 4, Player.BLACK, "op");
         putPieceOnBoard(board, opposingPawn);
-        pawnMover.move(opposingPawn, board.getSquare(3, 1), sit);
-        pawnMover.move(pawn, board.getSquare(3, 2), sit);
-        assertFalse(board.getSquare(3, 1).containsAPiece());
+        pawnMover.move(opposingPawn, board.getSquare(3, 6), sit);
+        pawnMover.move(pawn, board.getSquare(3, 5), sit);
+        assertFalse(board.getSquare(3, 6).containsAPiece());
     }
 
     @Test
     public void whenEnPassantingHashIsUpdatedCorrectly() {
-        Pawn opposingPawn = new Pawn(3, 3, Player.BLACK, "op");
+        Pawn opposingPawn = new Pawn(3, 4, Player.BLACK, "op");
         putPieceOnBoard(board, opposingPawn);
         sit.reHashBoard(true);
-        pawnMover.move(opposingPawn, board.getSquare(3, 1), sit);
-        pawnMover.move(pawn, board.getSquare(3, 2), sit);
+        pawnMover.move(opposingPawn, board.getSquare(3, 6), sit);
+        pawnMover.move(pawn, board.getSquare(3, 5), sit);
         assertEquals(sit.getHasher().hash(board), sit.getBoardHash());
     }
 }

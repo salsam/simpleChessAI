@@ -270,7 +270,7 @@ public class AILogic {
             System.out.println("square that was moved to is empty! seachDepth:"
                     + searchDepth + " height:" + height);
             if (piece.isTaken()) {
-                System.out.println("piece is taken!");
+                System.out.println("piece is taken!" + piece);
             }
         }
         alpha = checkForChange(

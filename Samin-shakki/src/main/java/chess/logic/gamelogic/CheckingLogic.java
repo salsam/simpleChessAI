@@ -79,12 +79,10 @@ public class CheckingLogic {
                 game.getChessBoard().getMovementLogic().move(piece, possibility, game);
                 game.getChessBoard().updateThreatenedSquares(getOpponent(player));
                 if (!checkIfChecked(player)) {
-//                    ChessBoardCopier.revertOldSituation(game.getChessBoard(), backUp);
-                    piece = undoMove(backUp, game, from, piece);
+                    undoMove(backUp, game, from, piece);
                     return false;
                 }
-                piece = undoMove(backUp, game, from, piece);
-//                ChessBoardCopier.revertOldSituation(game.getChessBoard(), backUp);
+                undoMove(backUp, game, from, piece);
             }
         }
 

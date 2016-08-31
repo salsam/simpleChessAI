@@ -60,64 +60,64 @@ public class InputProcessorTest {
 
     @Test
     public void ifNoPieceIsChosenSelectPieceOnTargetSquare() {
-        inputProcessor.processClick(1, 1, game);
-        assertEquals(game.getChessBoard().getSquare(1, 1).getPiece(), inputProcessor.getChosen());
+        inputProcessor.processClick(1, 6, game);
+        assertEquals(game.getChessBoard().getSquare(1, 6).getPiece(), inputProcessor.getChosen());
     }
 
     @Test
     public void ifNoPieceIsSelectedAndTargetSquareContainsNoPieceIrOpposingPieceNoPieceIsSelected() {
         inputProcessor.processClick(4, 4, game);
         assertEquals(null, inputProcessor.getChosen());
-        inputProcessor.processClick(6, 6, game);
+        inputProcessor.processClick(6, 1, game);
         assertEquals(null, inputProcessor.getChosen());
     }
 
     @Test
     public void whenPieceIsSelectedItsPossibleMovesAreSavedInFieldPossibilities() {
-        inputProcessor.processClick(1, 1, game);
-        assertTrue(inputProcessor.getPossibilities().contains(new Square(1, 2)));
-        assertTrue(inputProcessor.getPossibilities().contains(new Square(1, 3)));
+        inputProcessor.processClick(1, 6, game);
+        assertTrue(inputProcessor.getPossibilities().contains(new Square(1, 5)));
+        assertTrue(inputProcessor.getPossibilities().contains(new Square(1, 4)));
     }
 
     @Test
     public void ifAnotherPieceOwnedPieceIsClickedItIsSetAsChosen() {
-        inputProcessor.processClick(1, 1, game);
-        inputProcessor.processClick(1, 0, game);
+        inputProcessor.processClick(1, 6, game);
+        inputProcessor.processClick(1, 7, game);
 
-        assertTrue(inputProcessor.getPossibilities().contains(new Square(0, 2)));
-        assertTrue(inputProcessor.getPossibilities().contains(new Square(2, 2)));
-        assertFalse(inputProcessor.getPossibilities().contains(new Square(1, 2)));
-        assertFalse(inputProcessor.getPossibilities().contains(new Square(1, 3)));
+        assertTrue(inputProcessor.getPossibilities().contains(new Square(0, 5)));
+        assertTrue(inputProcessor.getPossibilities().contains(new Square(2, 5)));
+        assertFalse(inputProcessor.getPossibilities().contains(new Square(1, 5)));
+        assertFalse(inputProcessor.getPossibilities().contains(new Square(1, 4)));
     }
 
     @Test
     public void ifPieceIsChosenAndThenAPossibilityIsClickedMoveToThatSquare() {
-        inputProcessor.processClick(1, 1, game);
-        Piece piece = game.getChessBoard().getSquare(1, 1).getPiece();
-        inputProcessor.processClick(1, 2, game);
-        assertFalse(game.getChessBoard().getSquare(1, 1).containsAPiece());
-        assertTrue(game.getChessBoard().getSquare(1, 2).containsAPiece());
-        assertEquals(piece, game.getChessBoard().getSquare(1, 2).getPiece());
+        inputProcessor.processClick(1, 6, game);
+        Piece piece = game.getChessBoard().getSquare(1, 6).getPiece();
+        inputProcessor.processClick(1, 5, game);
+        assertFalse(game.getChessBoard().getSquare(1, 6).containsAPiece());
+        assertTrue(game.getChessBoard().getSquare(1, 5).containsAPiece());
+        assertEquals(piece, game.getChessBoard().getSquare(1, 5).getPiece());
     }
 
     @Test
     public void ifPawnIsMovedToOpposingEndOfBoardItIsPromotedToQueenOnSameSquare() {
-        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new Pawn(1, 6, Player.WHITE, "wp9"));
-        inputProcessor.processClick(1, 6, game);
-        inputProcessor.processClick(0, 7, game);
+        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new Pawn(1, 1, Player.WHITE, "wp9"));
+        inputProcessor.processClick(1, 1, game);
+        inputProcessor.processClick(0, 0, game);
 
-        assertTrue(game.getChessBoard().getSquare(0, 7).containsAPiece());
-        assertTrue(game.getChessBoard().getSquare(0, 7).getPiece().getClass() == Queen.class);
-        Queen q = (Queen) game.getChessBoard().getSquare(0, 7).getPiece();
+        assertTrue(game.getChessBoard().getSquare(0, 0).containsAPiece());
+        assertTrue(game.getChessBoard().getSquare(0, 0).getPiece().getClass() == Queen.class);
+        Queen q = (Queen) game.getChessBoard().getSquare(0, 0).getPiece();
         assertEquals(Player.WHITE, q.getOwner());
         assertEquals("wp9", q.getPieceCode());
     }
 
     @Test
     public void ifPawnIsMovedToOpposingEndOfBoardItIsReplacedByQueenWithSamePieceCode() {
-        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new Pawn(1, 6, Player.WHITE, "wp9"));
-        inputProcessor.processClick(1, 6, game);
-        inputProcessor.processClick(0, 7, game);
+        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new Pawn(1, 1, Player.WHITE, "wp9"));
+        inputProcessor.processClick(1, 1, game);
+        inputProcessor.processClick(0, 0, game);
         assertTrue(game.getChessBoard().getPieces(Player.WHITE).stream()
                 .noneMatch(whitePiece -> whitePiece.getPieceCode().equals("wp9")
                         && whitePiece.getClass() == Pawn.class));
@@ -128,11 +128,11 @@ public class InputProcessorTest {
 
     @Test
     public void outputTellsWhoseTurnItIsCorrectly() {
-        inputProcessor.processClick(1, 1, game);
-        inputProcessor.processClick(1, 2, game);
-        assertEquals("BLACK's turn.", output.getText());
         inputProcessor.processClick(1, 6, game);
         inputProcessor.processClick(1, 5, game);
+        assertEquals("BLACK's turn.", output.getText());
+        inputProcessor.processClick(1, 1, game);
+        inputProcessor.processClick(1, 2, game);
         assertEquals("WHITE's turn.", output.getText());
     }
 
@@ -140,12 +140,12 @@ public class InputProcessorTest {
     public void outputTellsIfPlayerIsChecked() {
         EmptyBoardInitializer emptyinit = new EmptyBoardInitializer();
         emptyinit.initialize(game.getChessBoard());
-        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new King(4, 0, Player.WHITE, "wk"));
-        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new Pawn(4, 2, Player.BLACK, "bp1"));
-        inputProcessor.processClick(4, 0, game);
-        inputProcessor.processClick(5, 0, game);
-        inputProcessor.processClick(4, 2, game);
-        inputProcessor.processClick(4, 1, game);
+        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new King(4, 7, Player.WHITE, "wk"));
+        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new Pawn(4, 5, Player.BLACK, "bp1"));
+        inputProcessor.processClick(4, 7, game);
+        inputProcessor.processClick(5, 7, game);
+        inputProcessor.processClick(4, 5, game);
+        inputProcessor.processClick(4, 6, game);
 
         assertEquals("WHITE's turn. Check!", output.getText());
     }

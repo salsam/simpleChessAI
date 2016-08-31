@@ -144,7 +144,7 @@ public class ChessBoardCopier {
      * @param from square that piece was situated on before movement.
      * @param moved piece that was moved.
      */
-    public static Piece undoMove(ChessBoard backUp, GameSituation sit, Square from, Piece moved) {
+    public static void undoMove(ChessBoard backUp, GameSituation sit, Square from, Piece moved) {
         Square to = sit.getChessBoard().getSquare(moved.getColumn(), moved.getRow());
         sit.decrementCountOfCurrentBoardSituation();
         sit.updateHashForUndoingMove(backUp, from, to);
@@ -164,7 +164,6 @@ public class ChessBoardCopier {
         from.getPiece().makeDeeplyEqualTo(old);
 
         handleDestination(backUp, to, sit, from);
-        return moved;
     }
 
     private static Piece revertPromotion(Piece current, ChessBoard board, Piece old) {

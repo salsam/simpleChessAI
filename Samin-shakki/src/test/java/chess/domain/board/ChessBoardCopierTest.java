@@ -96,9 +96,9 @@ public class ChessBoardCopierTest {
         assertTrue(sit.getChessBoard().getSquare(4, 4).containsAPiece());
         assertFalse(copy.getSquare(4, 4).containsAPiece());
 
-        sit.getChessBoard().getMovementLogic().move(queen, sit.getChessBoard().getSquare(4, 1), sit);
-        assertEquals(Player.BLACK, sit.getChessBoard().getSquare(4, 1).getPiece().getOwner());
-        assertEquals(Player.WHITE, copy.getSquare(4, 1).getPiece().getOwner());
+        sit.getChessBoard().getMovementLogic().move(queen, sit.getChessBoard().getSquare(4, 6), sit);
+        assertEquals(Player.BLACK, sit.getChessBoard().getSquare(4, 6).getPiece().getOwner());
+        assertEquals(Player.WHITE, copy.getSquare(4, 6).getPiece().getOwner());
     }
 
     @Test

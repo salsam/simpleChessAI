@@ -2,11 +2,8 @@ package chess.logic.chessboardinitializers;
 
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
-import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
-import chess.logic.chessboardinitializers.StandardBoardInitializer;
 import chess.logic.movementlogic.MovementLogic;
-import chess.logic.movementlogic.piecemovers.PawnMover;
 import chess.domain.pieces.Bishop;
 import chess.domain.pieces.King;
 import chess.domain.pieces.Knight;
@@ -86,7 +83,7 @@ public class StandardBoardInitializerTest {
 
     @Test
     public void kingsOnCorrectSquares() {
-        int[] columns = new int[]{4, 3};
+        int[] columns = new int[]{3, 4};
         int[] rows = new int[]{0, 7};
 
         testThatSquaresHavePieceOfCorrectClass(rows, columns, new King(4, 0, Player.WHITE, "wk"));
@@ -94,7 +91,7 @@ public class StandardBoardInitializerTest {
 
     @Test
     public void queensOnCorrectSquares() {
-        int[] columns = new int[]{3, 4};
+        int[] columns = new int[]{4, 3};
         int[] rows = new int[]{0, 7};
 
         testThatSquaresHavePieceOfCorrectClass(rows, columns, new Queen(3, 0, Player.WHITE, "wq"));

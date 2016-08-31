@@ -71,15 +71,15 @@ public class GameSituationEvaluatorTest {
 
     @Test
     public void gameSituationCanHaveNegativeValue() {
-        Rook brook = new Rook(0, 7, Player.BLACK, "br");
-        Queen bqueen = new Queen(2, 6, Player.BLACK, "bq");
-        Pawn wpawn = new Pawn(1, 5, Player.WHITE, "wp");
+        Rook brook = new Rook(0, 0, Player.BLACK, "br");
+        Queen bqueen = new Queen(2, 1, Player.BLACK, "bq");
+        Pawn wpawn = new Pawn(1, 2, Player.WHITE, "wp");
 
         putPieceOnBoard(situation.getChessBoard(), wpawn);
         putPieceOnBoard(situation.getChessBoard(), brook);
         putPieceOnBoard(situation.getChessBoard(), bqueen);
 
-        assertEquals(-1290 - 320, evaluateGameSituation(situation, Player.WHITE));
+        assertEquals(-1615, evaluateGameSituation(situation, Player.WHITE));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class GameSituationEvaluatorTest {
 
         situation.getChessBoard().getMovementLogic()
                 .move(wpawn, situation.getChessBoard().getSquare(2, 6), situation);
-        assertEquals(150 - 510 - 130, evaluateGameSituation(situation, Player.WHITE));
+        assertEquals(-530, evaluateGameSituation(situation, Player.WHITE));
     }
 
     @Test
