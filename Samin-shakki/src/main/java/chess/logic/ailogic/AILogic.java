@@ -269,6 +269,12 @@ public class AILogic {
             return alpha;
         }
         ml.move(piece, possibility, sit);
+        if (!possibility.containsAPiece()) {
+            System.out.println(searchDepth + " " + height);
+            if (piece.isTaken()) {
+                System.out.println("BBBB");
+            }
+        }
         alpha = checkForChange(
                 maxingPlayer, height, alpha, beta, piece, possibility);
         undoMove(backUp, sit, from, piece);
@@ -447,7 +453,7 @@ public class AILogic {
         sit = situation;
         ml = sit.getChessBoard().getMovementLogic();
         salvageLastPrincipalVariation();
-        for (int i = 1; i <= plies; i++) {
+        for (int i = 1; i < plies; i++) {
             searchDepth = i;
             negaMax(i, -123456789, 123456789, situation.whoseTurn());
             lastPlies++;

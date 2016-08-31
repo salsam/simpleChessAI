@@ -5,6 +5,7 @@ import chess.domain.datastructures.MyArrayList;
 import chess.domain.pieces.King;
 import chess.domain.pieces.Pawn;
 import chess.domain.pieces.Piece;
+import chess.domain.pieces.Queen;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.addPieceToOwner;
 
@@ -86,11 +87,15 @@ public class ChessBoardCopier {
     private static void makePieceListsEqual(ChessBoard board, ChessBoard chessboard) {
         for (Player player : Player.values()) {
             board.getPieces(player).stream().forEach(playersPiece -> {
-                chessboard.getPieces(player).stream().forEach(piece -> {
+                for (Piece piece : chessboard.getPieces(player)) {
                     if (piece.equals(playersPiece)) {
+                        if (piece.getClass() == Pawn.class && playersPiece.getClass() == Queen.class) {
+                            playersPiece = new Queen(piece.getColumn(), piece.getRow(), piece.getOwner(), piece.getPieceCode());
+                            board.getSquare(piece.getColumn(), piece.getRow()).setPiece(playersPiece);
+                        }
                         playersPiece.makeDeeplyEqualTo(piece);
                     }
-                });
+                }
             });
         }
     }
@@ -116,10 +121,11 @@ public class ChessBoardCopier {
     public static void undoMove(ChessBoard backUp, GameSituation sit, Square from, Square to) {
         sit.decrementCountOfCurrentBoardSituation();
         sit.updateHashForUndoingMove(backUp, from, to);
+
         from.setPiece(to.getPiece());
         Piece old = backUp.getSquare(from.getColumn(), from.getRow()).getPiece();
         if (from.getPiece() == null || old == null) {
-            System.out.println("old: " + old + "cur: " + from.getPiece() + " from: " + from + " to " + to);
+            System.out.println("old: " + old + " cur: " + from.getPiece() + " from: " + from + " to " + to);
         }
         if (old.getClass() != from.getPiece().getClass()) {
             ChessBoardInitializer.removePieceFromOwner(from.getPiece(), sit.getChessBoard());
@@ -149,6 +155,7 @@ public class ChessBoardCopier {
         Piece old = backUp.getSquare(from.getColumn(), from.getRow()).getPiece();
         if (from.getPiece() == null || old == null) {
             System.out.println("old: " + old + "cur: " + from.getPiece() + " from: " + from + " to " + to);
+            return;
         }
         if (old.getClass() != from.getPiece().getClass()) {
             ChessBoardInitializer.removePieceFromOwner(from.getPiece(), sit.getChessBoard());
@@ -172,8 +179,7 @@ public class ChessBoardCopier {
         }
     }
 
-    private static void putTakenPieceBackOnBoard(
-            ChessBoard board, Piece taken, Square to) {
+    private static void putTakenPieceBackOnBoard(ChessBoard board, Piece taken, Square to) {
         for (Piece piece : board.getPieces(taken.getOwner())) {
             if (piece.getPieceCode().equals(taken.getPieceCode())) {
                 piece.setTaken(false);
@@ -184,11 +190,9 @@ public class ChessBoardCopier {
     }
 
     private static void handleEnPassant(Square from, Square to, GameSituation sit, ChessBoard backUp) {
-        if (from.getPiece().getClass() == Pawn.class
-                && from.getColumn() != to.getColumn()) {
+        if (from.getPiece().getClass() == Pawn.class && from.getColumn() != to.getColumn()) {
             to = sit.getChessBoard().getSquare(to.getColumn(), from.getRow());
             Piece taken = backUp.getSquare(to.getColumn(), to.getRow()).getPiece();
-
             putTakenPieceBackOnBoard(sit.getChessBoard(), taken, to);
             sit.reHashBoard(false);
         }
