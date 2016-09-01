@@ -115,11 +115,11 @@ public class GameSituationEvaluator {
     public static int evaluateGameSituation(GameSituation sit, Player player) {
         int value = 0;
         if (sit.getCountOfCurrentSituation() >= 3) {
-            return value;
+            return 0;
         } else if (sit.getCheckLogic().checkIfCheckedAndMated(player)) {
             return -100000000;
         } else if (sit.getCheckLogic().stalemate(player)) {
-            return value;
+            return 0;
         }
 
         value += materialValue(sit, player);

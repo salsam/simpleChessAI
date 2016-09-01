@@ -267,25 +267,25 @@ public class AILogicTest {
         assertEquals(-250, ai.getBestValues()[1]);
     }
 
-    @Test
-    public void checkForChangeSavesFoundValueInTranspositionTable() {
-        ChessBoard cb = situation.getChessBoard();
-        Pawn wp = new Pawn(1, 4, Player.WHITE, "wp");
-        Pawn bp = new Pawn(5, 6, Player.BLACK, "bp");
-        putPieceOnBoard(cb, wp);
-        putPieceOnBoard(cb, bp);
-        situation.reHashBoard(true);
-
-        ai.setSituation(situation);
-        ai.setStart(System.currentTimeMillis());
-        ai.getTranspositionTable().clear();
-        assertTrue(ai.getTranspositionTable().isEmpty());
-        ai.checkForChange(Player.WHITE, 1, -123456789, 123456789, wp, cb.getSquare(1, 3));
-        TranspositionKey key = new TranspositionKey(1, Player.WHITE, situation.getBoardHash());
-        assertFalse(ai.getTranspositionTable().isEmpty());
-        assertTrue(ai.getTranspositionTable().containsKey(key));
-        assertEquals(evaluateGameSituation(situation, Player.WHITE), (int) ai.getTranspositionTable().get(key));
-    }
+//    @Test
+//    public void checkForChangeSavesFoundValueInTranspositionTable() {
+//        ChessBoard cb = situation.getChessBoard();
+//        Pawn wp = new Pawn(1, 4, Player.WHITE, "wp");
+//        Pawn bp = new Pawn(5, 6, Player.BLACK, "bp");
+//        putPieceOnBoard(cb, wp);
+//        putPieceOnBoard(cb, bp);
+//        situation.reHashBoard(true);
+//
+//        ai.setSituation(situation);
+//        ai.setStart(System.currentTimeMillis());
+//        ai.getTranspositionTable().clear();
+//        assertTrue(ai.getTranspositionTable().isEmpty());
+//        ai.checkForChange(Player.WHITE, 1, -123456789, 123456789, wp, cb.getSquare(1, 3));
+//        TranspositionKey key = new TranspositionKey(1, Player.WHITE, situation.getBoardHash());
+//        assertFalse(ai.getTranspositionTable().isEmpty());
+//        assertTrue(ai.getTranspositionTable().containsKey(key));
+//        assertEquals(evaluateGameSituation(situation, Player.WHITE), (int) ai.getTranspositionTable().get(key));
+//    }
 
     @Test
     public void testAMoveReturnsAlphaIfTimeIsUpAndDoesNotChangeBoard() {
@@ -297,7 +297,7 @@ public class AILogicTest {
         situation.reHashBoard(true);
         ChessBoard backUp = copy(cb);
         ai.setStart(System.currentTimeMillis() - 1000);
-        assertEquals(-12345, ai.testAMove(wr, cb.getSquare(1, 6), -12345, Player.WHITE, 1, 123456789, backUp, cb.getSquare(1, 4)));
+        assertEquals(-12345, ai.testAMove(wr, cb.getSquare(1, 6), cb.getSquare(1, 4), Player.WHITE, 1, -12345, 123456789, backUp));
         assertTrue(ChessBoardCopier.chessBoardsAreDeeplyEqual(cb, backUp));
     }
 
@@ -312,7 +312,7 @@ public class AILogicTest {
         ChessBoard backUp = copy(cb);
         ai.setStart(System.currentTimeMillis());
         ai.setSituation(situation);
-        ai.testAMove(wr, cb.getSquare(1, 6), -12345, Player.WHITE, 1, 1234567, backUp, cb.getSquare(1, 4));
+        ai.testAMove(wr, cb.getSquare(1, 6), cb.getSquare(1, 4), Player.WHITE, 1, -12345, 1234567, backUp);
         assertTrue(ChessBoardCopier.chessBoardsAreDeeplyEqual(cb, backUp));
     }
 
@@ -327,7 +327,7 @@ public class AILogicTest {
         ChessBoard backUp = copy(cb);
         ai.setSituation(situation);
         ai.setStart(System.currentTimeMillis());
-        assertEquals(470, ai.testAMove(wr, cb.getSquare(1, 6), -12345, Player.WHITE, 1, 1234567, backUp, cb.getSquare(1, 4)));
+        assertEquals(470, ai.testAMove(wr, cb.getSquare(1, 6), cb.getSquare(1, 4), Player.WHITE, 1, -12345, 1234567, backUp));
     }
 
     @Test
@@ -341,7 +341,7 @@ public class AILogicTest {
         ai.setStart(System.currentTimeMillis());
         ai.setSituation(situation);
         ChessBoard backUp = copy(cb);
-        ai.testAMove(wp, cb.getSquare(1, 7), -12345, Player.WHITE, 1, 1234567, backUp, cb.getSquare(1, 6));
+        ai.testAMove(wp, cb.getSquare(1, 7), cb.getSquare(1, 6), Player.WHITE, 1, -12345, 1234567, backUp);
         assertTrue(ChessBoardCopier.chessBoardsAreDeeplyEqual(cb, backUp));
         assertEquals(Pawn.class, cb.getSquare(1, 6).getPiece().getClass());
     }
@@ -358,7 +358,7 @@ public class AILogicTest {
         ai.setSituation(situation);
         ai.setSearchDepth(2);
         ChessBoard backUp = copy(cb);
-        ai.testAMove(wp, cb.getSquare(1, 7), -12345, Player.WHITE, 2, 1234567, backUp, cb.getSquare(1, 6));
+        ai.testAMove(wp, cb.getSquare(1, 7), cb.getSquare(1, 6), Player.WHITE, 2, -12345, 1234567, backUp);
         assertTrue(ChessBoardCopier.chessBoardsAreDeeplyEqual(cb, backUp));
         assertEquals(Pawn.class, cb.getSquare(1, 6).getPiece().getClass());
     }
@@ -374,7 +374,7 @@ public class AILogicTest {
         ChessBoard backUp = copy(cb);
         ai.setSituation(situation);
         ai.setStart(System.currentTimeMillis() - 1000);
-        assertEquals(-12345, ai.tryMovingPiece(wr, 1, 1, -12345, Player.WHITE, 123456, backUp, cb.getSquare(1, 4)));
+        assertEquals(-12345, ai.tryMovingPiece(1, 1, wr, cb.getSquare(1, 4), -12345, 123456, Player.WHITE, backUp));
     }
 
     @Test
@@ -388,7 +388,7 @@ public class AILogicTest {
         ChessBoard backUp = copy(cb);
         ai.setSituation(situation);
         ai.setStart(System.currentTimeMillis());
-        assertEquals(500, ai.tryMovingPiece(wr, 1, 1, -12345, Player.WHITE, 123456, backUp, cb.getSquare(1, 4)));
+        assertEquals(500, ai.tryMovingPiece(1, 1, wr, cb.getSquare(1, 4), -12345, 123456, Player.WHITE, backUp));
     }
 
     @Test
@@ -406,7 +406,7 @@ public class AILogicTest {
         ai.getKillerCandidates()[0] = null;
 
         ai.setStart(System.currentTimeMillis());
-        ai.tryMovingPiece(wp, 1, 1, -12345, Player.WHITE, 123456, backUp, cb.getSquare(1, 6));
+        ai.tryMovingPiece(1, 1, wp, cb.getSquare(1, 6), -12345, 123456, Player.WHITE, backUp);
         assertNotEquals(null, ai.getKillerCandidates()[0]);
     }
 
@@ -425,7 +425,7 @@ public class AILogicTest {
         ai.getKillerCandidates()[0] = null;
 
         ai.setStart(System.currentTimeMillis());
-        ai.tryMovingPiece(wp, 1, 1, -12345, Player.WHITE, 0, backUp, cb.getSquare(1, 2));
+        ai.tryMovingPiece(1, 1, wp, cb.getSquare(1, 2), -12345, 0, Player.WHITE, backUp);
         assertEquals(null, ai.getKillerCandidates()[0]);
     }
 }

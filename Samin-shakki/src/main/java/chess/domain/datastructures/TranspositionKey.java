@@ -47,9 +47,7 @@ public class TranspositionKey {
     }
 
     public TranspositionKey opposingKey() {
-        TranspositionKey ret = new TranspositionKey(
-                height, getOpponent(whoseTurn), hashedBoard);
-        return ret;
+        return new TranspositionKey(height, getOpponent(whoseTurn), hashedBoard);
     }
 
     @Override

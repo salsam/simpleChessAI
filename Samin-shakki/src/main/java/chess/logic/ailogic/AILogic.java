@@ -49,7 +49,7 @@ public class AILogic {
     private int[] bestValues;
     private long timeLimit;
     private long start;
-    private final int plies = 10;
+    private final int plies = 4;
     private int lastPlies;
     private int searchDepth;
     private int oldestIndex;
@@ -58,7 +58,7 @@ public class AILogic {
     private Move[] principalMoves;
     private Move[] killerCandidates;
     private Move[][] killerMoves;
-//    private Map<TranspositionKey, Integer> transpositionTable;
+    private Map<TranspositionKey, Integer> transpositionTable;
     private long sum = 0;
     private int count = 0;
 
@@ -73,7 +73,7 @@ public class AILogic {
         random = new Random();
         searchDepth = 3;
         timeLimit = 1000;
-//        transpositionTable = new MyHashMap();
+        transpositionTable = new MyHashMap();
     }
 
     public int[] getBestValues() {
@@ -91,7 +91,6 @@ public class AILogic {
 //    public Map<TranspositionKey, Integer> getTranspositionTable() {
 //        return transpositionTable;
 //    }
-
     public void setSituation(GameSituation sit) {
         this.sit = sit;
         this.ml = sit.getChessBoard().getMovementLogic();
@@ -125,7 +124,7 @@ public class AILogic {
      * using negaMax sped up with alpha-beta pruning. For each depth
      * corresponding bestValue is initialized to -12456789 representing negative
      * infinity. If leaf isn't reached yet, method will recurse forward by
-     * calling submethod tryAllPossibleMoves.
+     * calling helper method tryAllPossibleMoves.
      *
      * @param height Height from leaf nodes.
      * @param alpha current alpha value.
@@ -138,14 +137,14 @@ public class AILogic {
             return -123456789;
         }
 
-        TranspositionKey key = new TranspositionKey(
-                height, maxingPlayer, sit.getBoardHash());
+//        TranspositionKey key = new TranspositionKey(
+//                height, maxingPlayer, sit.getBoardHash());
 //        if (transpositionTable.containsKey(key)) {
 //            return transpositionTable.get(key);
-//        } else if (transpositionTable.containsKey(key.opposingKey())) {
+//        }
+//        else if (transpositionTable.containsKey(key.opposingKey())) {
 //            return -transpositionTable.get(key.opposingKey());
 //        }
-
         if (height == 0) {
             int value = evaluateGameSituation(sit, maxingPlayer);
             sit.setContinues(true);
@@ -193,15 +192,14 @@ public class AILogic {
                 }
 
                 Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
-                alpha = tryMovingPiece(piece, i, height, alpha,
-                        maxingPlayer, beta, backUp, from);
+                alpha = tryMovingPiece(height, i, piece, from, alpha, beta, maxingPlayer, backUp);
             }
         }
     }
 
     /**
      * Tries moving chosen piece to each possible square on chessboard. If first
-     * runthrough is going on (i==0) only tests captures while on second only
+     * run through is going on (i==0) only tests captures while on second only
      * tests positional moves (rest).
      *
      * If tested move doesn't produce beta-cutoff, move is saved as candidate
@@ -218,8 +216,7 @@ public class AILogic {
      * @param from square piece is located in before movement.
      * @return new alpha value of situation.
      */
-    public int tryMovingPiece(Piece piece, int i, int height,
-            int alpha, Player maxingPlayer, int beta, ChessBoard backUp, Square from) {
+    public int tryMovingPiece(int height, int i, Piece piece, Square from, int alpha, int beta, Player maxingPlayer, ChessBoard backUp) {
 
         for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
             if (System.currentTimeMillis() - start >= timeLimit) {
@@ -231,10 +228,10 @@ public class AILogic {
                     || moveHasBeenTestedAlready(height, piece, possibility)) {
                 continue;
             }
-            alpha = testAMove(piece, possibility, alpha, maxingPlayer, height, beta, backUp, from);
+            alpha = testAMove(piece, possibility, from, maxingPlayer, height, alpha, beta, backUp);
 
             if (alpha >= beta) {
-                saveNewKillerMove(height);
+//                saveNewKillerMove(height);
                 break;
             }
             killerCandidates[searchDepth - height] = new Move(piece, possibility);
@@ -256,8 +253,7 @@ public class AILogic {
      * @param from square where moved piece is located before move.
      * @return alpha value after testing chosen move.
      */
-    public int testAMove(Piece piece, Square possibility, int alpha,
-            Player maxingPlayer, int height, int beta, ChessBoard backUp, Square from) {
+    public int testAMove(Piece piece, Square possibility, Square from, Player maxingPlayer, int height, int alpha, int beta, ChessBoard backUp) {
         if (System.currentTimeMillis() - start >= timeLimit) {
             return alpha;
         }
@@ -280,8 +276,7 @@ public class AILogic {
                         + piece.getColumn() + "," + piece.getRow() + ")");
             }
         }
-        alpha = checkForChange(
-                maxingPlayer, height, alpha, beta, piece, possibility);
+        alpha = checkForChange(maxingPlayer, height, alpha, beta, piece, possibility);
         undoMove(backUp, sit, from, piece);
         sit.setContinues(true);
         return alpha;
@@ -312,7 +307,7 @@ public class AILogic {
 
             if (piece.equals(from.getPiece())) {
                 if (ml.possibleMoves(piece, sit.getChessBoard()).contains(to)) {
-                    alpha = testAMove(piece, to, alpha, maxingPlayer, height, beta, backUp, from);
+                    alpha = testAMove(piece, to, from, maxingPlayer, height, alpha, beta, backUp);
                 }
             }
         }
@@ -341,7 +336,7 @@ public class AILogic {
 
             if (piece.equals(from.getPiece())) {
                 if (ml.possibleMoves(piece, sit.getChessBoard()).contains(to)) {
-                    alpha = testAMove(piece, to, alpha, maxingPlayer, height, beta, backUp, from);
+                    alpha = testAMove(piece, to, from, maxingPlayer, height, alpha, beta, backUp);
                 }
             }
         }
