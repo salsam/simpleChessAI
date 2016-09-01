@@ -7,7 +7,6 @@ import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
 import chess.domain.pieces.Pawn;
 import chess.domain.pieces.Piece;
-import chess.logic.inputprocessing.InputProcessor;
 
 /**
  * This class is responsible for containing all pawn-related movement logic.
@@ -36,10 +35,9 @@ public class PawnMover extends PieceMover {
     @Override
     public void move(Piece piece, Square target, GameSituation sit) {
 
-        if (piece == null || piece.getClass() != Pawn.class) {
-            return;
-        }
-
+//        if (piece == null || piece.getClass() != Pawn.class) {
+//            return;
+//        }
         Pawn pawn = (Pawn) piece;
         pawn.setHasBeenMoved(true);
 
@@ -48,13 +46,14 @@ public class PawnMover extends PieceMover {
         }
 
         if (!target.containsAPiece() && target.getColumn() != piece.getColumn()) {
-            super.move(piece, sit.getChessBoard()
-                    .getSquare(target.getColumn(), piece.getRow()), sit);
-            sit.decrementCountOfCurrentBoardSituation();
+            Square enPassanted = sit.getChessBoard()
+                    .getSquare(target.getColumn(), piece.getRow());
+            sit.updateHashForTakingPiece(enPassanted);
+            enPassanted.getPiece().setTaken(true);
         }
 
         super.move(piece, target, sit);
-        InputProcessor.promotePiece(piece, sit.getChessBoard());
+//        promotePiece(piece, sit.getChessBoard());
     }
 
     /**

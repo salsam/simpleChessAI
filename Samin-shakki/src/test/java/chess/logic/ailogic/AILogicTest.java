@@ -278,8 +278,11 @@ public class AILogicTest {
 
         ai.setSituation(situation);
         ai.setStart(System.currentTimeMillis());
-        ai.checkForChange(Player.WHITE, 1, -123456789, 123456789, wp, cb.getSquare(1, 5));
+        ai.getTranspositionTable().clear();
+        assertTrue(ai.getTranspositionTable().isEmpty());
+        ai.checkForChange(Player.WHITE, 1, -123456789, 123456789, wp, cb.getSquare(1, 3));
         TranspositionKey key = new TranspositionKey(1, Player.WHITE, situation.getBoardHash());
+        assertFalse(ai.getTranspositionTable().isEmpty());
         assertTrue(ai.getTranspositionTable().containsKey(key));
         assertEquals(evaluateGameSituation(situation, Player.WHITE), (int) ai.getTranspositionTable().get(key));
     }
@@ -410,7 +413,7 @@ public class AILogicTest {
     @Test
     public void whenMoveDoesProduceBetaCutOffItIsNotSavedAsKillerCandidate() {
         ChessBoard cb = situation.getChessBoard();
-        Pawn wp = new Pawn(1, 1, Player.WHITE, "wp");
+        Pawn wp = new Pawn(1, 2, Player.WHITE, "wp");
         Pawn bp = new Pawn(5, 1, Player.BLACK, "bp");
         putPieceOnBoard(cb, wp);
         putPieceOnBoard(cb, bp);
@@ -422,7 +425,7 @@ public class AILogicTest {
         ai.getKillerCandidates()[0] = null;
 
         ai.setStart(System.currentTimeMillis());
-        ai.tryMovingPiece(wp, 1, 1, -12345, Player.WHITE, 0, backUp, cb.getSquare(1, 1));
+        ai.tryMovingPiece(wp, 1, 1, -12345, Player.WHITE, 0, backUp, cb.getSquare(1, 2));
         assertEquals(null, ai.getKillerCandidates()[0]);
     }
 }

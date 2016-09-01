@@ -2,6 +2,8 @@ package chess.domain;
 
 import chess.logic.movementlogic.MovementLogic;
 import chess.domain.board.ChessBoard;
+import static chess.domain.board.ChessBoardCopier.chessBoardsAreDeeplyEqual;
+import static chess.domain.board.ChessBoardCopier.copy;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
 import chess.logic.chessboardinitializers.EmptyBoardInitializer;
@@ -183,5 +185,22 @@ public class GameSituationTest {
         ml.move(wk, to, game);
         game.reHashBoard(true);
         assertEquals(game.getBoardHash(), updatedHash);
+    }
+
+    @Test
+    public void gameSituationRevertsToBeginningWhenGameIsReset() {
+        game = new GameSituation(stdinit, new MovementLogic());
+        ChessBoard bu = copy(game.getChessBoard());
+        ChessBoard cb = game.getChessBoard();
+        MovementLogic ml = cb.getMovementLogic();
+
+        long oldHash = game.getBoardHash();
+        ml.move(cb.getSquare(1, 6).getPiece(), cb.getSquare(1, 4), game);
+        game.reset();
+
+        assertTrue(chessBoardsAreDeeplyEqual(cb, bu));
+        assertEquals(oldHash, game.getBoardHash());
+
+        game = new GameSituation(new EmptyBoardInitializer(), new MovementLogic());
     }
 }
