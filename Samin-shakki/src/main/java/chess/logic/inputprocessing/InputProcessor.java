@@ -2,14 +2,17 @@ package chess.logic.inputprocessing;
 
 import chess.domain.board.ChessBoard;
 import chess.domain.board.ChessBoardCopier;
+import chess.logic.chessboardinitializers.ChessBoardInitializer;
+import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import static chess.domain.board.Player.getOpponent;
 import chess.domain.board.Square;
 import chess.domain.GameSituation;
 import chess.domain.Move;
 import static chess.domain.board.ChessBoardCopier.undoMove;
+import chess.domain.pieces.Pawn;
 import chess.domain.pieces.Piece;
+import chess.domain.pieces.Queen;
 import chess.logic.ailogic.AILogic;
-import static chess.logic.gamelogic.PromotionLogic.promotePiece;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.JFrame;
@@ -126,12 +129,39 @@ public class InputProcessor {
         possibilities = null;
 
         if (game.getCheckLogic().checkIfChecked(game.whoseTurn())) {
-            undoMove(backUp, game, from, target.getPiece());
+            undoMove(backUp, game, from, target);
             return;
         }
 
-//        promotePiece(target.getPiece(), game.getChessBoard());
+        promote(target, game.getChessBoard());
         startNextTurn(game);
+    }
+
+    public static void promote(Square target, ChessBoard cb) {
+        Piece piece = target.getPiece();
+        if (piece.getClass() == Pawn.class) {
+            Pawn chosenPawn = (Pawn) piece;
+            if (chosenPawn.opposingEnd() == target.getRow()) {
+                putPieceOnBoard(cb,
+                        new Queen(chosenPawn.getColumn(), chosenPawn.getRow(),
+                                chosenPawn.getOwner(), chosenPawn.getPieceCode()));
+                ChessBoardInitializer.removePieceFromOwner(chosenPawn, cb);
+            }
+        }
+    }
+
+    public static void promotePiece(Piece piece, ChessBoard cb) {
+        if (piece.getClass() == Pawn.class) {
+            Pawn chosenPawn = (Pawn) piece;
+            if (chosenPawn.opposingEnd() == piece.getRow()) {
+
+                Queen promoted = new Queen(chosenPawn.getColumn(), chosenPawn.getRow(),
+                        chosenPawn.getOwner(), chosenPawn.getPieceCode());
+                ChessBoardInitializer.removePieceFromOwner(chosenPawn, cb);
+                putPieceOnBoard(cb, promoted);
+                piece = promoted;
+            }
+        }
     }
 
     private void startNextTurn(GameSituation game) {

@@ -182,17 +182,4 @@ public class ChessBoard {
             return squaresThreatenedByBlack;
         }
     }
-
-    public void printTable() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (table[j][i].getPiece() == null) {
-                    System.out.print("nu");
-                } else {
-                    System.out.print(table[j][i].getPiece().getClass().getName().substring(20, 22));
-                }
-            }
-            System.out.println("");
-        }
-    }
 }

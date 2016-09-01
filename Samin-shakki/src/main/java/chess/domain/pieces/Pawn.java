@@ -47,7 +47,7 @@ public class Pawn extends Piece {
         if (this.hasBeenMoved != pawn.getHasBeenMoved()) {
             return false;
         }
-
+        
         return this.movedTwoSquaresLastTurn == pawn.getMovedTwoSquaresLastTurn();
     }
 

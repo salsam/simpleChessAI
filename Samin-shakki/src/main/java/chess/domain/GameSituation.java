@@ -187,10 +187,6 @@ public class GameSituation {
         boardHash = hasher.getHashAfterMove(boardHash, board, from, to);
     }
 
-    public void updateHashForTakingPiece(Square location) {
-        boardHash = hasher.getHashAfterPieceIsTaken(boardHash, board, location);
-    }
-
     public void updateHashForUndoingMove(ChessBoard backup, Square from, Square to) {
         boardHash = hasher.getHashBeforeMove(boardHash, board, backup, from, to);
     }
@@ -238,10 +234,11 @@ public class GameSituation {
      */
     public void reset() {
         init.initialize(board);
-        chessBoardSituationCounter.clear();
-        reHashBoard(true);
+        boardHash = hasher.hash(board);
         turn = 1;
         continues = true;
+        chessBoardSituationCounter.clear();
+        incrementCountOfCurrentBoardSituation();
     }
 
 }

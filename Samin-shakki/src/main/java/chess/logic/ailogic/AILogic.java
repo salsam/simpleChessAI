@@ -272,9 +272,6 @@ public class AILogic {
             System.out.println("backUp: " + backUp.getSquare(possibility.getColumn(),
                     possibility.getRow()).getPiece() + " at square: ("
                     + possibility.getColumn() + "," + possibility.getRow() + ")");
-            backUp.printTable();
-            System.out.println("");
-            sit.getChessBoard().printTable();
             if (piece.isTaken()) {
                 System.out.println("piece is taken!" + piece + " at square ("
                         + piece.getColumn() + "," + piece.getRow() + ")");
@@ -411,7 +408,7 @@ public class AILogic {
             return alpha;
         }
         int value = -negaMax(height - 1, -beta, -alpha, getOpponent(maxingPlayer));
-        TranspositionKey key = new TranspositionKey(height, maxingPlayer, sit.getBoardHash());
+        TranspositionKey key = new TranspositionKey(height, maxingPlayer, value);
         transpositionTable.put(key, value);
 
         if (value >= bestValues[height]) {

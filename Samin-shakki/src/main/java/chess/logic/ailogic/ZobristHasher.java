@@ -147,18 +147,4 @@ public class ZobristHasher {
         return hash;
     }
 
-    /**
-     * Updates hash for removing piece at chosen square on given chessboard.
-     *
-     * @param hash old hash of given chessboard.
-     * @param board chessboard on which piece is on.
-     * @param location square that piece being taken is placed on.
-     * @return hash after piece is taken.
-     */
-    public long getHashAfterPieceIsTaken(long hash, ChessBoard board, Square location) {
-        hash ^= squareHashes[8 * location.getColumn() + location.getRow()][numberOfPieceAtSquare(board, location)];
-        hash ^= squareHashes[8 * location.getColumn() + location.getRow()][0];
-        return hash;
-    }
-
 }
