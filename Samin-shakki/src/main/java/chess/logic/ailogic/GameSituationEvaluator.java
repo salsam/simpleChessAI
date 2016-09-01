@@ -127,7 +127,7 @@ public class GameSituationEvaluator {
         return value;
     }
 
-    public static int materialValue(GameSituation situation, Player player) {
+    private static int materialValue(GameSituation situation, Player player) {
         if (values == null) {
             initValues();
         }
@@ -148,7 +148,7 @@ public class GameSituationEvaluator {
         return value;
     }
 
-    public static int mobilityValue(GameSituation sit, Player player) {
+    private static int mobilityValue(GameSituation sit, Player player) {
         int value = sit.getChessBoard().getPieces(player).stream()
                 .filter(p -> !p.isTaken())
                 .mapToInt(p -> {

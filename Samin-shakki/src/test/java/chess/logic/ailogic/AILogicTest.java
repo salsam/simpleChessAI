@@ -30,7 +30,7 @@ public class AILogicTest {
     @BeforeClass
     public static void setUpClass() {
         situation = new GameSituation(new EmptyBoardInitializer(), new MovementLogic());
-        ai = new AILogic();
+        ai = new AILogic(3);
     }
 
     @Before
@@ -135,10 +135,8 @@ public class AILogicTest {
     @Test
     public void pawnRemainsPawnIfPromotionIsTested() {
         ChessBoard cb = situation.getChessBoard();
-        Pawn wp = new Pawn(1, 4, Player.WHITE, "wp");
+        Pawn wp = new Pawn(1, 6, Player.WHITE, "wp");
         putPieceOnBoard(cb, wp);
-        MovementLogic ml = cb.getMovementLogic();
-        ml.move(wp, cb.getSquare(1, 5), situation);
         ChessBoard backUp = copy(situation.getChessBoard());
         ai.findBestMoves(situation);
 
@@ -146,7 +144,6 @@ public class AILogicTest {
             for (Piece p : backUp.getPieces(player)) {
                 for (Piece newP : situation.getChessBoard().getPieces(player)) {
                     if (p.equals(newP)) {
-                        assertEquals(Pawn.class, p.getClass());
                         assertEquals(p.getClass(), newP.getClass());
                         assertEquals(p.getColumn(), newP.getColumn());
                         assertEquals(p.getRow(), newP.getRow());
@@ -169,7 +166,11 @@ public class AILogicTest {
         putPieceOnBoard(cb, wq);
         situation.reHashBoard(true);
 
-        ChessBoard backUp = copy(situation.getChessBoard());
+        ml.move(wq, cb.getSquare(1, 6), situation);
+        ml.move(wq, cb.getSquare(1, 4), situation);
+        ml.move(wq, cb.getSquare(1, 6), situation);
+        ml.move(wq, cb.getSquare(1, 3), situation);
+        
         ai.findBestMoves(situation);
 
         for (Player player : Player.values()) {

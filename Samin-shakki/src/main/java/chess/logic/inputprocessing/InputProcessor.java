@@ -48,9 +48,7 @@ public class InputProcessor {
      * Creates a new InputProcessor-object.
      */
     public InputProcessor() {
-        ais = new AILogic[2];
-        this.ais[0] = new AILogic();
-        this.ais[1] = new AILogic();
+        this.ai = new AILogic(3);
     }
 
     public Piece getChosen() {
