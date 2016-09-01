@@ -457,7 +457,7 @@ public class AILogic {
         start = System.currentTimeMillis();
         sit = situation;
         ml = sit.getChessBoard().getMovementLogic();
-        salvageLastPrincipalVariation();
+//        salvageLastPrincipalVariation();
         for (int i = 1; i < plies; i++) {
             searchDepth = i;
             negaMax(i, -123456789, 123456789, situation.whoseTurn());
@@ -468,7 +468,7 @@ public class AILogic {
 
         }
 
-        lastPrincipalVariation = new Pair(sit.getTurn(), principalMoves);
+//        lastPrincipalVariation = new Pair(sit.getTurn(), principalMoves);
         long used = System.currentTimeMillis() - start;
         sum += used;
         count++;
