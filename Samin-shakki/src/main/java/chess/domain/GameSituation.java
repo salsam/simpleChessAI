@@ -85,7 +85,7 @@ public class GameSituation {
         chessBoardSituationCounter = new MyHashMap();
         continues = true;
         hasher = new ZobristHasher();
-        reHashBoard(true);
+        boardHash = hasher.hash(board);
         ais = new boolean[2];
     }
 
@@ -237,11 +237,11 @@ public class GameSituation {
      * Resets the game situation to beginning of the game.
      */
     public void reset() {
+        continues = true;
         init.initialize(board);
         chessBoardSituationCounter.clear();
         reHashBoard(true);
         turn = 1;
-        continues = true;
     }
 
 }

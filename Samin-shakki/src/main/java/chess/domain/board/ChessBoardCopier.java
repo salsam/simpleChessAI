@@ -155,7 +155,16 @@ public class ChessBoardCopier {
 
         Piece old = backUp.getSquare(from.getColumn(), from.getRow()).getPiece();
         if (moved == null || old == null) {
-            System.out.println("old: " + old + "cur: " + moved + " from: " + from + " to " + to);
+            System.out.println("old: " + old + "cur: " + moved + " owner " + moved.getOwner() + " from: " + from + " to " + to);
+            System.out.println("backUp: " + backUp.getSquare(from.getColumn(),
+                    from.getRow()).getPiece() + " at square: ("
+                    + from.getColumn() + "," + from.getRow() + ")");
+            System.out.println("backUp: " + backUp.getSquare(to.getColumn(),
+                    to.getRow()).getPiece() + " at square: ("
+                    + to.getColumn() + "," + to.getRow() + ")");
+            backUp.printTable();
+            System.out.println("");
+            sit.getChessBoard().printTable();
         }
 
         from.setPiece(moved);

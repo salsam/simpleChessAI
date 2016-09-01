@@ -3,6 +3,7 @@ package chess.logic.ailogic;
 import chess.domain.GameSituation;
 import chess.domain.Move;
 import chess.domain.board.ChessBoard;
+import chess.domain.board.ChessBoardCopier;
 import static chess.domain.board.ChessBoardCopier.copy;
 import static chess.domain.board.ChessBoardCopier.undoMove;
 import chess.domain.board.Player;
@@ -49,7 +50,7 @@ public class AILogic {
     private int[] bestValues;
     private long timeLimit;
     private long start;
-    private final int plies = 4;
+    private final int plies = 10;
     private int lastPlies;
     private int searchDepth;
     private int oldestIndex;
@@ -231,7 +232,7 @@ public class AILogic {
             alpha = testAMove(piece, possibility, from, maxingPlayer, height, alpha, beta, backUp);
 
             if (alpha >= beta) {
-//                saveNewKillerMove(height);
+                saveNewKillerMove(height);
                 break;
             }
             killerCandidates[searchDepth - height] = new Move(piece, possibility);
@@ -276,7 +277,7 @@ public class AILogic {
                         + piece.getColumn() + "," + piece.getRow() + ")");
             }
         }
-        alpha = checkForChange(maxingPlayer, height, alpha, beta, piece, possibility);
+        alpha = checkForChange(piece, possibility, height, maxingPlayer, alpha, beta);
         undoMove(backUp, sit, from, piece);
         sit.setContinues(true);
         return alpha;
@@ -399,8 +400,7 @@ public class AILogic {
      * @param possibility square that piece was moved to.
      * @return new alpha value.
      */
-    public int checkForChange(Player maxingPlayer, int height,
-            int alpha, int beta, Piece piece, Square possibility) {
+    public int checkForChange(Piece piece, Square possibility, int height, Player maxingPlayer, int alpha, int beta) {
 
         if (sit.getCheckLogic().checkIfChecked(maxingPlayer)) {
             return alpha;

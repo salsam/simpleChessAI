@@ -9,7 +9,6 @@ import chess.domain.Move;
 import static chess.domain.board.ChessBoardCopier.undoMove;
 import chess.domain.pieces.Piece;
 import chess.logic.ailogic.AILogic;
-import static chess.logic.gamelogic.PromotionLogic.promotePiece;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.JFrame;
@@ -79,6 +78,10 @@ public class InputProcessor {
 
     public void setPossibilities(Set<Square> possibilities) {
         this.possibilities = possibilities;
+    }
+
+    public AILogic[] getAis() {
+        return this.ais;
     }
 
     /**
