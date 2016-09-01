@@ -58,7 +58,7 @@ public class AILogic {
     private Move[] principalMoves;
     private Move[] killerCandidates;
     private Move[][] killerMoves;
-    private Map<TranspositionKey, Integer> transpositionTable;
+//    private Map<TranspositionKey, Integer> transpositionTable;
     private long sum = 0;
     private int count = 0;
 
@@ -73,7 +73,7 @@ public class AILogic {
         random = new Random();
         searchDepth = 3;
         timeLimit = 1000;
-        transpositionTable = new MyHashMap();
+//        transpositionTable = new MyHashMap();
     }
 
     public int[] getBestValues() {
@@ -88,9 +88,9 @@ public class AILogic {
         this.searchDepth = searchDepth;
     }
 
-    public Map<TranspositionKey, Integer> getTranspositionTable() {
-        return transpositionTable;
-    }
+//    public Map<TranspositionKey, Integer> getTranspositionTable() {
+//        return transpositionTable;
+//    }
 
     public void setSituation(GameSituation sit) {
         this.sit = sit;
@@ -140,16 +140,16 @@ public class AILogic {
 
         TranspositionKey key = new TranspositionKey(
                 height, maxingPlayer, sit.getBoardHash());
-        if (transpositionTable.containsKey(key)) {
-            return transpositionTable.get(key);
-        } else if (transpositionTable.containsKey(key.opposingKey())) {
-            return -transpositionTable.get(key.opposingKey());
-        }
+//        if (transpositionTable.containsKey(key)) {
+//            return transpositionTable.get(key);
+//        } else if (transpositionTable.containsKey(key.opposingKey())) {
+//            return -transpositionTable.get(key.opposingKey());
+//        }
 
         if (height == 0) {
             int value = evaluateGameSituation(sit, maxingPlayer);
             sit.setContinues(true);
-            transpositionTable.put(key, value);
+//            transpositionTable.put(key, value);
             return value;
         }
         tryAllPossibleMoves(height, alpha, maxingPlayer, beta);
@@ -411,8 +411,8 @@ public class AILogic {
             return alpha;
         }
         int value = -negaMax(height - 1, -beta, -alpha, getOpponent(maxingPlayer));
-        TranspositionKey key = new TranspositionKey(height, maxingPlayer, sit.getBoardHash());
-        transpositionTable.put(key, value);
+//        TranspositionKey key = new TranspositionKey(height, maxingPlayer, sit.getBoardHash());
+//        transpositionTable.put(key, value);
 
         if (value >= bestValues[height]) {
             keepTrackOfBestMoves(height, value, piece, possibility);
