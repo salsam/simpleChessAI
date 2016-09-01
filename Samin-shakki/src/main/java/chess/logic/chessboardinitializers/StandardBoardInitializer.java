@@ -5,7 +5,7 @@ import chess.domain.board.Player;
 import chess.domain.pieces.*;
 
 /**
- * This class is used to initialise standard starting positions of chess. Using
+ * This class is used to initialize standard starting positions of chess. Using
  * method @see #initialise(ChessBoard)
  *
  * @author samisalo
@@ -13,10 +13,10 @@ import chess.domain.pieces.*;
 public class StandardBoardInitializer extends ChessBoardInitializer {
 
     /**
-     * Initialises the ChessBoard given as parameter with standard chess
+     * Initializes the ChessBoard given as parameter with standard chess
      * starting positions.
      *
-     * @param board ChessBoard to initialised.
+     * @param board ChessBoard to initialized.
      */
     @Override
     public void initialize(ChessBoard board) {

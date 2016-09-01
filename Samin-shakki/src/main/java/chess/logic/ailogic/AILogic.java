@@ -3,7 +3,6 @@ package chess.logic.ailogic;
 import chess.domain.GameSituation;
 import chess.domain.Move;
 import chess.domain.board.ChessBoard;
-import chess.domain.board.ChessBoardCopier;
 import static chess.domain.board.ChessBoardCopier.copy;
 import static chess.domain.board.ChessBoardCopier.undoMove;
 import chess.domain.board.Player;
@@ -101,6 +100,10 @@ public class AILogic {
         this.start = start;
     }
 
+    public long getTimeLimit() {
+        return timeLimit;
+    }
+
     /**
      * Sets new time limit for ai. This will be how long ai can think of next
      * move (measured in milliseconds).
@@ -182,7 +185,7 @@ public class AILogic {
         alpha = testPrincipalMove(height, maxingPlayer, alpha, beta, backUp);
         alpha = testKillerMoves(height, maxingPlayer, alpha, beta, backUp);
 
-        for (int i = 0; i < 2; i++) {
+        for (int count = 0; count < 2; count++) {
             for (Piece piece : sit.getChessBoard().getPieces(maxingPlayer)) {
                 if (alpha >= beta || System.currentTimeMillis() - start >= timeLimit) {
                     break;
@@ -193,7 +196,7 @@ public class AILogic {
                 }
 
                 Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
-                alpha = tryMovingPiece(height, i, piece, from, alpha, beta, maxingPlayer, backUp);
+                alpha = tryMovingPiece(height, count, piece, from, alpha, beta, maxingPlayer, backUp);
             }
         }
     }
@@ -208,7 +211,7 @@ public class AILogic {
      * will be saved as new killer move assuming such exists.
      *
      * @param piece piece being moved.
-     * @param i looping count.
+     * @param count looping count.
      * @param height height from leaf nodes.
      * @param alpha current alpha value.
      * @param maxingPlayer player whose turn it is.
@@ -217,15 +220,15 @@ public class AILogic {
      * @param from square piece is located in before movement.
      * @return new alpha value of situation.
      */
-    public int tryMovingPiece(int height, int i, Piece piece, Square from, int alpha, int beta, Player maxingPlayer, ChessBoard backUp) {
+    public int tryMovingPiece(int height, int count, Piece piece, Square from, int alpha, int beta, Player maxingPlayer, ChessBoard backUp) {
 
         for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
             if (System.currentTimeMillis() - start >= timeLimit) {
                 break;
             }
 
-            if ((i == 0 && !possibility.containsAPiece())
-                    || (i == 1 && possibility.containsAPiece())
+            if ((count == 0 && !possibility.containsAPiece())
+                    || (count == 1 && possibility.containsAPiece())
                     || moveHasBeenTestedAlready(height, piece, possibility)) {
                 continue;
             }
@@ -237,6 +240,7 @@ public class AILogic {
             }
             killerCandidates[searchDepth - height] = new Move(piece, possibility);
         }
+
         return alpha;
     }
 
@@ -306,7 +310,7 @@ public class AILogic {
             Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
             Square to = killer.getTarget();
 
-            if (piece.equals(from.getPiece())) {
+            if (piece.deepEquals(from.getPiece())) {
                 if (ml.possibleMoves(piece, sit.getChessBoard()).contains(to)) {
                     alpha = testAMove(piece, to, from, maxingPlayer, height, alpha, beta, backUp);
                 }
@@ -335,7 +339,7 @@ public class AILogic {
             Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
             Square to = principalMoves[searchDepth - height].getTarget();
 
-            if (piece.equals(from.getPiece())) {
+            if (piece.deepEquals(from.getPiece())) {
                 if (ml.possibleMoves(piece, sit.getChessBoard()).contains(to)) {
                     alpha = testAMove(piece, to, from, maxingPlayer, height, alpha, beta, backUp);
                 }

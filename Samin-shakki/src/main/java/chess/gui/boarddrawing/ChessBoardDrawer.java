@@ -29,6 +29,10 @@ public class ChessBoardDrawer extends JPanel {
         return game;
     }
 
+    public void setGame(GameSituation game) {
+        this.game = game;
+    }
+
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponents(graphics);

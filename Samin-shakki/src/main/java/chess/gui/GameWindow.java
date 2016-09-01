@@ -4,7 +4,6 @@ import chess.gui.actionlisteners.ChessBoardListener;
 import chess.gui.boarddrawing.ChessBoardDrawer;
 import chess.domain.GameSituation;
 import chess.logic.inputprocessing.InputProcessor;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -21,6 +20,7 @@ public class GameWindow extends JFrame {
 
     private GameSituation game;
     private InputProcessor inputProcessor;
+    private ChessBoardDrawer cbd;
     private JLabel textArea;
 
     public GameWindow(InputProcessor inputProcessor, GameSituation game) {
@@ -37,6 +37,12 @@ public class GameWindow extends JFrame {
         return game;
     }
 
+    public void setGame(GameSituation game) {
+        this.game = game;
+        this.cbd.setGame(game);
+
+    }
+
     public InputProcessor getInputProcessor() {
         return inputProcessor;
     }
@@ -49,15 +55,15 @@ public class GameWindow extends JFrame {
         textArea.setAlignmentY(TOP_ALIGNMENT);
         inputProcessor.setTextArea(textArea);
 
-        ChessBoardDrawer window = new ChessBoardDrawer(inputProcessor, game, 50);
-        window.setMaximumSize(new Dimension(400, 400));
-        window.setAlignmentX(CENTER_ALIGNMENT);
-        window.setAlignmentY(CENTER_ALIGNMENT);
-        window.addMouseListener(new ChessBoardListener(inputProcessor, window, 50));
+        cbd = new ChessBoardDrawer(inputProcessor, game, 50);
+        cbd.setMaximumSize(new Dimension(400, 400));
+        cbd.setAlignmentX(CENTER_ALIGNMENT);
+        cbd.setAlignmentY(CENTER_ALIGNMENT);
+        cbd.addMouseListener(new ChessBoardListener(inputProcessor, cbd, 50));
 
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         container.add(textArea);
-        container.add(window);
+        container.add(cbd);
     }
 
     @Override

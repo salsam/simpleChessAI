@@ -62,7 +62,7 @@ public abstract class ChessBoardInitializer {
 
     /**
      * Makes the square piece is located on refer to piece thus adding piece on
-     * chessboard.
+     * chessboard and adds piece to list of owner's pieces.
      *
      * @param board board Piece will be placed on.
      * @param piece piece Piece to be placed.

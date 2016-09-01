@@ -86,6 +86,7 @@ public class GameSituation {
         continues = true;
         hasher = new ZobristHasher();
         boardHash = hasher.hash(board);
+        incrementCountOfCurrentBoardSituation();
         ais = new boolean[2];
     }
 
@@ -238,6 +239,7 @@ public class GameSituation {
      */
     public void reset() {
         continues = true;
+        board = new ChessBoard(new MovementLogic());
         init.initialize(board);
         chessBoardSituationCounter.clear();
         reHashBoard(true);
