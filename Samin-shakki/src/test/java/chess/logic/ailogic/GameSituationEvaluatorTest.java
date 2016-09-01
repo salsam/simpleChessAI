@@ -58,7 +58,7 @@ public class GameSituationEvaluatorTest {
     public void gamesituationValuedNormallyWhenOpponentWillBeStaleMatedOnTheirTurn() {
         Queen queen = new Queen(1, 1, Player.WHITE, "wp");
         putPieceOnBoard(situation.getChessBoard(), queen);
-        assertEquals(880 + 23, evaluateGameSituation(situation, Player.WHITE));
+        assertEquals(880 + 230, evaluateGameSituation(situation, Player.WHITE));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class GameSituationEvaluatorTest {
         putPieceOnBoard(situation.getChessBoard(), brook);
         putPieceOnBoard(situation.getChessBoard(), bqueen);
 
-        assertEquals(-1313, evaluateGameSituation(situation, Player.WHITE));
+        assertEquals(-1615, evaluateGameSituation(situation, Player.WHITE));
     }
 
     @Test
@@ -94,7 +94,47 @@ public class GameSituationEvaluatorTest {
 
         situation.getChessBoard().getMovementLogic()
                 .move(wpawn, situation.getChessBoard().getSquare(2, 6), situation);
-        assertEquals(150 - 510 + 1 - 14, evaluateGameSituation(situation, Player.WHITE));
+        assertEquals(-530, evaluateGameSituation(situation, Player.WHITE));
+    }
+
+    @Test
+    public void checkMateWorth100000000() {
+        King wk = new King(0, 7, Player.WHITE, "wk");
+        King bk = new King(2, 6, Player.BLACK, "bk");
+        Queen bq = new Queen(1, 2, Player.BLACK, "bq");
+        ChessBoard cb = situation.getChessBoard();
+        MovementLogic ml = cb.getMovementLogic();
+
+        putPieceOnBoard(cb, wk);
+        putPieceOnBoard(cb, bk);
+        putPieceOnBoard(cb, bq);
+        situation.reHashBoard(true);
+
+        ml.move(bq, cb.getSquare(1, 6), situation);
+
+        assertEquals(-100000000, evaluateGameSituation(situation, Player.WHITE));
+    }
+
+    @Test
+    public void thirdRepetitionOfBoardSituationIsWorthZeroEvenWhenMated() {
+        King wk = new King(0, 7, Player.WHITE, "wk");
+        King bk = new King(2, 6, Player.BLACK, "bk");
+        Queen bq = new Queen(1, 2, Player.BLACK, "bq");
+        ChessBoard cb = situation.getChessBoard();
+        MovementLogic ml = cb.getMovementLogic();
+
+        putPieceOnBoard(cb, wk);
+        putPieceOnBoard(cb, bk);
+        putPieceOnBoard(cb, bq);
+        situation.reHashBoard(true);
+
+        ml.move(bq, cb.getSquare(1, 6), situation);
+        ml.move(bq, cb.getSquare(1, 2), situation);
+        ml.move(bq, cb.getSquare(1, 6), situation);
+        ml.move(bq, cb.getSquare(1, 2), situation);
+        ml.move(bq, cb.getSquare(1, 6), situation);
+
+        assertEquals(0, evaluateGameSituation(situation, Player.WHITE));
     }
 
     @Test
@@ -110,5 +150,15 @@ public class GameSituationEvaluatorTest {
         ml.move(wr, cb.getSquare(0, 7), situation);
 
         assertEquals(0, evaluateGameSituation(situation, Player.WHITE));
+    }
+
+    @Test
+    public void mobilityValueCorrectForPawn() {
+        Pawn wpawn = new Pawn(1, 5, Player.WHITE, "wp");
+        ChessBoard cb = situation.getChessBoard();
+        putPieceOnBoard(cb, wpawn);
+        assertEquals(20, GameSituationEvaluator.mobilityValue(situation, Player.WHITE));
+        cb.getMovementLogic().move(wpawn, cb.getSquare(1, 6), situation);
+        assertEquals(10, GameSituationEvaluator.mobilityValue(situation, Player.WHITE));
     }
 }

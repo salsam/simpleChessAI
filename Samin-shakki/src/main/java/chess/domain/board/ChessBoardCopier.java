@@ -162,9 +162,9 @@ public class ChessBoardCopier {
         moved.setColumn(from.getColumn());
         moved.setRow(from.getRow());
 
-        if (old.getClass() != moved.getClass()) {
-            revertPromotion(from, sit.getChessBoard(), old);
-        }
+//        if (old.getClass() != moved.getClass()) {
+//            revertPromotion(from, sit.getChessBoard(), old);
+//        }
         moved.makeDeeplyEqualTo(old);
 
         handleDestination(backUp, to, sit, from);
