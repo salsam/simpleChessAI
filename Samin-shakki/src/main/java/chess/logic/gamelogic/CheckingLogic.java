@@ -7,7 +7,6 @@ import static chess.domain.board.Player.getOpponent;
 import chess.domain.board.ChessBoardCopier;
 import static chess.domain.board.ChessBoardCopier.undoMove;
 import chess.domain.board.Square;
-import chess.domain.pieces.King;
 import chess.domain.pieces.Piece;
 
 /**
@@ -52,7 +51,7 @@ public class CheckingLogic {
      * @return true if player's king is threatened by opposing piece
      */
     public boolean checkIfChecked(Player player) {
-        King playersKing = game.getChessBoard().getKings().get(player);
+        Piece playersKing = game.getChessBoard().getKings().get(player);
         if (playersKing == null) {
             return false;
         }
@@ -79,10 +78,10 @@ public class CheckingLogic {
                 game.getChessBoard().getMovementLogic().move(piece, possibility, game);
                 game.getChessBoard().updateThreatenedSquares(getOpponent(player));
                 if (!checkIfChecked(player)) {
-                    undoMove(backUp, game, from, piece);
+                    undoMove(backUp, game, from, possibility);
                     return false;
                 }
-                undoMove(backUp, game, from, piece);
+                undoMove(backUp, game, from, possibility);
             }
         }
 

@@ -3,7 +3,8 @@ package chess.logic.ailogic;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
-import chess.domain.pieces.*;
+import chess.domain.pieces.BetterPiece;
+import static chess.domain.pieces.Klass.*;
 import java.util.Random;
 import java.util.Set;
 
@@ -55,15 +56,15 @@ public class ZobristHasher {
             ret += 6;
         }
 
-        if (sq.getPiece().getClass() == Pawn.class) {
+        if (((BetterPiece) sq.getPiece()).getKlass() == PAWN) {
             ret += 1;
-        } else if (sq.getPiece().getClass() == Rook.class) {
+        } else if (((BetterPiece) sq.getPiece()).getKlass() == ROOK) {
             ret += 2;
-        } else if (sq.getPiece().getClass() == Knight.class) {
+        } else if (((BetterPiece) sq.getPiece()).getKlass() == KNIGHT) {
             ret += 3;
-        } else if (sq.getPiece().getClass() == Bishop.class) {
+        } else if (((BetterPiece) sq.getPiece()).getKlass() == BISHOP) {
             ret += 4;
-        } else if (sq.getPiece().getClass() == Queen.class) {
+        } else if (((BetterPiece) sq.getPiece()).getKlass() == QUEEN) {
             ret += 5;
         } else if (kingCanCastle(board, sq)) {
             ret = 13;

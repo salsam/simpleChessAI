@@ -6,7 +6,8 @@ import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashMap;
-import chess.domain.pieces.Pawn;
+import chess.domain.pieces.BetterPiece;
+import static chess.domain.pieces.Klass.PAWN;
 import chess.logic.ailogic.ZobristHasher;
 import chess.logic.gamelogic.CheckingLogic;
 import chess.logic.gamelogic.LegalityChecker;
@@ -227,9 +228,8 @@ public class GameSituation {
      */
     public void makePawnsUnEnPassantable(Player player) {
         board.getPieces(player).stream().forEach(piece -> {
-            if (piece.getClass() == Pawn.class) {
-                Pawn pawn = (Pawn) piece;
-                pawn.setMovedTwoSquaresLastTurn(false);
+            if (((BetterPiece) piece).getKlass() == PAWN) {
+                ((BetterPiece) piece).setMovedTwoSquaresLastTurn(false);
             }
         });
     }

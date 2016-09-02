@@ -10,8 +10,8 @@ import chess.domain.board.ChessBoard;
 import java.util.Set;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
+import chess.domain.pieces.BetterPiece;
 import chess.domain.pieces.Piece;
-import chess.domain.pieces.Rook;
 
 /**
  * This class is responsible for all rook-related movement logic.
@@ -34,11 +34,7 @@ public class RookMover extends PieceMover {
     @Override
     public void move(Piece piece, Square target, GameSituation sit) {
 
-        if (piece == null || piece.getClass() != Rook.class) {
-            return;
-        }
-
-        Rook rook = (Rook) piece;
+        BetterPiece rook = (BetterPiece) piece;
         rook.setHasBeenMoved(true);
         super.move(rook, target, sit);
     }
@@ -51,7 +47,7 @@ public class RookMover extends PieceMover {
      */
     @Override
     public Set<Square> threatenedSquares(Piece piece, ChessBoard board) {
-        Rook rook = (Rook) piece;
+        BetterPiece rook = (BetterPiece) piece;
         Set<Square> possibilities = new MyHashSet<>();
         addHorizontalPossibilities(board.getSquare(rook.getColumn(), rook.getRow()), board, possibilities);
         addVerticalPossibilities(board.getSquare(rook.getColumn(), rook.getRow()), board, possibilities);

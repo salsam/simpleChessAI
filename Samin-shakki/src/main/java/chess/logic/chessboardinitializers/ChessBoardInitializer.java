@@ -2,7 +2,8 @@ package chess.logic.chessboardinitializers;
 
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Square;
-import chess.domain.pieces.King;
+import chess.domain.pieces.BetterPiece;
+import static chess.domain.pieces.Klass.KING;
 import chess.domain.pieces.Piece;
 
 /**
@@ -32,8 +33,8 @@ public abstract class ChessBoardInitializer {
     public static void addPieceToOwner(Square target, ChessBoard chessBoard) {
         if (target.getPiece() != null) {
             Piece piece = target.getPiece();
-            if (piece.getClass() == King.class) {
-                chessBoard.getKings().put(piece.getOwner(), (King) piece);
+            if (((BetterPiece)piece).getKlass() == KING) {
+                chessBoard.getKings().put(piece.getOwner(), piece);
             }
             chessBoard.getPieces(piece.getOwner()).add(piece);
         }

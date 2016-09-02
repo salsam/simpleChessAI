@@ -3,16 +3,12 @@ package chess.gui.boarddrawing;
 import chess.domain.datastructures.Pair;
 import static chess.io.ImageLoader.getImage;
 import chess.domain.board.Player;
-import chess.domain.pieces.Bishop;
-import chess.domain.pieces.King;
-import chess.domain.pieces.Knight;
-import chess.domain.pieces.Pawn;
+import chess.domain.datastructures.MyHashMap;
+import chess.domain.pieces.BetterPiece;
+import static chess.domain.pieces.Klass.*;
 import chess.domain.pieces.Piece;
-import chess.domain.pieces.Queen;
-import chess.domain.pieces.Rook;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -24,23 +20,23 @@ public class PieceDrawer {
     private Map<Pair, Image> images;
 
     public PieceDrawer() {
-        images = new HashMap();
+        images = new MyHashMap();
         addImages();
     }
 
     private void addImages() {
-        images.put(new Pair(Bishop.class, Player.BLACK), getImage("blackBishop1.png"));
-        images.put(new Pair(Bishop.class, Player.WHITE), getImage("whiteBishop1.png"));
-        images.put(new Pair(King.class, Player.BLACK), getImage("blackKing1.png"));
-        images.put(new Pair(King.class, Player.WHITE), getImage("whiteKing1.png"));
-        images.put(new Pair(Knight.class, Player.BLACK), getImage("blackKnight1.png"));
-        images.put(new Pair(Knight.class, Player.WHITE), getImage("whiteKnight1.png"));
-        images.put(new Pair(Pawn.class, Player.BLACK), getImage("blackPawn1.png"));
-        images.put(new Pair(Pawn.class, Player.WHITE), getImage("whitePawn1.png"));
-        images.put(new Pair(Queen.class, Player.BLACK), getImage("blackQueen1.png"));
-        images.put(new Pair(Queen.class, Player.WHITE), getImage("whiteQueen1.png"));
-        images.put(new Pair(Rook.class, Player.BLACK), getImage("blackRook1.png"));
-        images.put(new Pair(Rook.class, Player.WHITE), getImage("whiteRook1.png"));
+        images.put(new Pair(BISHOP, Player.BLACK), getImage("blackBishop1.png"));
+        images.put(new Pair(BISHOP, Player.WHITE), getImage("whiteBishop1.png"));
+        images.put(new Pair(KING, Player.BLACK), getImage("blackKing1.png"));
+        images.put(new Pair(KING, Player.WHITE), getImage("whiteKing1.png"));
+        images.put(new Pair(KNIGHT, Player.BLACK), getImage("blackKnight1.png"));
+        images.put(new Pair(KNIGHT, Player.WHITE), getImage("whiteKnight1.png"));
+        images.put(new Pair(PAWN, Player.BLACK), getImage("blackPawn1.png"));
+        images.put(new Pair(PAWN, Player.WHITE), getImage("whitePawn1.png"));
+        images.put(new Pair(QUEEN, Player.BLACK), getImage("blackQueen1.png"));
+        images.put(new Pair(QUEEN, Player.WHITE), getImage("whiteQueen1.png"));
+        images.put(new Pair(ROOK, Player.BLACK), getImage("blackRook1.png"));
+        images.put(new Pair(ROOK, Player.WHITE), getImage("whiteRook1.png"));
     }
 
     /**
@@ -54,6 +50,6 @@ public class PieceDrawer {
     public void draw(Piece piece, Graphics graphics, int sideLength) {
         int x = piece.getColumn() * sideLength;
         int y = piece.getRow() * sideLength;
-        graphics.drawImage(images.get(new Pair(piece.getClass(), piece.getOwner())), x, y, sideLength, sideLength, null);
+        graphics.drawImage(images.get(new Pair(((BetterPiece) piece).getKlass(), piece.getOwner())), x, y, sideLength, sideLength, null);
     }
 }

@@ -4,7 +4,6 @@ import chess.domain.datastructures.MyArrayList;
 import chess.domain.datastructures.MyHashMap;
 import chess.domain.datastructures.MyHashSet;
 import chess.logic.movementlogic.MovementLogic;
-import chess.domain.pieces.King;
 import chess.domain.pieces.Piece;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +45,7 @@ public class ChessBoard {
     /**
      * Map containing positions of both kings.
      */
-    private Map<Player, King> kings;
+    private Map<Player, Piece> kings;
 
     /**
      * Creates a new chessboard with given movement logic.
@@ -102,7 +101,7 @@ public class ChessBoard {
      *
      * @return map with references from each player to their king.
      */
-    public Map<Player, King> getKings() {
+    public Map<Player, Piece> getKings() {
         return this.kings;
     }
 

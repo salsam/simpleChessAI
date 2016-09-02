@@ -129,7 +129,7 @@ public class InputProcessor {
         possibilities = null;
 
         if (game.getCheckLogic().checkIfChecked(game.whoseTurn())) {
-            undoMove(backUp, game, from, target.getPiece());
+            undoMove(backUp, game, from, target);
             return;
         }
 

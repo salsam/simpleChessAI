@@ -6,6 +6,7 @@ import chess.domain.board.ChessBoardCopier;
 import chess.domain.board.Player;
 import chess.domain.pieces.King;
 import chess.domain.pieces.Pawn;
+import chess.domain.pieces.Piece;
 import chess.domain.pieces.Queen;
 import chess.domain.pieces.Rook;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
@@ -118,7 +119,7 @@ public class CheckingLogicTest {
     @Test
     public void checkMateFalseInComplexSituationWhereKingThreatenedByProtectedPieceButCanBeAvoided() {
         game = new GameSituation(new StandardBoardInitializer(), ml);
-        King whiteKing = game.getChessBoard().getKings().get(Player.WHITE);
+        Piece whiteKing = game.getChessBoard().getKings().get(Player.WHITE);
         Pawn whitePawn = (Pawn) game.getChessBoard().getSquare(5, 1).getPiece();
         Pawn blackPawn1 = (Pawn) game.getChessBoard().getSquare(5, 6).getPiece();
         Pawn blackPawn2 = (Pawn) game.getChessBoard().getSquare(4, 6).getPiece();

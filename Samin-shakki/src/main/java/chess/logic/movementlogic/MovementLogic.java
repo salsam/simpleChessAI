@@ -7,6 +7,12 @@ import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
+import static chess.domain.pieces.Klass.BISHOP;
+import static chess.domain.pieces.Klass.KING;
+import static chess.domain.pieces.Klass.KNIGHT;
+import static chess.domain.pieces.Klass.PAWN;
+import static chess.domain.pieces.Klass.QUEEN;
+import static chess.domain.pieces.Klass.ROOK;
 import java.util.Set;
 
 /**
@@ -66,18 +72,22 @@ public class MovementLogic {
      * @return a set containing all squares given piece threatens on given board
      */
     public Set<Square> threatenedSquares(Piece piece, ChessBoard board) {
-        if (piece.getClass() == Bishop.class) {
-            return bishopMover.threatenedSquares(piece, board);
-        } else if (piece.getClass() == King.class) {
-            return kingMover.threatenedSquares(piece, board);
-        } else if (piece.getClass() == Knight.class) {
-            return knightMover.threatenedSquares(piece, board);
-        } else if (piece.getClass() == Pawn.class) {
-            return pawnMover.threatenedSquares(piece, board);
-        } else if (piece.getClass() == Queen.class) {
-            return queenMover.threatenedSquares(piece, board);
-        } else if (piece.getClass() == Rook.class) {
-            return rookMover.threatenedSquares(piece, board);
+        BetterPiece piec = (BetterPiece) piece;
+        switch (piec.getKlass()) {
+            case BISHOP:
+                return bishopMover.threatenedSquares(piece, board);
+            case KING:
+                return kingMover.threatenedSquares(piece, board);
+            case KNIGHT:
+                return knightMover.threatenedSquares(piece, board);
+            case PAWN:
+                return pawnMover.threatenedSquares(piece, board);
+            case QUEEN:
+                return queenMover.threatenedSquares(piece, board);
+            case ROOK:
+                return rookMover.threatenedSquares(piece, board);
+            default:
+                break;
         }
         return new MyHashSet<>();
     }
@@ -92,18 +102,22 @@ public class MovementLogic {
      * board
      */
     public Set<Square> possibleMoves(Piece piece, ChessBoard board) {
-        if (piece.getClass() == Bishop.class) {
-            return bishopMover.possibleMoves(piece, board);
-        } else if (piece.getClass() == King.class) {
-            return kingMover.possibleMoves(piece, board);
-        } else if (piece.getClass() == Knight.class) {
-            return knightMover.possibleMoves(piece, board);
-        } else if (piece.getClass() == Pawn.class) {
-            return pawnMover.possibleMoves(piece, board);
-        } else if (piece.getClass() == Queen.class) {
-            return queenMover.possibleMoves(piece, board);
-        } else if (piece.getClass() == Rook.class) {
-            return rookMover.possibleMoves(piece, board);
+        BetterPiece piec = (BetterPiece) piece;
+        switch (piec.getKlass()) {
+            case BISHOP:
+                return bishopMover.possibleMoves(piece, board);
+            case KING:
+                return kingMover.possibleMoves(piece, board);
+            case KNIGHT:
+                return knightMover.possibleMoves(piece, board);
+            case PAWN:
+                return pawnMover.possibleMoves(piece, board);
+            case QUEEN:
+                return queenMover.possibleMoves(piece, board);
+            case ROOK:
+                return rookMover.possibleMoves(piece, board);
+            default:
+                break;
         }
         return new MyHashSet<>();
     }
@@ -118,19 +132,24 @@ public class MovementLogic {
      */
     public void move(Piece piece, Square target, GameSituation sit) {
 
-        if (piece.getClass() == Bishop.class) {
-            bishopMover.move(piece, target, sit);
-        } else if (piece.getClass() == King.class) {
-            kingMover.move(piece, target, sit);
-        } else if (piece.getClass() == Knight.class) {
-            knightMover.move(piece, target, sit);
-        } else if (piece.getClass() == Pawn.class) {
-            pawnMover.move(piece, target, sit);
-        } else if (piece.getClass() == Queen.class) {
-            queenMover.move(piece, target, sit);
-        } else if (piece.getClass() == Rook.class) {
-            rookMover.move(piece, target, sit);
+        BetterPiece piec = (BetterPiece) piece;
+        switch (piec.getKlass()) {
+            case BISHOP:
+                bishopMover.move(piece, target, sit);
+            case KING:
+                kingMover.move(piece, target, sit);
+            case KNIGHT:
+                knightMover.move(piece, target, sit);
+            case PAWN:
+                pawnMover.move(piece, target, sit);
+            case QUEEN:
+                queenMover.move(piece, target, sit);
+            case ROOK:
+                rookMover.move(piece, target, sit);
+            default:
+                break;
         }
+
         sit.incrementCountOfCurrentBoardSituation();
     }
 

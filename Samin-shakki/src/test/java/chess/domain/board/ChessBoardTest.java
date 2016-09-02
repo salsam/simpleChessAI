@@ -4,7 +4,7 @@ import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import chess.logic.chessboardinitializers.StandardBoardInitializer;
 import chess.logic.movementlogic.MovementLogic;
-import chess.domain.pieces.King;
+import chess.domain.pieces.Piece;
 import chess.domain.pieces.Queen;
 import java.util.HashSet;
 import java.util.Set;
@@ -164,8 +164,8 @@ public class ChessBoardTest {
     @Test
     public void getKingsReturnsMapThatContainsKingLocations() {
         init.initialize(board);
-        King whiteKing = board.getKings().get(Player.WHITE);
-        King blackKing = board.getKings().get(Player.BLACK);
+        Piece whiteKing = board.getKings().get(Player.WHITE);
+        Piece blackKing = board.getKings().get(Player.BLACK);
         assertEquals(board.getSquare(4, 7), board.getSquare(whiteKing.getColumn(), whiteKing.getRow()));
         assertEquals(board.getSquare(4, 0), board.getSquare(blackKing.getColumn(), blackKing.getRow()));
     }

@@ -5,7 +5,8 @@ import chess.domain.board.ChessBoard;
 import java.util.Set;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
-import chess.domain.pieces.Pawn;
+import chess.domain.pieces.BetterPiece;
+import static chess.domain.pieces.Klass.PAWN;
 import chess.domain.pieces.Piece;
 import static chess.logic.gamelogic.PromotionLogic.promotePiece;
 
@@ -36,10 +37,10 @@ public class PawnMover extends PieceMover {
     @Override
     public void move(Piece piece, Square target, GameSituation sit) {
 
-//        if (piece == null || piece.getClass() != Pawn.class) {
+//        if (piece == null) {
 //            return;
 //        }
-        Pawn pawn = (Pawn) piece;
+        BetterPiece pawn = (BetterPiece) piece;
         pawn.setHasBeenMoved(true);
 
         if (Math.abs(piece.getRow() - target.getRow()) == 2) {
@@ -95,8 +96,8 @@ public class PawnMover extends PieceMover {
                 target = board.getSquare(piece.getColumn() + columnChange[i], piece.getRow());
 
                 if (targetContainsAnEnemyPawn(piece, target)) {
-                    Pawn opposingPawn = (Pawn) target.getPiece();
-                    if (opposingPawn.getMovedTwoSquaresLastTurn()) {
+                    BetterPiece opposingPawn = (BetterPiece) target.getPiece();
+                    if (opposingPawn.isMovedTwoSquaresLastTurn()) {
                         squares.add(board.getSquare(target.getColumn(), target.getRow() + piece.getOwner().getDirection()));
                     }
                 }
@@ -113,7 +114,7 @@ public class PawnMover extends PieceMover {
             return false;
         }
 
-        return target.getPiece().getClass() == Pawn.class;
+        return ((BetterPiece) target.getPiece()).getKlass() == PAWN;
     }
 
     /**
@@ -130,12 +131,12 @@ public class PawnMover extends PieceMover {
      */
     @Override
     public Set<Square> possibleMoves(Piece piece, ChessBoard board) {
-        Pawn pawn = (Pawn) piece;
+        BetterPiece pawn = (BetterPiece) piece;
         Set<Square> moves = new MyHashSet<>();
         int newrow = piece.getRow() + piece.getOwner().getDirection();
 
         if (addSquareIfWithinTableAndEmpty(board, pawn.getColumn(), newrow, moves)) {
-            if (!pawn.getHasBeenMoved()) {
+            if (!pawn.isHasBeenMoved()) {
                 newrow += piece.getOwner().getDirection();
                 addSquareIfWithinTableAndEmpty(board, pawn.getColumn(), newrow, moves);
             }

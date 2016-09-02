@@ -5,6 +5,7 @@ import chess.domain.board.Player;
 import static chess.domain.board.Player.getOpponent;
 import chess.domain.datastructures.MyHashMap;
 import chess.domain.pieces.*;
+import static chess.domain.pieces.Klass.*;
 import java.util.Map;
 
 /**
@@ -17,17 +18,17 @@ import java.util.Map;
  */
 public class GameSituationEvaluator {
 
-    private static Map<Class, Integer> values;
-    private static Map<Class, Integer[][]> positionalValues;
+    private static Map<Klass, Integer> values;
+    private static Map<Klass, Integer[][]> positionalValues;
 
     private static void initValues() {
         values = new MyHashMap();
-        values.put(Pawn.class, 100);
-        values.put(Knight.class, 320);
-        values.put(Bishop.class, 333);
-        values.put(Rook.class, 510);
-        values.put(Queen.class, 880);
-        values.put(King.class, 40000);
+        values.put(PAWN, 100);
+        values.put(KNIGHT, 320);
+        values.put(BISHOP, 333);
+        values.put(ROOK, 510);
+        values.put(QUEEN, 880);
+        values.put(KING, 40000);
     }
 
     private static void initPositionValues() {
@@ -46,7 +47,7 @@ public class GameSituationEvaluator {
         {-10, 0, 10, 10, 10, 10, 0, -10}, {-10, 5, 5, 10, 10, 5, 5, -10},
         {-10, 0, 5, 10, 10, 5, 0, -10}, {-10, 0, 0, 0, 0, 0, 0, -10},
         {-20, - 10, -10, -10, -10, -10, -10, -20}};
-        positionalValues.put(Bishop.class, bishopValues);
+        positionalValues.put(BISHOP, bishopValues);
     }
 
     private static void initKingPositionalValues() {
@@ -55,7 +56,7 @@ public class GameSituationEvaluator {
         {-20, -30, -30, -40, -40, -30, -30, -20}, {-30, -40, -40, -50, -50, -40, -40, -30},
         {-30, -40, -40, -50, -50, -40, -40, -30}, {-30, -40, -40, -50, -50, -40, -40, -30},
         {-30, -40, -40, -50, -50, -40, -40, -30}};
-        positionalValues.put(King.class, kingValues);
+        positionalValues.put(KING, kingValues);
     }
 
     private static void initKnightPositionalValues() {
@@ -64,7 +65,7 @@ public class GameSituationEvaluator {
         {-30, 0, 15, 20, 20, 15, 0, -30}, {-30, 5, 15, 20, 20, 15, 5, -30},
         {-30, 0, 10, 15, 15, 10, 0, -30}, {-40, -20, 0, 0, 0, 0, -20, -40},
         {-50, -40, -30, -30, -30, -30, -40, -50}};
-        positionalValues.put(Knight.class, knightValues);
+        positionalValues.put(KNIGHT, knightValues);
     }
 
     private static void initPawnPositionalValues() {
@@ -73,7 +74,7 @@ public class GameSituationEvaluator {
         {5, -5, -10, 0, 0, -10, -5, 5}, {0, 0, 0, 20, 20, 0, 0, 0},
         {5, 5, 10, 25, 25, 10, 5, 5}, {10, 10, 20, 30, 30, 20, 10, 10},
         {50, 50, 50, 50, 50, 50, 50, 50}, {0, 0, 0, 0, 0, 0, 0, 0}};
-        positionalValues.put(Pawn.class, pawnValues);
+        positionalValues.put(PAWN, pawnValues);
     }
 
     private static void initQueenPositionalValues() {
@@ -82,7 +83,7 @@ public class GameSituationEvaluator {
         {0, 0, 5, 5, 5, 5, 0, -5}, {-5, 0, 5, 5, 5, 5, 0, -5},
         {-10, 0, 5, 5, 5, 5, 0, - 10}, {-10, 0, 0, 0, 0, 0, 0, -10},
         {-20, -10, -10, -5, -5, -10, -10, -20}};
-        positionalValues.put(Queen.class, queenValues);
+        positionalValues.put(QUEEN, queenValues);
     }
 
     private static void initRookPositionalValues() {
@@ -91,14 +92,14 @@ public class GameSituationEvaluator {
         {-5, 0, 0, 0, 0, 0, 0, -5}, {-5, 0, 0, 0, 0, 0, 0, -5},
         {-5, 0, 0, 0, 0, 0, 0, -5}, {5, 10, 10, 10, 10, 10, 10, 5},
         {0, 0, 0, 0, 0, 0, 0, 0}};
-        positionalValues.put(Rook.class, rookValues);
+        positionalValues.put(ROOK, rookValues);
     }
 
     private static int getPositionalValue(Piece piece) {
         if (piece.getOwner() == Player.BLACK) {
-            return positionalValues.get(piece.getClass())[piece.getRow()][piece.getColumn()];
+            return positionalValues.get(((BetterPiece) piece).getKlass())[piece.getRow()][piece.getColumn()];
         }
-        return positionalValues.get(piece.getClass())[7 - piece.getRow()][7 - piece.getColumn()];
+        return positionalValues.get(((BetterPiece) piece).getKlass())[7 - piece.getRow()][7 - piece.getColumn()];
     }
 
     /**
@@ -138,12 +139,12 @@ public class GameSituationEvaluator {
 
         int value = situation.getChessBoard().getPieces(player).stream()
                 .filter(piece -> !piece.isTaken())
-                .mapToInt(piece -> values.get(piece.getClass()) + getPositionalValue(piece))
+                .mapToInt(piece -> values.get(((BetterPiece) piece).getKlass()) + getPositionalValue(piece))
                 .sum();
 
         value -= situation.getChessBoard().getPieces(getOpponent(player)).stream()
                 .filter(piece -> !piece.isTaken())
-                .mapToInt(piece -> values.get(piece.getClass()) + getPositionalValue(piece))
+                .mapToInt(piece -> values.get(((BetterPiece) piece).getKlass()) + getPositionalValue(piece))
                 .sum();
         return value;
     }

@@ -6,9 +6,9 @@ import chess.domain.pieces.*;
 
 /**
  * This class is used to initialize standard starting positions of chess. Using
- * method @see #initialise(ChessBoard)
+ * method @see #initialize(ChessBoard)
  *
- * @author samisalo
+ * @author sami
  */
 public class StandardBoardInitializer extends ChessBoardInitializer {
 
