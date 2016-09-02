@@ -2,6 +2,7 @@ package chess.domain.datastructures;
 
 import chess.domain.board.Player;
 import static chess.domain.board.Player.getOpponent;
+import static chess.domain.datastructures.Type.getOppositeType;
 import java.util.Objects;
 
 /**
@@ -12,22 +13,14 @@ import java.util.Objects;
  */
 public class TranspositionKey {
 
-    private int height;
     private Player whoseTurn;
     private long hashedBoard;
+    private boolean saved;
 
-    public TranspositionKey(int height, Player whoseTurn, long hash) {
-        this.height = height;
+    public TranspositionKey(Player whoseTurn, long hash) {
         this.whoseTurn = whoseTurn;
         this.hashedBoard = hash;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int first) {
-        this.height = first;
+        this.saved = false;
     }
 
     public Player getWhoseTurn() {
@@ -46,14 +39,17 @@ public class TranspositionKey {
         this.hashedBoard = hashedBoard;
     }
 
-    public TranspositionKey opposingKey() {
-        return new TranspositionKey(height, getOpponent(whoseTurn), hashedBoard);
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 47 * hash + this.height;
         hash = 47 * hash + Objects.hashCode(this.whoseTurn);
         hash = 47 * hash + (int) (this.hashedBoard ^ (this.hashedBoard >>> 32));
         return hash;
@@ -71,13 +67,10 @@ public class TranspositionKey {
             return false;
         }
         final TranspositionKey other = (TranspositionKey) obj;
-        if (this.height != other.height) {
+        if (this.hashedBoard != other.getHashedBoard()) {
             return false;
         }
-        if (this.hashedBoard != other.hashedBoard) {
-            return false;
-        }
-        if (this.whoseTurn != other.whoseTurn) {
+        if (this.whoseTurn != other.getWhoseTurn()) {
             return false;
         }
         return true;

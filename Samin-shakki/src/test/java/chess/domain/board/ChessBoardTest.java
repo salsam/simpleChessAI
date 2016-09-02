@@ -167,6 +167,6 @@ public class ChessBoardTest {
         King whiteKing = board.getKings().get(Player.WHITE);
         King blackKing = board.getKings().get(Player.BLACK);
         assertEquals(board.getSquare(4, 7), board.getSquare(whiteKing.getColumn(), whiteKing.getRow()));
-        assertEquals(board.getSquare(3, 0), board.getSquare(blackKing.getColumn(), blackKing.getRow()));
+        assertEquals(board.getSquare(4, 0), board.getSquare(blackKing.getColumn(), blackKing.getRow()));
     }
 }

@@ -198,7 +198,7 @@ public class GameSituationTest {
         ml.move(cb.getSquare(1, 6).getPiece(), cb.getSquare(1, 4), game);
         game.reset();
 
-        assertTrue(chessBoardsAreDeeplyEqual(cb, bu));
+        assertTrue(chessBoardsAreDeeplyEqual(game.getChessBoard(), bu));
         assertEquals(oldHash, game.getBoardHash());
 
         game = new GameSituation(new EmptyBoardInitializer(), new MovementLogic());

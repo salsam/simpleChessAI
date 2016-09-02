@@ -83,7 +83,7 @@ public class StandardBoardInitializerTest {
 
     @Test
     public void kingsOnCorrectSquares() {
-        int[] columns = new int[]{3, 4};
+        int[] columns = new int[]{4, 4};
         int[] rows = new int[]{0, 7};
 
         testThatSquaresHavePieceOfCorrectClass(rows, columns, new King(4, 0, Player.WHITE, "wk"));
@@ -91,7 +91,7 @@ public class StandardBoardInitializerTest {
 
     @Test
     public void queensOnCorrectSquares() {
-        int[] columns = new int[]{4, 3};
+        int[] columns = new int[]{3, 3};
         int[] rows = new int[]{0, 7};
 
         testThatSquaresHavePieceOfCorrectClass(rows, columns, new Queen(3, 0, Player.WHITE, "wq"));

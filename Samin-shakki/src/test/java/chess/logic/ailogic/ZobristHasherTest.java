@@ -34,14 +34,13 @@ public class ZobristHasherTest {
     public static void setUpClass() {
         init = new EmptyBoardInitializer();
         ml = new MovementLogic();
-        sit = new GameSituation(init, ml);
-        cb = sit.getChessBoard();
         zb = new ZobristHasher();
     }
 
     @Before
     public void setUp() {
-        sit.reset();
+        sit = new GameSituation(init, ml);
+        cb = sit.getChessBoard();
     }
 
     @Test

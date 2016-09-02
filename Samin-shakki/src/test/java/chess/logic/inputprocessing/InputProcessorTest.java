@@ -25,7 +25,7 @@ public class InputProcessorTest {
 
     private InputProcessor inputProcessor;
     private static JLabel output;
-    private static GameSituation game;
+    private GameSituation game;
     private static ChessBoardInitializer init;
 
     public InputProcessorTest() {
@@ -34,13 +34,12 @@ public class InputProcessorTest {
     @BeforeClass
     public static void setUpClass() {
         init = new StandardBoardInitializer();
-        game = new GameSituation(init, new MovementLogic());
         output = new JLabel("");
     }
 
     @Before
     public void setUp() {
-        game.reset();
+        game = new GameSituation(init, new MovementLogic());
         inputProcessor = new InputProcessor();
         inputProcessor.setTextArea(output);
         output.setText("");

@@ -133,7 +133,6 @@ public class InputProcessor {
             return;
         }
 
-//        promotePiece(target.getPiece(), game.getChessBoard());
         startNextTurn(game);
     }
 

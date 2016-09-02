@@ -88,12 +88,10 @@ public class CheckingLogicTest {
         MovementLogic mvl = game.getChessBoard().getMovementLogic();
 
         mvl.move(game.getChessBoard().getSquare(4, 6).getPiece(), game.getChessBoard().getSquare(4, 5), game);
-        mvl.move(game.getChessBoard().getSquare(5, 1).getPiece(), game.getChessBoard().getSquare(5, 2), game);
-        mvl.move(game.getChessBoard().getSquare(5, 7).getPiece(), game.getChessBoard().getSquare(1, 3), game);
-        mvl.move(game.getChessBoard().getSquare(3, 1).getPiece(), game.getChessBoard().getSquare(3, 2), game);
+        mvl.move(game.getChessBoard().getSquare(5, 1).getPiece(), game.getChessBoard().getSquare(5, 3), game);
+        mvl.move(game.getChessBoard().getSquare(1, 6).getPiece(), game.getChessBoard().getSquare(1, 5), game);
+        mvl.move(game.getChessBoard().getSquare(6, 1).getPiece(), game.getChessBoard().getSquare(6, 3), game);
         mvl.move(game.getChessBoard().getSquare(3, 7).getPiece(), game.getChessBoard().getSquare(7, 3), game);
-        mvl.move(game.getChessBoard().getSquare(5, 2).getPiece(), game.getChessBoard().getSquare(5, 3), game);
-        mvl.move(game.getChessBoard().getSquare(7, 3).getPiece(), game.getChessBoard().getSquare(4, 0), game);
         game.getChessBoard().updateThreatenedSquares(Player.WHITE);
         ChessBoard backUp = ChessBoardCopier.copy(game.getChessBoard());
         assertTrue(cl.checkMate(Player.BLACK));

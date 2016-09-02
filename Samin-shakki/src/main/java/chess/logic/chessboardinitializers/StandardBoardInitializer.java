@@ -37,9 +37,9 @@ public class StandardBoardInitializer extends ChessBoardInitializer {
 
     private void initialiseKingsAndQueens(ChessBoard board) {
         putPieceOnBoard(board, new King(4, 7, Player.WHITE, "wk"));
-        putPieceOnBoard(board, new King(3, 0, Player.BLACK, "bk"));
+        putPieceOnBoard(board, new King(4, 0, Player.BLACK, "bk"));
         putPieceOnBoard(board, new Queen(3, 7, Player.WHITE, "wq"));
-        putPieceOnBoard(board, new Queen(4, 0, Player.BLACK, "bq"));
+        putPieceOnBoard(board, new Queen(3, 0, Player.BLACK, "bq"));
     }
 
     private void initialiseKnights(ChessBoard board) {
