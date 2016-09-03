@@ -10,6 +10,8 @@ Nämä testit voi toistaa ajamalla ohjelman, valitsemalla halutun pelimoodin ja 
 
 ##Suorituskykytestaus
 
+Seuraavissa testeissä laitan kaksi tekoälyä pelaamaan vastakkain annetuilla ehdoilla. Tekoälyt laitetaan pelaamaan vastakkain ajamalla ohjelma, klikkaamalla painiketta new Ai vs Ai game ja valitsemalla halutut aikarajat. Lisäksi testeissä muutetaan AILogic luokassa määriteltyä rekursiosyvyyden ylärajaa muuttujassa private final int plies. Kuvaajissa siirron vuoronumerolla tarkoitetaan sitä kuinka mones kyseisen pelaajan siirto on kyseessä. Näin esimerkiksi vuoronumero 3 tarkoittaa pelaajan kolmatta siirtoa. Kuten edelliset testit, on myös nämä testit suoritettu halpisläppärillä ja tehokkaalla pöytäkoneella saadut ajat voivat tippua jopa kymmenesosaan.
+
 ###Esimerkkipeli, jossa rekursiosyvyydeksi rajoitettu 3 ja aikaraja 1s.
 
 ![Siirtoajan kehittyminen vuoronumeron kasvaessa](https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Siirtoon%20kulunut%20aika.jpg)
