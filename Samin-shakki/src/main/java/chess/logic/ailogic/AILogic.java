@@ -50,7 +50,7 @@ public class AILogic {
     private int[] bestValues;
     private long timeLimit;
     private long start;
-    private final int plies = 10;
+    private final int plies = 3;
     private int lastPlies;
     private int searchDepth;
     private int oldestIndex;
@@ -474,11 +474,12 @@ public class AILogic {
         ml = sit.getChessBoard().getMovementLogic();
         salvageLastPrincipalVariation();
         int i = 1;
-        while (i < plies) {
+        while (i <= plies) {
             searchDepth = i;
             negaMax(i, -123456789, 123456789, situation.whoseTurn());
             lastPlies++;
-            if (System.currentTimeMillis() - start >= timeLimit || Math.abs(bestValues[i]) > 20000) {
+            if (System.currentTimeMillis() - start >= timeLimit
+                    || Math.abs(bestValues[i]) > 20000) {
                 break;
             }
             i++;
