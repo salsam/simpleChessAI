@@ -24,4 +24,8 @@ Päivät | Tunnit | Kuvaus
 24.08.2016 | 8h | Lisätty käliin puolen valinta AIta vastaan, AI:n vaikeustason valinta AivsAi tai pelaajaa vastaan ja käsitellään nyt valloitukset ennen muita siirtoja.
 25.08.2016 | 5h | Sotilaiden korotus kumotaan nyt siirtoja testatessa, AILogic luokan metodeille lisää testejä ja metodit siis muutettu julkisiksi. Yritetty ratkaista pelin kaatuminen Play Again-valinna jälkeen.
 26.08.2016 | 5h | Toteutusdokumentaatio tehty, suorityskykytestausta eteenpäin, lisää testejä AILogicille ja Play Again-bugin metsästystä.
-
+30.08.2016 | 0.5h | Päivitetty toteutusdokumentaatio ja käyttöohje
+31.08.2016 | 9h | Yritetty korjata play again-bugia, transpositiotauluongelmaa ja kuningatar-bugia debuggaamalla ja lisäämällä testejä. Korjattu Arrays.deepEqualsin väärä käyttö (piti olla arraysAreDeepDeepEqual). Siirretty nappulat oikeille aloitusruuduille ja korjattu siitä rikkoutuneet testit.
+01.09.2016 | 12h | Jatkettu play again-bugin korjaamista. Korjattu transpositiotaluun syötettävät arvot. Kokeiltu revertata vanhaan tilanteeseen, mutta tämä oli liian kaukana menneisyydessä + play again-bugi oli olemassa jo silloin. Play again-bugi korjattu.
+02.09.2016 | 7h | Korjattu transpositiotaulut toimimaan alfa-beeta karsinnan kanssa. Siirretty transpositiotaulujen toiminta omaan luokkaan, omat luokat avaimille ja arvoille. Jatkettu kuningatarongelman selvittämistä. Syy ratkennut: tyhmä shakin rakenteeni pakottaa luomaan uuden nappulan korotuksessa ja poistamaan vanhan, mikä sotkee for-each loopin. Aloitettu refaktoroimaan koodia niin, ettei shakissani ole kuin yksi nappulaluokka, jolla on luokka attribuuttina.
+03.09.2016 | 5h | Refaktorointi hoidettu loppuun, poistettu turhat nappulaluokat ja rajapinta. Kuningatarbugi ratkennut + korjattu siirtojen hashaus, joka oli hajonnut debugatessa. Päivitetty javadocit.
