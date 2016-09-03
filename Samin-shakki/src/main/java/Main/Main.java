@@ -1,3 +1,5 @@
+package Main;
+
 
 import chess.domain.GameSituation;
 import chess.gui.GraphicalUserInterface;
