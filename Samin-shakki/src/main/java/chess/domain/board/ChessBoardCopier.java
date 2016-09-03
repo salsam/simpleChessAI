@@ -102,19 +102,17 @@ public class ChessBoardCopier {
      * @param to square that moved piece moved to.
      */
     public static void undoMove(ChessBoard backUp, GameSituation sit, Square from, Square to) {
-        sit.decrementCountOfCurrentBoardSituation();
-        sit.updateHashForUndoingMove(backUp, from, to);
-
         BetterPiece old = backUp.getSquare(from.getColumn(), from.getRow()).getPiece();
+        sit.decrementCountOfCurrentBoardSituation();
+        if (old.getKlass() == PAWN && to.getPiece().getKlass() == QUEEN) {
+            sit.updateHashForUndoingPromotion(to);
+        }
+        sit.updateHashForUndoingMove(backUp, from, to);
 
         if (to.getPiece() == null || old == null) {
             System.out.println("old: " + old);
             System.out.println(" cur: " + to.getPiece());
             System.out.println(" from: " + from + " to " + to);
-        }
-
-        if (old.getKlass() == PAWN && to.getPiece().getKlass() == QUEEN) {
-            sit.updateHashForUndoingPromotion(to);
         }
 
         from.setPiece(to.getPiece());

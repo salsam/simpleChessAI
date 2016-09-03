@@ -82,7 +82,6 @@ public class PieceMoverTest {
         ChessBoard comp = new ChessBoard(new MovementLogic());
         putPieceOnBoard(comp, piece);
         putPieceOnBoard(comp, pawn);
-
         assertEquals(sit.getHasher().hash(comp), sit.getBoardHash());
     }
 
@@ -91,7 +90,6 @@ public class PieceMoverTest {
         board.getMovementLogic().move(piece, board.getSquare(3, 6), sit);
         ChessBoard comp = new ChessBoard(new MovementLogic());
         putPieceOnBoard(comp, piece);
-
         assertEquals(sit.getHasher().hash(comp), sit.getBoardHash());
     }
 }

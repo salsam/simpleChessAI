@@ -128,16 +128,22 @@ public class MovementLogic {
         switch (piece.getKlass()) {
             case BISHOP:
                 bishopMover.move(piece, target, sit);
+                break;
             case KING:
                 kingMover.move(piece, target, sit);
+                break;
             case KNIGHT:
                 knightMover.move(piece, target, sit);
+                break;
             case PAWN:
                 pawnMover.move(piece, target, sit);
+                break;
             case QUEEN:
                 queenMover.move(piece, target, sit);
+                break;
             case ROOK:
                 rookMover.move(piece, target, sit);
+                break;
         }
 
         sit.incrementCountOfCurrentBoardSituation();
