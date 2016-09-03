@@ -50,7 +50,7 @@ public class AILogic {
     private int[] bestValues;
     private long timeLimit;
     private long start;
-    private final int plies = 3;
+    private final int plies = 10;
     private int lastPlies;
     private int searchDepth;
     private int oldestIndex;
@@ -60,8 +60,6 @@ public class AILogic {
     private Move[] killerCandidates;
     private Move[][] killerMoves;
     private TranspositionTable transpositionTable;
-    private long sum = 0;
-    private int count = 0;
 
     public AILogic() {
         bestValues = new int[plies + 1];
@@ -189,6 +187,7 @@ public class AILogic {
      * @param alpha current alpha-value.
      * @param maxingPlayer player whose turn it is.
      * @param beta current beta-value.
+     * @return highest value associated with all legal moves.
      */
     public int tryAllPossibleMoves(int height, int ogAlpha, int alpha, Player maxingPlayer, int beta) {
         bestValues[height] = -123456789;
@@ -226,6 +225,7 @@ public class AILogic {
      * @param loopCount looping count.
      * @param height height from leaf nodes.
      * @param alpha current alpha value.
+     * @param ogAlpha original alpha value for this depth.
      * @param maxingPlayer player whose turn it is.
      * @param beta current beta value.
      * @param backUp backup of situation before moving chosen piece.
@@ -234,13 +234,8 @@ public class AILogic {
      */
     public int tryMovingPiece(int height, int loopCount, Piece piece, Square from, int ogAlpha, int alpha, int beta, Player maxingPlayer, ChessBoard backUp) {
 
-        Piece clone = piece.clone();
         for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
 
-            if (!clone.deepEquals(piece)) {
-                piece.makeDeeplyEqualTo(clone);
-                System.out.println("AAAAAAAAAAAAAAAAAA");
-            }
             if (System.currentTimeMillis() - start >= timeLimit) {
                 break;
             }
@@ -271,6 +266,7 @@ public class AILogic {
      * @param alpha current alpha-value.
      * @param maxingPlayer player whose turn it is to move a piece.
      * @param height height from leaves.
+     * @param ogAlpha original alpha value for this depth.
      * @param beta current beta-value.
      * @param backUp backUp of situation before move is made.
      * @param from square where moved piece is located before move.
@@ -402,6 +398,7 @@ public class AILogic {
      * @param height height in game tree.
      * @param alpha previous alpha value.
      * @param beta beta value.
+     * @param ogAlpha original alpha value for this depth.
      * @param piece piece that was moved.
      * @param possibility square that piece was moved to.
      * @return new alpha value.
@@ -473,8 +470,7 @@ public class AILogic {
         transpositionTable.makePairsUnsaved();
         ml = sit.getChessBoard().getMovementLogic();
         salvageLastPrincipalVariation();
-        int i = 1;
-        while (i <= plies) {
+        for (int i = 1; i <= plies; i++) {
             searchDepth = i;
             negaMax(i, -123456789, 123456789, situation.whoseTurn());
             lastPlies++;
@@ -482,16 +478,9 @@ public class AILogic {
                     || Math.abs(bestValues[i]) > 20000) {
                 break;
             }
-            i++;
-
         }
-        System.out.println("Reached depth : " + i);
 
         lastPrincipalVariation = new Pair(sit.getTurn(), principalMoves);
-        long used = System.currentTimeMillis() - start;
-        sum += used;
-        count++;
-        System.out.println("used: " + used + ", avg: " + sum / count + ", count: " + count);
     }
 
     /**
