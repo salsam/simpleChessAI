@@ -9,7 +9,9 @@
 
 - [Käyttöohje](https://github.com/salsam/simpleChessAI/blob/master/K%C3%A4ytt%C3%B6ohje.md)
  
-- [Suorituskykytestaus](https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Suorituskykytestaus.md)
+- [Suorituskykytestaus](https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Testausdokumentaatio.md)
+
+- [Suorituskyvynkehitys](https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Suorituskykytestaus.md) 
 
 - [Toteutusdokumentaatio](https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Toteutusdokumentti.md)
 
