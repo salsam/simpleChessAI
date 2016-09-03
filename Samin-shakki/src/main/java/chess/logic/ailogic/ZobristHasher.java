@@ -3,7 +3,6 @@ package chess.logic.ailogic;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
-import chess.domain.pieces.BetterPiece;
 import static chess.domain.pieces.Klass.*;
 import java.util.Random;
 import java.util.Set;
@@ -56,15 +55,15 @@ public class ZobristHasher {
             ret += 6;
         }
 
-        if (((BetterPiece) sq.getPiece()).getKlass() == PAWN) {
+        if (sq.getPiece().getKlass() == PAWN) {
             ret += 1;
-        } else if (((BetterPiece) sq.getPiece()).getKlass() == ROOK) {
+        } else if (sq.getPiece().getKlass() == ROOK) {
             ret += 2;
-        } else if (((BetterPiece) sq.getPiece()).getKlass() == KNIGHT) {
+        } else if (sq.getPiece().getKlass() == KNIGHT) {
             ret += 3;
-        } else if (((BetterPiece) sq.getPiece()).getKlass() == BISHOP) {
+        } else if (sq.getPiece().getKlass() == BISHOP) {
             ret += 4;
-        } else if (((BetterPiece) sq.getPiece()).getKlass() == QUEEN) {
+        } else if (sq.getPiece().getKlass() == QUEEN) {
             ret += 5;
         } else if (kingCanCastle(board, sq)) {
             ret = 13;
@@ -159,6 +158,20 @@ public class ZobristHasher {
     public long getHashAfterPieceIsTaken(long hash, ChessBoard board, Square location) {
         hash ^= squareHashes[8 * location.getColumn() + location.getRow()][numberOfPieceAtSquare(board, location)];
         hash ^= squareHashes[8 * location.getColumn() + location.getRow()][0];
+        return hash;
+    }
+
+    public long getHashAfterPromotion(long hash, ChessBoard board, Square location) {
+        int pieceType = numberOfPieceAtSquare(board, location);
+        hash ^= squareHashes[8 * location.getColumn() + location.getRow()][pieceType];
+        hash ^= squareHashes[8 * location.getColumn() + location.getRow()][pieceType + 4];
+        return hash;
+    }
+
+    public long getHashBeforePromotion(long hash, ChessBoard board, Square location) {
+        int pieceType = numberOfPieceAtSquare(board, location);
+        hash ^= squareHashes[8 * location.getColumn() + location.getRow()][pieceType];
+        hash ^= squareHashes[8 * location.getColumn() + location.getRow()][pieceType - 4];
         return hash;
     }
 

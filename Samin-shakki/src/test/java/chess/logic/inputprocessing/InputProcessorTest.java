@@ -4,11 +4,15 @@ import chess.domain.board.Player;
 import chess.domain.board.Square;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import chess.logic.chessboardinitializers.EmptyBoardInitializer;
-import chess.logic.chessboardinitializers.StandardBoardInitializer;
 import chess.domain.GameSituation;
 import chess.domain.datastructures.MyHashMap;
+import chess.domain.pieces.BetterPiece;
+import static chess.domain.pieces.Klass.KING;
+import static chess.domain.pieces.Klass.PAWN;
+import static chess.domain.pieces.Klass.QUEEN;
+import static chess.domain.pieces.Klass.ROOK;
+import chess.logic.chessboardinitializers.BetterChessBoardInitializer;
 import chess.logic.movementlogic.MovementLogic;
-import chess.domain.pieces.*;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,7 +37,7 @@ public class InputProcessorTest {
 
     @BeforeClass
     public static void setUpClass() {
-        init = new StandardBoardInitializer();
+        init = new BetterChessBoardInitializer();
         output = new JLabel("");
     }
 
@@ -86,7 +90,7 @@ public class InputProcessorTest {
     @Test
     public void ifPieceIsChosenAndThenAPossibilityIsClickedMoveToThatSquare() {
         inputProcessor.processClick(1, 6, game);
-        Piece piece = game.getChessBoard().getSquare(1, 6).getPiece();
+        BetterPiece piece = game.getChessBoard().getSquare(1, 6).getPiece();
         inputProcessor.processClick(1, 5, game);
         assertFalse(game.getChessBoard().getSquare(1, 6).containsAPiece());
         assertTrue(game.getChessBoard().getSquare(1, 5).containsAPiece());
@@ -95,25 +99,25 @@ public class InputProcessorTest {
 
     @Test
     public void ifPawnIsMovedToOpposingEndOfBoardItIsPromotedToQueenOnSameSquare() {
-        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new Pawn(1, 1, Player.WHITE, "wp9"));
+        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new BetterPiece(PAWN, 1, 1, Player.WHITE, "wp9"));
         inputProcessor.processClick(1, 1, game);
         inputProcessor.processClick(0, 0, game);
 
         assertTrue(game.getChessBoard().getSquare(0, 0).containsAPiece());
-        assertTrue(game.getChessBoard().getSquare(0, 0).getPiece().getClass() == Queen.class);
-        Queen q = (Queen) game.getChessBoard().getSquare(0, 0).getPiece();
+        assertTrue(game.getChessBoard().getSquare(0, 0).getPiece().getKlass() == QUEEN);
+        BetterPiece q = game.getChessBoard().getSquare(0, 0).getPiece();
         assertEquals(Player.WHITE, q.getOwner());
         assertEquals("wp9", q.getPieceCode());
     }
 
     @Test
     public void ifPawnIsMovedToOpposingEndOfBoardItIsReplacedByQueenWithSamePieceCode() {
-        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new Pawn(1, 1, Player.WHITE, "wp9"));
+        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new BetterPiece(PAWN, 1, 1, Player.WHITE, "wp9"));
         inputProcessor.processClick(1, 1, game);
         inputProcessor.processClick(0, 0, game);
         assertTrue(game.getChessBoard().getPieces(Player.WHITE).stream()
                 .noneMatch(whitePiece -> whitePiece.getPieceCode().equals("wp9")
-                        && whitePiece.getClass() == Pawn.class));
+                        && whitePiece.getKlass() == PAWN));
 
         assertTrue(game.getChessBoard().getPieces(Player.WHITE).stream()
                 .anyMatch(whitePiece -> whitePiece.getPieceCode().equals("wp9")));
@@ -133,8 +137,8 @@ public class InputProcessorTest {
     public void outputTellsIfPlayerIsChecked() {
         EmptyBoardInitializer emptyinit = new EmptyBoardInitializer();
         emptyinit.initialize(game.getChessBoard());
-        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new King(4, 7, Player.WHITE, "wk"));
-        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new Pawn(4, 5, Player.BLACK, "bp1"));
+        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new BetterPiece(KING, 4, 7, Player.WHITE, "wk"));
+        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new BetterPiece(PAWN, 4, 5, Player.BLACK, "bp1"));
         inputProcessor.processClick(4, 7, game);
         inputProcessor.processClick(5, 7, game);
         inputProcessor.processClick(4, 5, game);
@@ -151,9 +155,9 @@ public class InputProcessorTest {
         inputProcessor.setFrames(frames);
         EmptyBoardInitializer emptyinit = new EmptyBoardInitializer();
         emptyinit.initialize(game.getChessBoard());
-        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new King(1, 0, Player.WHITE, "wk"));
-        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new Queen(4, 1, Player.BLACK, "bq"));
-        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new Rook(7, 1, Player.BLACK, "br1"));
+        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new BetterPiece(KING, 1, 0, Player.WHITE, "wk"));
+        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new BetterPiece(QUEEN, 4, 1, Player.BLACK, "bq"));
+        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new BetterPiece(ROOK, 7, 1, Player.BLACK, "br1"));
         inputProcessor.processClick(1, 0, game);
         inputProcessor.processClick(0, 0, game);
         inputProcessor.processClick(4, 1, game);
@@ -170,9 +174,9 @@ public class InputProcessorTest {
         inputProcessor.setFrames(frames);
         EmptyBoardInitializer emptyinit = new EmptyBoardInitializer();
         emptyinit.initialize(game.getChessBoard());
-        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new King(1, 0, Player.WHITE, "wk"));
-        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new Queen(1, 7, Player.BLACK, "bq"));
-        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new Rook(7, 1, Player.BLACK, "br1"));
+        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new BetterPiece(KING, 1, 0, Player.WHITE, "wk"));
+        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new BetterPiece(QUEEN, 1, 7, Player.BLACK, "bq"));
+        ChessBoardInitializer.putPieceOnBoard(game.getChessBoard(), new BetterPiece(ROOK, 7, 1, Player.BLACK, "br1"));
         inputProcessor.processClick(1, 0, game);
         inputProcessor.processClick(0, 0, game);
         inputProcessor.processClick(1, 7, game);

@@ -4,7 +4,6 @@ import chess.domain.board.ChessBoard;
 import chess.domain.board.Square;
 import chess.domain.pieces.BetterPiece;
 import static chess.domain.pieces.Klass.KING;
-import chess.domain.pieces.Piece;
 
 /**
  * All classes that inherit this abstract class are used to initialize different
@@ -32,8 +31,8 @@ public abstract class ChessBoardInitializer {
      */
     public static void addPieceToOwner(Square target, ChessBoard chessBoard) {
         if (target.getPiece() != null) {
-            Piece piece = target.getPiece();
-            if (((BetterPiece)piece).getKlass() == KING) {
+            BetterPiece piece = target.getPiece();
+            if (piece.getKlass() == KING) {
                 chessBoard.getKings().put(piece.getOwner(), piece);
             }
             chessBoard.getPieces(piece.getOwner()).add(piece);
@@ -46,7 +45,7 @@ public abstract class ChessBoardInitializer {
      * @param piece The piece you want to remove.
      * @param chessBoard ChessBoard where piece will be removed from
      */
-    public static void removePieceFromOwner(Piece piece, ChessBoard chessBoard) {
+    public static void removePieceFromOwner(BetterPiece piece, ChessBoard chessBoard) {
         chessBoard.getPieces(piece.getOwner()).remove(piece);
     }
 
@@ -68,7 +67,7 @@ public abstract class ChessBoardInitializer {
      * @param board board Piece will be placed on.
      * @param piece piece Piece to be placed.
      */
-    public static void putPieceOnBoard(ChessBoard board, Piece piece) {
+    public static void putPieceOnBoard(ChessBoard board, BetterPiece piece) {
         if (board.withinTable(piece.getColumn(), piece.getRow())) {
             board.getSquare(piece.getColumn(), piece.getRow()).setPiece(piece);
             addPieceToOwner(board.getSquare(piece.getColumn(), piece.getRow()), board);

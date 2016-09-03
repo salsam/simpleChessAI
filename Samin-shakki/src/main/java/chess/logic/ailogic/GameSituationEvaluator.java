@@ -95,11 +95,11 @@ public class GameSituationEvaluator {
         positionalValues.put(ROOK, rookValues);
     }
 
-    private static int getPositionalValue(Piece piece) {
+    private static int getPositionalValue(BetterPiece piece) {
         if (piece.getOwner() == Player.BLACK) {
-            return positionalValues.get(((BetterPiece) piece).getKlass())[piece.getRow()][piece.getColumn()];
+            return positionalValues.get(piece.getKlass())[piece.getRow()][piece.getColumn()];
         }
-        return positionalValues.get(((BetterPiece) piece).getKlass())[7 - piece.getRow()][7 - piece.getColumn()];
+        return positionalValues.get(piece.getKlass())[7 - piece.getRow()][7 - piece.getColumn()];
     }
 
     /**
@@ -139,12 +139,12 @@ public class GameSituationEvaluator {
 
         int value = situation.getChessBoard().getPieces(player).stream()
                 .filter(piece -> !piece.isTaken())
-                .mapToInt(piece -> values.get(((BetterPiece) piece).getKlass()) + getPositionalValue(piece))
+                .mapToInt(piece -> values.get(piece.getKlass()) + getPositionalValue(piece))
                 .sum();
 
         value -= situation.getChessBoard().getPieces(getOpponent(player)).stream()
                 .filter(piece -> !piece.isTaken())
-                .mapToInt(piece -> values.get(((BetterPiece) piece).getKlass()) + getPositionalValue(piece))
+                .mapToInt(piece -> values.get(piece.getKlass()) + getPositionalValue(piece))
                 .sum();
         return value;
     }

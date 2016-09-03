@@ -7,7 +7,6 @@ import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
 import chess.domain.pieces.BetterPiece;
 import static chess.domain.pieces.Klass.PAWN;
-import chess.domain.pieces.Piece;
 import static chess.logic.gamelogic.PromotionLogic.promotePiece;
 
 /**
@@ -35,16 +34,15 @@ public class PawnMover extends PieceMover {
      * @param target square that pawn is moving to.
      */
     @Override
-    public void move(Piece piece, Square target, GameSituation sit) {
+    public void move(BetterPiece piece, Square target, GameSituation sit) {
 
 //        if (piece == null) {
 //            return;
 //        }
-        BetterPiece pawn = (BetterPiece) piece;
-        pawn.setHasBeenMoved(true);
+        piece.setHasBeenMoved(true);
 
         if (Math.abs(piece.getRow() - target.getRow()) == 2) {
-            pawn.setMovedTwoSquaresLastTurn(true);
+            piece.setMovedTwoSquaresLastTurn(true);
         }
 
         if (!target.containsAPiece() && target.getColumn() != piece.getColumn()) {
@@ -55,7 +53,7 @@ public class PawnMover extends PieceMover {
         }
 
         super.move(piece, target, sit);
-        promotePiece(piece, sit.getChessBoard());
+        promotePiece(piece, sit);
     }
 
     /**
@@ -69,7 +67,7 @@ public class PawnMover extends PieceMover {
      * @return list containing all squares this pawn threatens
      */
     @Override
-    public Set<Square> threatenedSquares(Piece piece, ChessBoard board) {
+    public Set<Square> threatenedSquares(BetterPiece piece, ChessBoard board) {
         Set<Square> squares = new MyHashSet();
         int[] columnChange = new int[]{1, -1};
         int column = piece.getColumn();
@@ -87,7 +85,7 @@ public class PawnMover extends PieceMover {
         return squares;
     }
 
-    private void addPossibleEnPassant(Piece piece, ChessBoard board, Set<Square> squares) {
+    private void addPossibleEnPassant(BetterPiece piece, ChessBoard board, Set<Square> squares) {
         Square target;
         int[] columnChange = new int[]{1, -1};
 
@@ -96,7 +94,7 @@ public class PawnMover extends PieceMover {
                 target = board.getSquare(piece.getColumn() + columnChange[i], piece.getRow());
 
                 if (targetContainsAnEnemyPawn(piece, target)) {
-                    BetterPiece opposingPawn = (BetterPiece) target.getPiece();
+                    BetterPiece opposingPawn = target.getPiece();
                     if (opposingPawn.isMovedTwoSquaresLastTurn()) {
                         squares.add(board.getSquare(target.getColumn(), target.getRow() + piece.getOwner().getDirection()));
                     }
@@ -105,7 +103,7 @@ public class PawnMover extends PieceMover {
         }
     }
 
-    private boolean targetContainsAnEnemyPawn(Piece chosen, Square target) {
+    private boolean targetContainsAnEnemyPawn(BetterPiece chosen, Square target) {
         if (!target.containsAPiece()) {
             return false;
         }
@@ -114,7 +112,7 @@ public class PawnMover extends PieceMover {
             return false;
         }
 
-        return ((BetterPiece) target.getPiece()).getKlass() == PAWN;
+        return target.getPiece().getKlass() == PAWN;
     }
 
     /**
@@ -130,24 +128,23 @@ public class PawnMover extends PieceMover {
      * @return a list containing all squares this pawn can legally move to.
      */
     @Override
-    public Set<Square> possibleMoves(Piece piece, ChessBoard board) {
-        BetterPiece pawn = (BetterPiece) piece;
+    public Set<Square> possibleMoves(BetterPiece piece, ChessBoard board) {
         Set<Square> moves = new MyHashSet<>();
         int newrow = piece.getRow() + piece.getOwner().getDirection();
 
-        if (addSquareIfWithinTableAndEmpty(board, pawn.getColumn(), newrow, moves)) {
-            if (!pawn.isHasBeenMoved()) {
+        if (addSquareIfWithinTableAndEmpty(board, piece.getColumn(), newrow, moves)) {
+            if (!piece.isHasBeenMoved()) {
                 newrow += piece.getOwner().getDirection();
-                addSquareIfWithinTableAndEmpty(board, pawn.getColumn(), newrow, moves);
+                addSquareIfWithinTableAndEmpty(board, piece.getColumn(), newrow, moves);
             }
         }
 
-        addPossibilitiesToTakeOpposingPieces(pawn, board, moves);
+        addPossibilitiesToTakeOpposingPieces(piece, board, moves);
 
         return moves;
     }
 
-    private void addPossibilitiesToTakeOpposingPieces(Piece piece, ChessBoard board, Set<Square> moves) {
+    private void addPossibilitiesToTakeOpposingPieces(BetterPiece piece, ChessBoard board, Set<Square> moves) {
         threatenedSquares(piece, board).stream().filter(i -> legalToMoveTo(piece, i, board))
                 .filter(i -> i.containsAPiece())
                 .forEach(i -> moves.add(i));

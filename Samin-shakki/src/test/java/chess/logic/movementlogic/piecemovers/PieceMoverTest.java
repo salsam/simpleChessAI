@@ -3,12 +3,12 @@ package chess.logic.movementlogic.piecemovers;
 import chess.domain.GameSituation;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
+import chess.domain.pieces.BetterPiece;
+import static chess.domain.pieces.Klass.PAWN;
+import static chess.domain.pieces.Klass.QUEEN;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import chess.logic.movementlogic.MovementLogic;
-import chess.domain.pieces.Pawn;
-import chess.domain.pieces.Piece;
-import chess.domain.pieces.Queen;
 import chess.logic.chessboardinitializers.EmptyBoardInitializer;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -21,8 +21,8 @@ import static org.junit.Assert.assertEquals;
  */
 public class PieceMoverTest {
 
-    private Piece piece;
-    private Piece pawn;
+    private BetterPiece piece;
+    private BetterPiece pawn;
     private static ChessBoard board;
     private static ChessBoardInitializer init;
     private static GameSituation sit;
@@ -40,8 +40,8 @@ public class PieceMoverTest {
     @Before
     public void setUp() {
         init.initialize(board);
-        piece = new Queen(3, 4, Player.WHITE, "wq");
-        pawn = new Pawn(3, 6, Player.BLACK, "bp");
+        piece = new BetterPiece(QUEEN, 3, 4, Player.WHITE, "wq");
+        pawn = new BetterPiece(PAWN, 3, 6, Player.BLACK, "bp");
         putPieceOnBoard(board, pawn);
         putPieceOnBoard(board, piece);
         sit.reHashBoard(true);

@@ -6,7 +6,6 @@ import chess.domain.pieces.BetterPiece;
 import static chess.domain.pieces.Klass.KING;
 import static chess.domain.pieces.Klass.PAWN;
 import static chess.domain.pieces.Klass.QUEEN;
-import chess.domain.pieces.Piece;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.addPieceToOwner;
 
@@ -35,10 +34,10 @@ public class ChessBoardCopier {
         ChessBoard copy = new ChessBoard(board.getMovementLogic());
         copy.setTable(copyTable(board.getTable()));
         setPieces(copy);
-        
+
         return copy;
     }
-    
+
     private static Square[][] copyTable(Square[][] table) {
         Square[][] copyTable = new Square[table.length][table[0].length];
         for (int i = 0; i < table.length; i++) {
@@ -48,11 +47,11 @@ public class ChessBoardCopier {
         }
         return copyTable;
     }
-    
+
     private static void setPieces(ChessBoard board) {
         board.setBlackPieces(new MyArrayList());
         board.setWhitePieces(new MyArrayList());
-        
+
         for (int i = 0; i < board.getTable().length; i++) {
             for (int j = 0; j < board.getTable()[0].length; j++) {
                 addPieceToOwner(board.getTable()[i][j], board);
@@ -72,22 +71,22 @@ public class ChessBoardCopier {
         clearBoardOfPieces(board);
         makePieceListsEqual(board, chessboard);
     }
-    
+
     private static void makePieceListsEqual(ChessBoard board, ChessBoard chessboard) {
         for (Player player : Player.values()) {
             board.getPieces(player).clear();
-            for (Piece playersPiece : chessboard.getPieces(player)) {
+            for (BetterPiece playersPiece : chessboard.getPieces(player)) {
                 ChessBoardInitializer.putPieceOnBoard(board, playersPiece.clone());
             }
         }
     }
-    
+
     private static void clearBoardOfPieces(ChessBoard board) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 board.getTable()[i][j].setPiece(null);
             }
-            
+
         }
         board.getPieces(Player.BLACK).clear();
         board.getPieces(Player.WHITE).clear();
@@ -105,19 +104,21 @@ public class ChessBoardCopier {
     public static void undoMove(ChessBoard backUp, GameSituation sit, Square from, Square to) {
         sit.decrementCountOfCurrentBoardSituation();
         sit.updateHashForUndoingMove(backUp, from, to);
-        
+
+        BetterPiece old = backUp.getSquare(from.getColumn(), from.getRow()).getPiece();
         from.setPiece(to.getPiece());
-        Piece old = backUp.getSquare(from.getColumn(), from.getRow()).getPiece();
+
+        if (old.getKlass() == PAWN && from.getPiece().getKlass() == QUEEN) {
+            sit.updateHashForUndoingPromotion(from);
+        }
+        from.getPiece().makeDeeplyEqualTo(old);
+
         if (from.getPiece() == null || old == null) {
-            System.out.println("old: " + old + " cur: " + from.getPiece() + " from: " + from + " to " + to);
+            System.out.println("old: " + old);
+            System.out.println(" cur: " + from.getPiece());
+            System.out.println(" from: " + from + " to " + to);
         }
-        if (((BetterPiece) old).getKlass() == PAWN
-                && ((BetterPiece) from.getPiece()).getKlass() == QUEEN) {
-            ((BetterPiece) from.getPiece()).setKlass(PAWN);
-        } else {
-            from.getPiece().makeDeeplyEqualTo(old);
-        }
-        
+
         handleDestination(backUp, to, sit, from);
     }
 
@@ -169,7 +170,7 @@ public class ChessBoardCopier {
 //
 //        return moved;
 //    }
-    private static void revertPromotion(Square from, ChessBoard board, Piece old) {
+    private static void revertPromotion(Square from, ChessBoard board, BetterPiece old) {
         if (old.getClass() != from.getPiece().getClass()) {
             System.out.println(board.getSquare(from.getColumn(), from.getRow()).getPiece());
             System.out.println("VDBDFNTGMHYMU;");
@@ -178,9 +179,9 @@ public class ChessBoardCopier {
             System.out.println(board.getSquare(from.getColumn(), from.getRow()).getPiece());
         }
     }
-    
+
     private static void handleDestination(ChessBoard backUp, Square to, GameSituation sit, Square from) {
-        Piece taken = backUp.getSquare(to.getColumn(), to.getRow()).getPiece();
+        BetterPiece taken = backUp.getSquare(to.getColumn(), to.getRow()).getPiece();
         if (taken != null) {
             putTakenPieceBackOnBoard(sit.getChessBoard(), taken, to);
         } else {
@@ -189,9 +190,9 @@ public class ChessBoardCopier {
             handleEnPassant(from, to, sit, backUp);
         }
     }
-    
-    private static void putTakenPieceBackOnBoard(ChessBoard board, Piece taken, Square to) {
-        for (Piece piece : board.getPieces(taken.getOwner())) {
+
+    private static void putTakenPieceBackOnBoard(ChessBoard board, BetterPiece taken, Square to) {
+        for (BetterPiece piece : board.getPieces(taken.getOwner())) {
             if (piece.getPieceCode().equals(taken.getPieceCode())) {
                 piece.makeDeeplyEqualTo(taken);
                 board.getSquare(taken.getColumn(), taken.getRow()).setPiece(piece);
@@ -199,18 +200,18 @@ public class ChessBoardCopier {
             }
         }
     }
-    
+
     private static void handleEnPassant(Square from, Square to, GameSituation sit, ChessBoard backUp) {
-        if (((BetterPiece) from.getPiece()).getKlass() == PAWN && from.getColumn() != to.getColumn()) {
+        if (from.getPiece().getKlass() == PAWN && from.getColumn() != to.getColumn()) {
             Square to2 = sit.getChessBoard().getSquare(to.getColumn(), from.getRow());
-            Piece taken = backUp.getSquare(to2.getColumn(), to2.getRow()).getPiece();
+            BetterPiece taken = backUp.getSquare(to2.getColumn(), to2.getRow()).getPiece();
             putTakenPieceBackOnBoard(sit.getChessBoard(), taken, to2);
             sit.reHashBoard(false);
         }
     }
-    
+
     private static void handleCastling(Square from, Square to, GameSituation sit, ChessBoard backUp) {
-        if (((BetterPiece) from.getPiece()).getKlass() == KING) {
+        if (from.getPiece().getKlass() == KING) {
             if (from.getColumn() - to.getColumn() == -2) {
                 Square from2 = sit.getChessBoard().getSquare(7, from.getRow());
                 Square to2 = sit.getChessBoard().getSquare(to.getColumn() - 1, to.getRow());
@@ -237,18 +238,16 @@ public class ChessBoardCopier {
             for (int j = 0; j < 8; j++) {
                 if (cb1.getSquare(i, j).getPiece() == null) {
                     if (cb2.getSquare(i, j).getPiece() != null) {
-                        System.out.println("cb1: " + cb1.getSquare(i, j).getPiece()
-                                + " cb2: " + cb2.getSquare(i, j).getPiece()
-                                + " at square (" + i + "," + j + ")");
+                        System.out.println("cb1: " + cb1.getSquare(i, j).getPiece());
+                        System.out.println("cb2: " + cb2.getSquare(i, j).getPiece());
                         cb1.printTable();
                         System.out.println("");
                         cb2.printTable();
                         return false;
                     }
                 } else if (!cb1.getSquare(i, j).getPiece().deepEquals(cb2.getSquare(i, j).getPiece())) {
-                    System.out.println("cb1: " + cb1.getSquare(i, j).getPiece()
-                            + " cb2: " + cb2.getSquare(i, j).getPiece()
-                            + " at square (" + i + "," + j + ")");
+                    System.out.println("cb1: " + cb1.getSquare(i, j).getPiece());
+                    System.out.println("cb2: " + cb2.getSquare(i, j).getPiece());
                     cb1.printTable();
                     System.out.println("");
                     cb2.printTable();
@@ -256,7 +255,7 @@ public class ChessBoardCopier {
                 }
             }
         }
-        
+
         return true;
     }
 }

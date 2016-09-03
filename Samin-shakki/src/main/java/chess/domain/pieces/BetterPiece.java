@@ -77,6 +77,17 @@ public class BetterPiece extends Piece {
         return this.movedTwoSquaresLastTurn == other.isHasBeenMoved();
     }
 
+    public void makeDeeplyEqualTo(BetterPiece piece) {
+        klass = piece.getKlass();
+        column = piece.getColumn();
+        row = piece.getRow();
+        owner = piece.getOwner();
+        taken = piece.isTaken();
+        hasBeenMoved = piece.isHasBeenMoved();
+        movedTwoSquaresLastTurn = piece.isMovedTwoSquaresLastTurn();
+        pieceCode = piece.getPieceCode();
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -116,4 +127,12 @@ public class BetterPiece extends Piece {
         }
         return row == 0;
     }
+
+    @Override
+    public String toString() {
+        return "piececode: " + pieceCode + " class: " + klass + " location: ("
+                + column + "," + row + ") owner: " + owner + " taken: " + taken
+                + " hasbeenmoved: " + hasBeenMoved + " moved2squares: " + movedTwoSquaresLastTurn;
+    }
+
 }

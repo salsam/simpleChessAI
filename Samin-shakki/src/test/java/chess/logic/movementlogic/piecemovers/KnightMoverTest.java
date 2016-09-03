@@ -4,11 +4,12 @@ import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
 import chess.domain.board.SquareTest;
+import chess.domain.pieces.BetterPiece;
+import static chess.domain.pieces.Klass.KNIGHT;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import chess.logic.chessboardinitializers.EmptyBoardInitializer;
 import chess.logic.movementlogic.MovementLogic;
-import chess.domain.pieces.Knight;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -20,7 +21,7 @@ import static org.junit.Assert.assertFalse;
  */
 public class KnightMoverTest {
 
-    private Knight knight;
+    private BetterPiece knight;
     private static KnightMover knightMover;
     private static ChessBoard board;
     private static ChessBoardInitializer init;
@@ -38,7 +39,7 @@ public class KnightMoverTest {
     @Before
     public void setUp() {
         init.initialize(board);
-        knight = new Knight(4, 4, Player.WHITE, "wn");
+        knight = new BetterPiece(KNIGHT, 4, 4, Player.WHITE, "wn");
         putPieceOnBoard(board, knight);
     }
 
@@ -57,7 +58,7 @@ public class KnightMoverTest {
 
     @Test
     public void knightCannotMoveOverTheEdge() {
-        knight = new Knight(0, 0, Player.WHITE, "wn");
+        knight = new BetterPiece(KNIGHT, 0, 0, Player.WHITE, "wn");
         putPieceOnBoard(board, knight);
         assertFalse(knightMover.possibleMoves(knight, board).contains(new Square(-1, -2)));
         assertFalse(knightMover.possibleMoves(knight, board).contains(new Square(1, -2)));

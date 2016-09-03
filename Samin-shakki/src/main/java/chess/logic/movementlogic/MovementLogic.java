@@ -7,12 +7,7 @@ import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
-import static chess.domain.pieces.Klass.BISHOP;
-import static chess.domain.pieces.Klass.KING;
-import static chess.domain.pieces.Klass.KNIGHT;
-import static chess.domain.pieces.Klass.PAWN;
-import static chess.domain.pieces.Klass.QUEEN;
-import static chess.domain.pieces.Klass.ROOK;
+import static chess.domain.pieces.Klass.*;
 import java.util.Set;
 
 /**
@@ -71,9 +66,8 @@ public class MovementLogic {
      * @param board board on which piece is placed
      * @return a set containing all squares given piece threatens on given board
      */
-    public Set<Square> threatenedSquares(Piece piece, ChessBoard board) {
-        BetterPiece piec = (BetterPiece) piece;
-        switch (piec.getKlass()) {
+    public Set<Square> threatenedSquares(BetterPiece piece, ChessBoard board) {
+        switch (piece.getKlass()) {
             case BISHOP:
                 return bishopMover.threatenedSquares(piece, board);
             case KING:
@@ -101,9 +95,8 @@ public class MovementLogic {
      * @return a set containing all squares given piece can move to on given
      * board
      */
-    public Set<Square> possibleMoves(Piece piece, ChessBoard board) {
-        BetterPiece piec = (BetterPiece) piece;
-        switch (piec.getKlass()) {
+    public Set<Square> possibleMoves(BetterPiece piece, ChessBoard board) {
+        switch (piece.getKlass()) {
             case BISHOP:
                 return bishopMover.possibleMoves(piece, board);
             case KING:
@@ -130,10 +123,8 @@ public class MovementLogic {
      * @param target square where piece will be moved to.
      * @param sit situation before move.
      */
-    public void move(Piece piece, Square target, GameSituation sit) {
-
-        BetterPiece piec = (BetterPiece) piece;
-        switch (piec.getKlass()) {
+    public void move(BetterPiece piece, Square target, GameSituation sit) {
+        switch (piece.getKlass()) {
             case BISHOP:
                 bishopMover.move(piece, target, sit);
             case KING:

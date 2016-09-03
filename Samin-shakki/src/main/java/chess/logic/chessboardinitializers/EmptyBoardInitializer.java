@@ -10,10 +10,10 @@ import chess.domain.board.ChessBoard;
 public class EmptyBoardInitializer extends ChessBoardInitializer {
 
     /**
-     * Initialises the ChessBoard given as parameter to be empty. Thus board
+     * Initializes the ChessBoard given as parameter to be empty. Thus board
      * will be cleaned of all pieces.
      *
-     * @param board board to be initialised
+     * @param board board to be initialized
      */
     @Override
     public void initialize(ChessBoard board) {

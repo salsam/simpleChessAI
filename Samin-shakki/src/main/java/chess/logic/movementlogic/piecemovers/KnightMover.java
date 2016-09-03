@@ -8,7 +8,7 @@ package chess.logic.movementlogic.piecemovers;
 import chess.domain.board.ChessBoard;
 import java.util.Set;
 import chess.domain.board.Square;
-import chess.domain.pieces.Piece;
+import chess.domain.pieces.BetterPiece;
 
 /**
  * This class is responsible for all knight-related movement logic.
@@ -31,7 +31,7 @@ public class KnightMover extends PieceMover {
      * @return list containing all squares given knight threatens
      */
     @Override
-    public Set<Square> threatenedSquares(Piece piece, ChessBoard board) {
+    public Set<Square> threatenedSquares(BetterPiece piece, ChessBoard board) {
         int[] rowChange = new int[]{-2, -2, -1, -1, 1, 1, 2, 2};
         int[] columnChange = new int[]{1, -1, 2, -2, 2, -2, 1, -1};
 

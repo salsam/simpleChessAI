@@ -4,16 +4,17 @@ import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
 import chess.domain.board.SquareTest;
+import chess.domain.pieces.BetterPiece;
+import static chess.domain.pieces.Klass.PAWN;
+import static chess.domain.pieces.Klass.QUEEN;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import chess.logic.chessboardinitializers.EmptyBoardInitializer;
 import chess.logic.movementlogic.MovementLogic;
-import chess.domain.pieces.Pawn;
-import chess.domain.pieces.Queen;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 
 /**
  *
@@ -21,7 +22,7 @@ import static org.junit.Assert.*;
  */
 public class QueenMoverTest {
 
-    private Queen queen;
+    private BetterPiece queen;
     private static ChessBoard board;
     private static ChessBoardInitializer init;
     private static QueenMover queenMover;
@@ -39,7 +40,7 @@ public class QueenMoverTest {
     @Before
     public void setUp() {
         init.initialize(board);
-        queen = new Queen(3, 5, Player.WHITE, "wq");
+        queen = new BetterPiece(QUEEN, 3, 5, Player.WHITE, "wq");
         putPieceOnBoard(board, queen);
     }
 
@@ -102,28 +103,28 @@ public class QueenMoverTest {
 
     @Test
     public void queenCannotOnTopOfOwnPiece() {
-        Pawn pawn = new Pawn(3, 1, Player.WHITE, "wp");
+        BetterPiece pawn = new BetterPiece(PAWN, 3, 1, Player.WHITE, "wp");
         putPieceOnBoard(board, pawn);
         assertFalse(queenMover.possibleMoves(queen, board).contains(new Square(3, 1)));
     }
 
     @Test
     public void queenCanMoveOnTopOfEnemyPiece() {
-        Pawn pawn = new Pawn(3, 1, Player.BLACK, "bp");
+        BetterPiece pawn = new BetterPiece(PAWN, 3, 1, Player.BLACK, "bp");
         putPieceOnBoard(board, pawn);
         assertTrue(queenMover.possibleMoves(queen, board).contains(new Square(3, 1)));
     }
 
     @Test
     public void queenCannotMovePastAPiece() {
-        Pawn pawn = new Pawn(3, 1, Player.WHITE, "wp");
+        BetterPiece pawn = new BetterPiece(PAWN, 3, 1, Player.WHITE, "wp");
         putPieceOnBoard(board, pawn);
         assertFalse(queenMover.possibleMoves(queen, board).contains(new Square(3, 0)));
     }
 
     @Test
     public void queenCannotMovePastOpposingPiece() {
-        Pawn pawn = new Pawn(3, 1, Player.BLACK, "bp");
+        BetterPiece pawn = new BetterPiece(PAWN, 3, 1, Player.BLACK, "bp");
         putPieceOnBoard(board, pawn);
         assertFalse(queenMover.possibleMoves(queen, board).contains(new Square(3, 0)));
     }

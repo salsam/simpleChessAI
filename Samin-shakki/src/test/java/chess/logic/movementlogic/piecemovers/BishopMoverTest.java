@@ -4,12 +4,13 @@ import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
 import chess.domain.board.SquareTest;
+import chess.domain.pieces.BetterPiece;
+import static chess.domain.pieces.Klass.BISHOP;
+import static chess.domain.pieces.Klass.PAWN;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import chess.logic.chessboardinitializers.EmptyBoardInitializer;
 import chess.logic.movementlogic.MovementLogic;
-import chess.domain.pieces.Bishop;
-import chess.domain.pieces.Pawn;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,7 +23,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class BishopMoverTest {
 
-    private Bishop bishop;
+    private BetterPiece bishop;
     private static BishopMover bishopMover;
     private static ChessBoard board;
     private static ChessBoardInitializer init;
@@ -40,7 +41,7 @@ public class BishopMoverTest {
     @Before
     public void setUp() {
         init.initialize(board);
-        bishop = new Bishop(3, 4, Player.WHITE, "wb");
+        bishop = new BetterPiece(BISHOP, 3, 4, Player.WHITE, "wb");
         putPieceOnBoard(board, bishop);
     }
 
@@ -83,28 +84,28 @@ public class BishopMoverTest {
 
     @Test
     public void bishopCannotMoveOnTopOfOwnPiece() {
-        Pawn pawn = new Pawn(4, 5, Player.WHITE, "wp");
+        BetterPiece pawn = new BetterPiece(PAWN, 4, 5, Player.WHITE, "wp");
         putPieceOnBoard(board, pawn);
         assertFalse(bishopMover.possibleMoves(bishop, board).contains(new Square(4, 5)));
     }
 
     @Test
     public void bishopCanTakeAnEnemyPiece() {
-        Pawn pawn = new Pawn(4, 5, Player.BLACK, "bp");
+        BetterPiece pawn = new BetterPiece(PAWN, 4, 5, Player.BLACK, "bp");
         putPieceOnBoard(board, pawn);
         assertTrue(bishopMover.possibleMoves(bishop, board).contains(new Square(4, 5)));
     }
 
     @Test
     public void bishopCannotMovePastAPiece() {
-        Pawn pawn = new Pawn(4, 5, Player.WHITE, "wp");
+        BetterPiece pawn = new BetterPiece(PAWN, 4, 5, Player.WHITE, "wp");
         putPieceOnBoard(board, pawn);
         assertFalse(bishopMover.possibleMoves(bishop, board).contains(new Square(5, 6)));
     }
 
     @Test
     public void bishopCannotMovePastOpposingPiece() {
-        Pawn pawn = new Pawn(4, 5, Player.BLACK, "bp");
+        BetterPiece pawn = new BetterPiece(PAWN, 4, 5, Player.BLACK, "bp");
         putPieceOnBoard(board, pawn);
         assertFalse(bishopMover.possibleMoves(bishop, board).contains(new Square(5, 6)));
     }

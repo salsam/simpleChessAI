@@ -32,11 +32,9 @@ public class RookMover extends PieceMover {
      * @param target square this rook is moving to.
      */
     @Override
-    public void move(Piece piece, Square target, GameSituation sit) {
-
-        BetterPiece rook = (BetterPiece) piece;
-        rook.setHasBeenMoved(true);
-        super.move(rook, target, sit);
+    public void move(BetterPiece piece, Square target, GameSituation sit) {
+        piece.setHasBeenMoved(true);
+        super.move(piece, target, sit);
     }
 
     /**
@@ -46,11 +44,10 @@ public class RookMover extends PieceMover {
      * @return list containing all squares this rook threatens
      */
     @Override
-    public Set<Square> threatenedSquares(Piece piece, ChessBoard board) {
-        BetterPiece rook = (BetterPiece) piece;
+    public Set<Square> threatenedSquares(BetterPiece piece, ChessBoard board) {
         Set<Square> possibilities = new MyHashSet<>();
-        addHorizontalPossibilities(board.getSquare(rook.getColumn(), rook.getRow()), board, possibilities);
-        addVerticalPossibilities(board.getSquare(rook.getColumn(), rook.getRow()), board, possibilities);
+        addHorizontalPossibilities(board.getSquare(piece.getColumn(), piece.getRow()), board, possibilities);
+        addVerticalPossibilities(board.getSquare(piece.getColumn(), piece.getRow()), board, possibilities);
 
         return possibilities;
     }

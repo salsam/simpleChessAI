@@ -5,8 +5,9 @@ import chess.domain.board.ChessBoard;
 import static chess.domain.board.ChessBoardCopier.copy;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
-import chess.domain.pieces.Knight;
-import chess.domain.pieces.Pawn;
+import chess.domain.pieces.BetterPiece;
+import static chess.domain.pieces.Klass.KNIGHT;
+import static chess.domain.pieces.Klass.PAWN;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import chess.logic.chessboardinitializers.EmptyBoardInitializer;
 import chess.logic.movementlogic.MovementLogic;
@@ -60,13 +61,13 @@ public class ZobristHasherTest {
     @Test
     public void hashIsDifferentWithDifferentBoardSituations() {
         long oldHash = zb.hash(cb);
-        ChessBoardInitializer.putPieceOnBoard(cb, new Pawn(0, 0, Player.WHITE, "wp"));
+        ChessBoardInitializer.putPieceOnBoard(cb, new BetterPiece(PAWN, 0, 0, Player.WHITE, "wp"));
         assertNotEquals(oldHash, zb.hash(cb));
     }
 
     @Test
     public void hashIsDifferentWithSamePieceInDifferentLocation() {
-        Pawn wp = new Pawn(1, 1, Player.WHITE, "wp");
+        BetterPiece wp = new BetterPiece(PAWN, 1, 1, Player.WHITE, "wp");
         ChessBoardInitializer.putPieceOnBoard(cb, wp);
         long oldHash = zb.hash(cb);
         assertNotEquals(oldHash,
@@ -77,7 +78,7 @@ public class ZobristHasherTest {
     @Test
     public void takenPiecesAreNotAccountedForHashing() {
         long oldHash = zb.hash(cb);
-        Pawn wp = new Pawn(1, 1, Player.WHITE, "wp");
+        BetterPiece wp = new BetterPiece(PAWN, 1, 1, Player.WHITE, "wp");
         ChessBoardInitializer.putPieceOnBoard(cb, wp);
         wp.setTaken(true);
         assertEquals(oldHash, zb.hash(cb));
@@ -85,7 +86,7 @@ public class ZobristHasherTest {
 
     @Test
     public void hashCorrectAfterAMoveIsMade() {
-        Knight wn = new Knight(1, 0, Player.WHITE, "wn");
+        BetterPiece wn = new BetterPiece(KNIGHT, 1, 0, Player.WHITE, "wn");
         ChessBoardInitializer.putPieceOnBoard(cb, wn);
         Square from = cb.getSquare(1, 0);
         Square to = cb.getSquare(2, 2);
@@ -96,7 +97,7 @@ public class ZobristHasherTest {
 
     @Test
     public void hashBeforeMoveCorrect() {
-        Knight wn = new Knight(1, 0, Player.WHITE, "wn");
+        BetterPiece wn = new BetterPiece(KNIGHT, 1, 0, Player.WHITE, "wn");
         ChessBoardInitializer.putPieceOnBoard(cb, wn);
         ChessBoard backup = copy(cb);
         long before = zb.hash(cb);
@@ -109,7 +110,7 @@ public class ZobristHasherTest {
 
     @Test
     public void hashingAMoveAndUndoingItMakesHashRemainSame() {
-        Knight wn = new Knight(1, 0, Player.WHITE, "wn");
+        BetterPiece wn = new BetterPiece(KNIGHT, 1, 0, Player.WHITE, "wn");
         ChessBoardInitializer.putPieceOnBoard(cb, wn);
         ChessBoard backup = copy(cb);
         long oldHash = zb.hash(cb);

@@ -5,8 +5,7 @@ import chess.domain.board.ChessBoard;
 import java.util.Set;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
-import chess.domain.pieces.Piece;
-import chess.logic.inputprocessing.InputProcessor;
+import chess.domain.pieces.BetterPiece;
 
 public abstract class PieceMover {
 
@@ -19,7 +18,7 @@ public abstract class PieceMover {
      * @return set containing containing all squares given piece threatens on
      * given chessboard
      */
-    public abstract Set<Square> threatenedSquares(Piece piece, ChessBoard board);
+    public abstract Set<Square> threatenedSquares(BetterPiece piece, ChessBoard board);
 
     /**
      * Returns a list of squares given piece can legally move to.
@@ -28,7 +27,7 @@ public abstract class PieceMover {
      * @param board ChessBoard on which given piece moves on
      * @return list containing all squares given piece can legally move to
      */
-    public Set<Square> possibleMoves(Piece piece, ChessBoard board) {
+    public Set<Square> possibleMoves(BetterPiece piece, ChessBoard board) {
         Set<Square> moves = new MyHashSet();
 
         threatenedSquares(piece, board).stream()
@@ -73,7 +72,7 @@ public abstract class PieceMover {
         return possibilities;
     }
 
-    protected boolean legalToMoveTo(Piece piece, Square target, ChessBoard board) {
+    protected boolean legalToMoveTo(BetterPiece piece, Square target, ChessBoard board) {
 
         if (!target.containsAPiece()) {
             return true;
@@ -90,7 +89,7 @@ public abstract class PieceMover {
      * @param target Square where this piece will be moved.
      * @param sit situation being changed.
      */
-    public void move(Piece piece, Square target, GameSituation sit) {
+    public void move(BetterPiece piece, Square target, GameSituation sit) {
         if (piece == null) {
             return;
         }

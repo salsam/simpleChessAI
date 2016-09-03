@@ -26,13 +26,13 @@ public class EmptyBoardInitializerTest {
     @Test
     public void initializerClearsBoardOfAllPiecesWhenInitializingABoard() {
         ChessBoard board = new ChessBoard(new MovementLogic());
-        ChessBoardInitializer stdinit = new StandardBoardInitializer();
+        ChessBoardInitializer stdinit = new BetterChessBoardInitializer();
         stdinit.initialize(board);
         init.initialize(board);
 
         for (int i = 0; i < board.getTable().length; i++) {
             for (int j = 0; j < board.getTable()[0].length; j++) {
-                assertFalse(board.getSquare(i, j).containsAPiece());
+                assertTrue(board.getSquare(i, j).getPiece() == null);
             }
         }
     }
@@ -40,7 +40,7 @@ public class EmptyBoardInitializerTest {
     @Test
     public void initializerClearsAllPiecesFromPlayersToo() {
         ChessBoard board = new ChessBoard(new MovementLogic());
-        ChessBoardInitializer stdinit = new StandardBoardInitializer();
+        ChessBoardInitializer stdinit = new BetterChessBoardInitializer();
         stdinit.initialize(board);
         init.initialize(board);
 

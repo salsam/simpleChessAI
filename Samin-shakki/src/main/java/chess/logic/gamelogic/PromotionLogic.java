@@ -1,10 +1,9 @@
 package chess.logic.gamelogic;
 
-import chess.domain.board.ChessBoard;
+import chess.domain.GameSituation;
 import chess.domain.pieces.BetterPiece;
 import static chess.domain.pieces.Klass.PAWN;
 import static chess.domain.pieces.Klass.QUEEN;
-import chess.domain.pieces.Piece;
 
 /**
  *
@@ -12,11 +11,12 @@ import chess.domain.pieces.Piece;
  */
 public class PromotionLogic {
 
-    public static void promotePiece(Piece piece, ChessBoard cb) {
-        if (((BetterPiece) piece).getKlass() == PAWN && !piece.isTaken()) {
-            //Hashin pävitys tähän!!!!!!!
-            if (((BetterPiece) piece).isAtOpposingEnd()) {
-                ((BetterPiece) piece).setKlass(QUEEN);
+    public static void promotePiece(BetterPiece piece, GameSituation sit) {
+        if (piece.getKlass() == PAWN && !piece.isTaken()) {
+            if (piece.isAtOpposingEnd()) {
+                sit.updateHashForPromotion(
+                        sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow()));
+                piece.setKlass(QUEEN);
                 System.out.println("Pawn was promoted111111111111");
             }
         }

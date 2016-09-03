@@ -1,7 +1,8 @@
 package chess.domain.board;
 
-import chess.domain.pieces.Pawn;
-import java.util.HashSet;
+import chess.domain.datastructures.MyHashSet;
+import chess.domain.pieces.BetterPiece;
+import static chess.domain.pieces.Klass.PAWN;
 import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +15,7 @@ import static org.junit.Assert.*;
 public class SquareTest {
 
     public static void testMultipleSquares(int[] columns, int[] rows, Set<Square> possibleMoves) {
-        Set<Square> realPossibilities = new HashSet<>();
+        Set<Square> realPossibilities = new MyHashSet<>();
         for (int i = 0; i < columns.length; i++) {
             realPossibilities.add(new Square(columns[i], rows[i]));
         }
@@ -50,7 +51,7 @@ public class SquareTest {
 
     @Test
     public void pieceCorrectIfNotNull() {
-        Pawn pawn = new Pawn(2, 1, Player.WHITE, "wp");
+        BetterPiece pawn = new BetterPiece(PAWN, 2, 1, Player.WHITE, "wp");
         square.setPiece(pawn);
         assertEquals(pawn, square.getPiece());
     }

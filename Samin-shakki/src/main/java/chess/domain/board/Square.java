@@ -1,6 +1,6 @@
 package chess.domain.board;
 
-import chess.domain.pieces.Piece;
+import chess.domain.pieces.BetterPiece;
 
 /**
  * Square class is responsible for keeping track of its location and possible
@@ -21,7 +21,7 @@ public class Square {
     /**
      * Piece that is situated on this square, null if there's no piece.
      */
-    private Piece piece;
+    private BetterPiece piece;
 
     /**
      * Creates a new square with given row and column.Field piece will be null
@@ -43,11 +43,11 @@ public class Square {
         return row;
     }
 
-    public Piece getPiece() {
+    public BetterPiece getPiece() {
         return piece;
     }
 
-    public void setPiece(Piece piece) {
+    public void setPiece(BetterPiece piece) {
         this.piece = piece;
     }
 

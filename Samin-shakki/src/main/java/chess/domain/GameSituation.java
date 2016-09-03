@@ -197,6 +197,14 @@ public class GameSituation {
         boardHash = hasher.getHashBeforeMove(boardHash, board, backup, from, to);
     }
 
+    public void updateHashForPromotion(Square location) {
+        boardHash = hasher.getHashAfterPromotion(boardHash, board, location);
+    }
+
+    public void updateHashForUndoingPromotion(Square location) {
+        boardHash = hasher.getHashBeforePromotion(boardHash, board, location);
+    }
+
     /**
      * Sets the given chessBoard in the field board and updates LegalityChecker
      * to check that board instead of old board.
@@ -228,8 +236,8 @@ public class GameSituation {
      */
     public void makePawnsUnEnPassantable(Player player) {
         board.getPieces(player).stream().forEach(piece -> {
-            if (((BetterPiece) piece).getKlass() == PAWN) {
-                ((BetterPiece) piece).setMovedTwoSquaresLastTurn(false);
+            if (piece.getKlass() == PAWN) {
+                piece.setMovedTwoSquaresLastTurn(false);
             }
         });
     }

@@ -4,7 +4,7 @@ import chess.domain.datastructures.MyArrayList;
 import chess.domain.datastructures.MyHashMap;
 import chess.domain.datastructures.MyHashSet;
 import chess.logic.movementlogic.MovementLogic;
-import chess.domain.pieces.Piece;
+import chess.domain.pieces.BetterPiece;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,11 +25,11 @@ public class ChessBoard {
     /**
      * List of all pieces that white owns.
      */
-    private List<Piece> whitePieces;
+    private List<BetterPiece> whitePieces;
     /**
      * List of all pieces that black owns.
      */
-    private List<Piece> blackPieces;
+    private List<BetterPiece> blackPieces;
     /**
      * Set containing all squares that black threatens.
      */
@@ -45,7 +45,7 @@ public class ChessBoard {
     /**
      * Map containing positions of both kings.
      */
-    private Map<Player, Piece> kings;
+    private Map<Player, BetterPiece> kings;
 
     /**
      * Creates a new chessboard with given movement logic.
@@ -101,7 +101,7 @@ public class ChessBoard {
      *
      * @return map with references from each player to their king.
      */
-    public Map<Player, Piece> getKings() {
+    public Map<Player, BetterPiece> getKings() {
         return this.kings;
     }
 
@@ -127,7 +127,7 @@ public class ChessBoard {
      * @param player player whose pieces you want.
      * @return list containing all pieces owned by the player.
      */
-    public List<Piece> getPieces(Player player) {
+    public List<BetterPiece> getPieces(Player player) {
         if (player == Player.WHITE) {
             return whitePieces;
         } else {
@@ -135,11 +135,11 @@ public class ChessBoard {
         }
     }
 
-    public void setBlackPieces(List<Piece> blackPieces) {
+    public void setBlackPieces(List<BetterPiece> blackPieces) {
         this.blackPieces = blackPieces;
     }
 
-    public void setWhitePieces(List<Piece> whitePieces) {
+    public void setWhitePieces(List<BetterPiece> whitePieces) {
         this.whitePieces = whitePieces;
     }
 
@@ -186,9 +186,9 @@ public class ChessBoard {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (table[j][i].getPiece() == null) {
-                    System.out.print("nu");
+                    System.out.print("NU");
                 } else {
-                    System.out.print(table[j][i].getPiece().getClass().getName().substring(20, 22));
+                    System.out.print(table[j][i].getPiece().getKlass().toString().substring(0, 2));
                 }
             }
             System.out.println("");
