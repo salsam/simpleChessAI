@@ -22,9 +22,9 @@ Tekoälyn hyödyntämät tietorakenteet on koottu kansioon datastructures. Raken
 
 ###Saavutetut aika- ja tilavaativuudet
 
-Ohjelmani aikavaativuus on kaikkien tehostustenkin jälkeen O(160^d) eli tehostukset eivät vaikuta pahimman tapauksen aikavaativuuteen ollenkaan. Päin vastoin lisäämäni iteratiivinen syvennys lisää pahimman tapauksen aikavaativuutta hieman (noin 160^(d-1) lisää työtä eli 1/160 kokonaistyöstä). Sen sijaan ohjelmani keskimääräinen aikavaativuus lienee parantunut kivasti, sillä aluksi rekursiosyvyyden 3 tutkimiseen vaadittiin jopa 20 sekuntia, kun taas lopuksi siitä selvitään alle sekunnissa lähes aina. Tämä O-notaatiohan ei todellakaan vastaa pelini todellista aikavaativuutta, sillä O-notaatiota laskiessa on oletettu kaikkien käyttämieni heuristiikkojen olevan aina väärässä, vaikka tämä on hyvin epätodennäköistä. Ohjelmani muistuttaakin tässä QuickSorttia, jolla havaitaan samanlainen ilmiö. Valitettavasti en osaa laskea ohjelmani keskimääräistä aikavaativuutta sanoakseni tarkemman arvion.
+Ohjelmani aikavaativuus on kaikkien tehostustenkin jälkeen O(218^d) eli tehostukset eivät vaikuta pahimman tapauksen aikavaativuuteen ollenkaan. Päin vastoin lisäämäni iteratiivinen syvennys lisää pahimman tapauksen aikavaativuutta hieman (noin 218^(d-1) lisää työtä eli 1/218 kokonaistyöstä). Sen sijaan ohjelmani keskimääräinen aikavaativuus lienee parantunut kivasti, sillä aluksi rekursiosyvyyden 3 tutkimiseen vaadittiin jopa 20 sekuntia, kun taas lopuksi siitä selvitään alle sekunnissa lähes aina. Tämä O-notaatiohan ei todellakaan vastaa pelini todellista aikavaativuutta, sillä O-notaatiota laskiessa on oletettu kaikkien käyttämieni heuristiikkojen olevan aina väärässä, vaikka tämä on hyvin epätodennäköistä. Ohjelmani muistuttaakin tässä QuickSorttia, jolla havaitaan samanlainen ilmiö. Valitettavasti en osaa laskea ohjelmani keskimääräistä aikavaativuutta sanoakseni tarkemman arvion.
 
-Ohjelmani on rakennettu periaatteella, jossa aikavaativuus on paljon tilavaativuutta olennaisempi eli käytän niin paljon dynaamista muistia kuin mahdollista. Tämän vuoksi ohjelmani tilavaativuuskin on karu O(160^d), sillä joudumme pahimmassa tapauksessa tallentamaan jokaisen tutkimamme pelitilanteen muistiin. Tätä voisi laskea esimerkiksi ottamalla vain tietyn määrän yleisimpiä pelitilanteita muistiin, mutta en tämän kurssin aikana ole ehtinyt suunnitella tähän mitään monimutkaisempaa vaan keskittynyt algoritmin nopeuttamiseen. Mikäli tilanteista haluaisi tallentaa vain osan, pitäisi minun luoda jonkinlainen arvostelusysteemi pelitilanteille. Tämän arvostelujärjestelmän tulisi huomioida ainakin rekursion jäljellä oleva syvyys (mitä korkeammalla puussa olevia haaroja karsitaa, sitä parempi) ja tilanteiden esiintymistiheys.
+Ohjelmani on rakennettu periaatteella, jossa aikavaativuus on paljon tilavaativuutta olennaisempi eli käytän niin paljon dynaamista muistia kuin mahdollista. Tämän vuoksi ohjelmani tilavaativuuskin on karu O(218^d), sillä joudumme pahimmassa tapauksessa tallentamaan jokaisen tutkimamme pelitilanteen muistiin. Tätä voisi laskea esimerkiksi ottamalla vain tietyn määrän yleisimpiä pelitilanteita muistiin, mutta en tämän kurssin aikana ole ehtinyt suunnitella tähän mitään monimutkaisempaa vaan keskittynyt algoritmin nopeuttamiseen. Mikäli tilanteista haluaisi tallentaa vain osan, pitäisi minun luoda jonkinlainen arvostelusysteemi pelitilanteille. Tämän arvostelujärjestelmän tulisi huomioida ainakin rekursion jäljellä oleva syvyys (mitä korkeammalla puussa olevia haaroja karsitaa, sitä parempi) ja tilanteiden esiintymistiheys.
 
 ###Puutteet ja parannusehdotukset
 
@@ -38,6 +38,8 @@ Lisäksi käyttämäni lineaarinen evaluaatiofunktio on hyvin minimalistinen, jo
 
 ###Lähteet
 [Pelitilanteen arviointi](https://chessprogramming.wikispaces.com/Evaluation)
+
+[Suurin määrä mahdollisia siirtoja pelaajalla 218](https://www.chess.com/forum/view/fun-with-chess/what-chess-position-has-the-most-number-of-possible-moves)
 
 [Nappuloiden arvot](https://en.wikipedia.org/wiki/Chess_piece_relative_value)
 
