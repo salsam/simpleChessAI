@@ -1,8 +1,7 @@
 package chess.domain.board;
 
 import chess.domain.datastructures.MyHashSet;
-import chess.domain.pieces.BetterPiece;
-import static chess.domain.pieces.Klass.QUEEN;
+import static chess.domain.board.Klass.QUEEN;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import chess.logic.movementlogic.MovementLogic;

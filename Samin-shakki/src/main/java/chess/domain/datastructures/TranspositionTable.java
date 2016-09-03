@@ -3,6 +3,8 @@ package chess.domain.datastructures;
 import java.util.Map;
 
 /**
+ * This class is used for saving search results of AI for search corresponding
+ * to transposition key with result of transposition entry.
  *
  * @author sami
  */
@@ -25,6 +27,14 @@ public class TranspositionTable {
         return table.get(key);
     }
 
+    /**
+     * Puts the given key and entry associated with it to HashMap. For each key
+     * only one result with highest depth is saved. If memory cap is reached,
+     * removes a random entry to make space for the one being added.
+     *
+     * @param key key representing chessboard situation at time of search.
+     * @param entry entry representing the result of said search.
+     */
     public void put(TranspositionKey key, TranspositionEntry entry) {
 //        if (table.size() > 100000) {
 //            for (TranspositionKey k : table.keySet()) {
@@ -41,6 +51,10 @@ public class TranspositionTable {
         }
     }
 
+    /**
+     * Makes all pairs saved HashMap eligible for being removed if memory cap is
+     * reached.
+     */
     public void makePairsUnsaved() {
         table.keySet().stream().forEach((key) -> {
             key.setSaved(false);

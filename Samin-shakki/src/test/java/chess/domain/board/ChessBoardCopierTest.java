@@ -1,11 +1,10 @@
 package chess.domain.board;
 
 import chess.domain.GameSituation;
-import chess.domain.pieces.BetterPiece;
-import static chess.domain.pieces.Klass.KING;
-import static chess.domain.pieces.Klass.PAWN;
-import static chess.domain.pieces.Klass.QUEEN;
-import static chess.domain.pieces.Klass.ROOK;
+import static chess.domain.board.Klass.KING;
+import static chess.domain.board.Klass.PAWN;
+import static chess.domain.board.Klass.QUEEN;
+import static chess.domain.board.Klass.ROOK;
 import chess.logic.movementlogic.MovementLogic;
 import chess.logic.chessboardinitializers.BetterChessBoardInitializer;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;

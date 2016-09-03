@@ -1,14 +1,14 @@
 package chess.logic.chessboardinitializers;
 
+import chess.domain.board.BetterPiece;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
-import chess.domain.pieces.*;
-import static chess.domain.pieces.Klass.*;
+import static chess.domain.board.Klass.*;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 
 /**
  * This class is used to initialize standard starting positions of chess. Using
- * method @see #initialise(ChessBoard)
+ * method initialize.
  *
  * @author samisalo
  */

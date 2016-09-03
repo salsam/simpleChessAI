@@ -1,7 +1,5 @@
 package chess.domain.board;
 
-import chess.domain.pieces.BetterPiece;
-
 /**
  * Square class is responsible for keeping track of its location and possible
  * piece situated on it.

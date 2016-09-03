@@ -10,8 +10,7 @@ import chess.domain.board.ChessBoard;
 import java.util.Set;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
-import chess.domain.pieces.BetterPiece;
-import chess.domain.pieces.Piece;
+import chess.domain.board.BetterPiece;
 
 /**
  * This class is responsible for all rook-related movement logic.

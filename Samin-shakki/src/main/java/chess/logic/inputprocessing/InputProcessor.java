@@ -7,7 +7,7 @@ import chess.domain.board.Square;
 import chess.domain.GameSituation;
 import chess.domain.Move;
 import static chess.domain.board.ChessBoardCopier.undoMove;
-import chess.domain.pieces.BetterPiece;
+import chess.domain.board.BetterPiece;
 import chess.logic.ailogic.AILogic;
 import java.util.Map;
 import java.util.Set;

@@ -12,8 +12,8 @@ import chess.domain.board.Player;
 import static chess.domain.board.Player.getOpponent;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
-import chess.domain.pieces.BetterPiece;
-import static chess.domain.pieces.Klass.ROOK;
+import chess.domain.board.BetterPiece;
+import static chess.domain.board.Klass.ROOK;
 
 /**
  * This class is responsible for all king-related movement logic.
@@ -40,9 +40,6 @@ public class KingMover extends PieceMover {
     @Override
     public void move(BetterPiece piece, Square target, GameSituation sit) {
 
-//        if (piece == null || piece.getClass() != King.class) {
-//            return;
-//        }
         piece.setHasBeenMoved(true);
         RookMover rookMover = new RookMover();
 
@@ -84,7 +81,7 @@ public class KingMover extends PieceMover {
 
     /**
      * Returns a list containing all squares chosen king can legally move to.
-     * That means all neighbour squares of king's location that aren't
+     * That means all neighbor squares of king's location that aren't
      * threatened by opponent or contain player's own piece.
      *
      * @param piece target king

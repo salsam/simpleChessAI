@@ -2,7 +2,7 @@ package chess.logic.gamelogic;
 
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
-import chess.domain.pieces.BetterPiece;
+import chess.domain.board.BetterPiece;
 
 /**
  * This class provides methods to check if player owns targeted piece, whether

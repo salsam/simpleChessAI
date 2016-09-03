@@ -3,7 +3,7 @@ package chess.logic.ailogic;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
-import static chess.domain.pieces.Klass.*;
+import static chess.domain.board.Klass.*;
 import java.util.Random;
 import java.util.Set;
 
@@ -161,6 +161,14 @@ public class ZobristHasher {
         return hash;
     }
 
+    /**
+     * Updates hash for changing class of piece at location from pawn to queen.
+     *
+     * @param hash old hash of given chessboard.
+     * @param board chessboard on which piece is on.
+     * @param location square that piece being promoted is placed on.
+     * @return hash after piece is promoted.
+     */
     public long getHashAfterPromotion(long hash, ChessBoard board, Square location) {
         int pieceType = numberOfPieceAtSquare(board, location);
         hash ^= squareHashes[8 * location.getColumn() + location.getRow()][pieceType];
@@ -168,6 +176,14 @@ public class ZobristHasher {
         return hash;
     }
 
+    /**
+     * Updates hash for changing class of piece at location from queen to pawn.
+     *
+     * @param hash old hash of given chessboard.
+     * @param board chessboard on which piece is on.
+     * @param location square that piece being demoted is placed on.
+     * @return hash after piece is demoted.
+     */
     public long getHashBeforePromotion(long hash, ChessBoard board, Square location) {
         int pieceType = numberOfPieceAtSquare(board, location);
         hash ^= squareHashes[8 * location.getColumn() + location.getRow()][pieceType];

@@ -7,7 +7,7 @@ import static chess.domain.board.Player.getOpponent;
 import chess.domain.board.ChessBoardCopier;
 import static chess.domain.board.ChessBoardCopier.undoMove;
 import chess.domain.board.Square;
-import chess.domain.pieces.BetterPiece;
+import chess.domain.board.BetterPiece;
 
 /**
  * This class is responsible for checking if king is checked, checkmated or

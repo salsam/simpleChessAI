@@ -1,7 +1,7 @@
 package chess.domain;
 
 import chess.domain.board.Square;
-import chess.domain.pieces.BetterPiece;
+import chess.domain.board.BetterPiece;
 import java.util.Objects;
 
 /**

@@ -6,8 +6,8 @@ import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashMap;
-import chess.domain.pieces.BetterPiece;
-import static chess.domain.pieces.Klass.PAWN;
+import chess.domain.board.BetterPiece;
+import static chess.domain.board.Klass.PAWN;
 import chess.logic.ailogic.ZobristHasher;
 import chess.logic.gamelogic.CheckingLogic;
 import chess.logic.gamelogic.LegalityChecker;
@@ -148,6 +148,11 @@ public class GameSituation {
         return boardHash;
     }
 
+    /**
+     * Returns how many times current situation has been met.
+     *
+     * @return how many times current chessboard situation has occurred.
+     */
     public int getCountOfCurrentSituation() {
         if (!chessBoardSituationCounter.containsKey(boardHash)) {
             return 0;
@@ -177,6 +182,13 @@ public class GameSituation {
                 chessBoardSituationCounter.get(boardHash) + 1);
     }
 
+    /**
+     * Calculates hash for current chessboard situation again. If increment is
+     * selected, also adds 1 to amount of times current situation has occurred.
+     *
+     * @param increment if true, adds 1 to count of current board situation
+     * occurrences.
+     */
     public void reHashBoard(boolean increment) {
         long oldHash = boardHash;
         boardHash = hasher.hash(board);
@@ -185,22 +197,50 @@ public class GameSituation {
         }
     }
 
+    /**
+     * Updates hash for movement.
+     *
+     * @param from square that is moved from.
+     * @param to square that is moved to.
+     */
     public void updateHashForMoving(Square from, Square to) {
         boardHash = hasher.getHashAfterMove(boardHash, board, from, to);
     }
 
+    /**
+     * Updates hash for setting piece at location taken.
+     *
+     * @param location location of piece being taken.
+     */
     public void updateHashForTakingPiece(Square location) {
         boardHash = hasher.getHashAfterPieceIsTaken(boardHash, board, location);
     }
 
+    /**
+     * Updates hash for undoing move from square from to square to.
+     *
+     * @param backup backup of situation before movement.
+     * @param from square that is moved from.
+     * @param to square that is moved to.
+     */
     public void updateHashForUndoingMove(ChessBoard backup, Square from, Square to) {
         boardHash = hasher.getHashBeforeMove(boardHash, board, backup, from, to);
     }
 
+    /**
+     * Updates hash for having piece at target square promoted to queen.
+     *
+     * @param location square that piece is located on.
+     */
     public void updateHashForPromotion(Square location) {
         boardHash = hasher.getHashAfterPromotion(boardHash, board, location);
     }
 
+    /**
+     * Updates hash for having piece at location reverted from queen to pawn.
+     *
+     * @param location location of piece being reverted from queen to pawn.
+     */
     public void updateHashForUndoingPromotion(Square location) {
         boardHash = hasher.getHashBeforePromotion(boardHash, board, location);
     }

@@ -2,8 +2,8 @@ package chess.logic.chessboardinitializers;
 
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
-import chess.domain.pieces.BetterPiece;
-import static chess.domain.pieces.Klass.*;
+import chess.domain.board.BetterPiece;
+import static chess.domain.board.Klass.*;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import chess.logic.movementlogic.MovementLogic;
 import org.junit.Before;

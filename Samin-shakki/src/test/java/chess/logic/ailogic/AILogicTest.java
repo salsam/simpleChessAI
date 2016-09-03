@@ -5,9 +5,8 @@ import chess.domain.Move;
 import static chess.domain.board.ChessBoardCopier.copy;
 import chess.domain.board.*;
 import static chess.domain.board.ChessBoardCopier.chessBoardsAreDeeplyEqual;
-import chess.domain.pieces.BetterPiece;
-import static chess.domain.pieces.Klass.*;
-import chess.domain.pieces.Piece;
+import chess.domain.board.BetterPiece;
+import static chess.domain.board.Klass.*;
 import static chess.logic.ailogic.GameSituationEvaluator.evaluateGameSituation;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import chess.logic.chessboardinitializers.*;
@@ -420,7 +419,6 @@ public class AILogicTest {
         sit.reHashBoard(true);
         ChessBoard backUp = copy(cb);
 
-//        ai.setSituation(sit);
         ai.setSearchDepth(1);
         ai.getKillerCandidates()[0] = null;
 
@@ -430,9 +428,8 @@ public class AILogicTest {
     }
 
     @Test
-    public void a() {
+    public void promotionDoesNotChangeChessBoardSituationInComplexSituation() {
         ChessBoard cb = sit.getChessBoard();
-        MovementLogic ml = cb.getMovementLogic();
 
         BetterPiece bk = new BetterPiece(KING, 1, 1, Player.BLACK, "bk");
         BetterPiece wk = new BetterPiece(KING, 4, 5, Player.WHITE, "wk");
@@ -461,10 +458,6 @@ public class AILogicTest {
         sit.reHashBoard(true);
 
         ChessBoard bu = copy(cb);
-
-        Square from = cb.getSquare(1, 2);
-        Square to = cb.getSquare(1, 1);
-        Piece moved = from.getPiece();
         ai.setTimeLimit(10000);
         ai.setStart(System.currentTimeMillis());
         ai.findBestMoves(sit);

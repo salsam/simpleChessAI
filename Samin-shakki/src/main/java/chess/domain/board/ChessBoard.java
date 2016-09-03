@@ -4,7 +4,6 @@ import chess.domain.datastructures.MyArrayList;
 import chess.domain.datastructures.MyHashMap;
 import chess.domain.datastructures.MyHashSet;
 import chess.logic.movementlogic.MovementLogic;
-import chess.domain.pieces.BetterPiece;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;

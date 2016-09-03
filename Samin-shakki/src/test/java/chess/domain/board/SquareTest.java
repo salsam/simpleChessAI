@@ -1,8 +1,7 @@
 package chess.domain.board;
 
 import chess.domain.datastructures.MyHashSet;
-import chess.domain.pieces.BetterPiece;
-import static chess.domain.pieces.Klass.PAWN;
+import static chess.domain.board.Klass.PAWN;
 import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;

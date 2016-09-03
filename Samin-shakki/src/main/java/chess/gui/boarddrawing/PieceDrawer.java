@@ -4,9 +4,8 @@ import chess.domain.datastructures.Pair;
 import static chess.io.ImageLoader.getImage;
 import chess.domain.board.Player;
 import chess.domain.datastructures.MyHashMap;
-import chess.domain.pieces.BetterPiece;
-import static chess.domain.pieces.Klass.*;
-import chess.domain.pieces.Piece;
+import chess.domain.board.BetterPiece;
+import static chess.domain.board.Klass.*;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.Map;
@@ -47,9 +46,9 @@ public class PieceDrawer {
      * @param graphics Graphics object used to draw the image.
      * @param sideLength length of each square's sides.
      */
-    public void draw(Piece piece, Graphics graphics, int sideLength) {
+    public void draw(BetterPiece piece, Graphics graphics, int sideLength) {
         int x = piece.getColumn() * sideLength;
         int y = piece.getRow() * sideLength;
-        graphics.drawImage(images.get(new Pair(((BetterPiece) piece).getKlass(), piece.getOwner())), x, y, sideLength, sideLength, null);
+        graphics.drawImage(images.get(new Pair(piece.getKlass(), piece.getOwner())), x, y, sideLength, sideLength, null);
     }
 }

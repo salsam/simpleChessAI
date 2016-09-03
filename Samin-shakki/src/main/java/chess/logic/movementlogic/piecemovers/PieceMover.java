@@ -5,7 +5,7 @@ import chess.domain.board.ChessBoard;
 import java.util.Set;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
-import chess.domain.pieces.BetterPiece;
+import chess.domain.board.BetterPiece;
 
 public abstract class PieceMover {
 
@@ -90,9 +90,6 @@ public abstract class PieceMover {
      * @param sit situation being changed.
      */
     public void move(BetterPiece piece, Square target, GameSituation sit) {
-//        if (piece == null) {
-//            return;
-//        }
 
         Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
         sit.updateHashForMoving(from, target);

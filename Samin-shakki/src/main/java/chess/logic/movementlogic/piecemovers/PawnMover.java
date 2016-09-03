@@ -5,8 +5,8 @@ import chess.domain.board.ChessBoard;
 import java.util.Set;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
-import chess.domain.pieces.BetterPiece;
-import static chess.domain.pieces.Klass.PAWN;
+import chess.domain.board.BetterPiece;
+import static chess.domain.board.Klass.PAWN;
 import static chess.logic.gamelogic.PromotionLogic.promotePiece;
 
 /**
@@ -36,9 +36,6 @@ public class PawnMover extends PieceMover {
     @Override
     public void move(BetterPiece piece, Square target, GameSituation sit) {
 
-//        if (piece == null) {
-//            return;
-//        }
         piece.setHasBeenMoved(true);
 
         if (Math.abs(piece.getRow() - target.getRow()) == 2) {

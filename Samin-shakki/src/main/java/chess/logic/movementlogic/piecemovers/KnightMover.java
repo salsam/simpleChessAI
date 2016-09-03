@@ -8,7 +8,7 @@ package chess.logic.movementlogic.piecemovers;
 import chess.domain.board.ChessBoard;
 import java.util.Set;
 import chess.domain.board.Square;
-import chess.domain.pieces.BetterPiece;
+import chess.domain.board.BetterPiece;
 
 /**
  * This class is responsible for all knight-related movement logic.

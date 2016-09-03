@@ -2,8 +2,8 @@ package chess.logic.chessboardinitializers;
 
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Square;
-import chess.domain.pieces.BetterPiece;
-import static chess.domain.pieces.Klass.KING;
+import chess.domain.board.BetterPiece;
+import static chess.domain.board.Klass.KING;
 
 /**
  * All classes that inherit this abstract class are used to initialize different

@@ -16,7 +16,7 @@ import chess.domain.datastructures.TranspositionEntry;
 import chess.domain.datastructures.TranspositionKey;
 import chess.domain.datastructures.TranspositionTable;
 import chess.domain.datastructures.Type;
-import chess.domain.pieces.BetterPiece;
+import chess.domain.board.BetterPiece;
 import java.util.Random;
 
 /**
@@ -282,42 +282,7 @@ public class AILogic {
             return alpha;
         }
 
-//        if (searchDepth >= 5 && height < 3 && piece.getPieceCode().equals("wp2")) {
-//            System.out.println("searchdepth: " + searchDepth + " height: " + height);
-//            System.out.println(piece + " from (" + piece.getColumn() + ","
-//                    + piece.getRow() + ") to ("
-//                    + possibility.getColumn() + "," + possibility.getRow() + ")");
-//
-//            sit.getChessBoard().printTable();
-//        }
         ml.move(piece, possibility, sit);
-//        if (searchDepth >= 5 && height < 3 && piece.getPieceCode().equals("wp2")) {
-//            System.out.println("searchdepth: " + searchDepth + " height: " + height);
-//            System.out.println(piece + " from (" + from.getColumn() + ","
-//                    + from.getRow() + ") to ("
-//                    + possibility.getColumn() + "," + possibility.getRow() + ")");
-//
-//            sit.getChessBoard().printTable();
-//        }
-
-        if (!possibility.containsAPiece()
-                || !backUp.getSquare(from.getColumn(), from.getRow()).containsAPiece()) {
-            System.out.println("square that was moved to is empty! seachDepth:"
-                    + searchDepth + " height:" + height);
-            System.out.println("backUp: " + backUp.getSquare(from.getColumn(),
-                    from.getRow()).getPiece() + " at square: ("
-                    + from.getColumn() + "," + from.getRow() + ")");
-            System.out.println("backUp: " + backUp.getSquare(possibility.getColumn(),
-                    possibility.getRow()).getPiece() + " at square: ("
-                    + possibility.getColumn() + "," + possibility.getRow() + ")");
-            backUp.printTable();
-            System.out.println("");
-            sit.getChessBoard().printTable();
-            if (piece.isTaken()) {
-                System.out.println("piece is taken!" + piece + " at square ("
-                        + piece.getColumn() + "," + piece.getRow() + ")");
-            }
-        }
         alpha = checkForChange(piece, possibility, height, maxingPlayer, ogAlpha, alpha, beta);
         undoMove(backUp, sit, from, possibility);
         sit.setContinues(true);
@@ -447,7 +412,7 @@ public class AILogic {
             return alpha;
         }
         int value = -negaMax(height - 1, -beta, -alpha, getOpponent(maxingPlayer));
-//        addSituationToTranpositionTable(maxingPlayer, height, value, ogAlpha, beta);
+        addSituationToTranpositionTable(maxingPlayer, height, value, ogAlpha, beta);
 
         if (value >= bestValues[height]) {
             keepTrackOfBestMoves(height, value, piece, possibility);

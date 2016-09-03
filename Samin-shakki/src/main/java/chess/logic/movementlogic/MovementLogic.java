@@ -1,13 +1,13 @@
 package chess.logic.movementlogic;
 
+import chess.domain.board.BetterPiece;
 import chess.domain.GameSituation;
-import chess.domain.pieces.*;
 import chess.logic.movementlogic.piecemovers.*;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
-import static chess.domain.pieces.Klass.*;
+import static chess.domain.board.Klass.*;
 import java.util.Set;
 
 /**

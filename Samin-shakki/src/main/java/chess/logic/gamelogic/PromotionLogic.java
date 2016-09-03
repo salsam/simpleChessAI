@@ -1,9 +1,9 @@
 package chess.logic.gamelogic;
 
 import chess.domain.GameSituation;
-import chess.domain.pieces.BetterPiece;
-import static chess.domain.pieces.Klass.PAWN;
-import static chess.domain.pieces.Klass.QUEEN;
+import chess.domain.board.BetterPiece;
+import static chess.domain.board.Klass.PAWN;
+import static chess.domain.board.Klass.QUEEN;
 
 /**
  *
@@ -17,7 +17,6 @@ public class PromotionLogic {
                 sit.updateHashForPromotion(
                         sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow()));
                 piece.setKlass(QUEEN);
-//                System.out.println("Pawn was promoted111111111111");
             }
         }
     }

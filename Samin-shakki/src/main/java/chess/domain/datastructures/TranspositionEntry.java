@@ -1,6 +1,8 @@
 package chess.domain.datastructures;
 
 /**
+ * This class is used as entry that is saved for each key in transposition
+ * table.
  *
  * @author sami
  */

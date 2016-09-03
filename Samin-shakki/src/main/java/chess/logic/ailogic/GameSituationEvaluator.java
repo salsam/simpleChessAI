@@ -1,11 +1,12 @@
 package chess.logic.ailogic;
 
+import chess.domain.board.Klass;
+import chess.domain.board.BetterPiece;
 import chess.domain.GameSituation;
 import chess.domain.board.Player;
 import static chess.domain.board.Player.getOpponent;
 import chess.domain.datastructures.MyHashMap;
-import chess.domain.pieces.*;
-import static chess.domain.pieces.Klass.*;
+import static chess.domain.board.Klass.*;
 import java.util.Map;
 
 /**

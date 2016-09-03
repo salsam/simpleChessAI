@@ -1,13 +1,10 @@
 package chess.domain.datastructures;
 
 import chess.domain.board.Player;
-import static chess.domain.board.Player.getOpponent;
-import static chess.domain.datastructures.Type.getOppositeType;
 import java.util.Objects;
 
 /**
- * This class is used to save quadruples that will be used as keys in
- * transposition tables.
+ * This class is used as keys in transposition tables.
  *
  * @author sami
  */

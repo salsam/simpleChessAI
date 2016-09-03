@@ -2,10 +2,9 @@ package chess.domain.board;
 
 import chess.domain.GameSituation;
 import chess.domain.datastructures.MyArrayList;
-import chess.domain.pieces.BetterPiece;
-import static chess.domain.pieces.Klass.KING;
-import static chess.domain.pieces.Klass.PAWN;
-import static chess.domain.pieces.Klass.QUEEN;
+import static chess.domain.board.Klass.KING;
+import static chess.domain.board.Klass.PAWN;
+import static chess.domain.board.Klass.QUEEN;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.addPieceToOwner;
 
@@ -109,74 +108,10 @@ public class ChessBoardCopier {
         }
         sit.updateHashForUndoingMove(backUp, from, to);
 
-        if (to.getPiece() == null || old == null) {
-            System.out.println("old: " + old);
-            System.out.println(" cur: " + to.getPiece());
-            System.out.println(" from: " + from + " to " + to);
-        }
-
         from.setPiece(to.getPiece());
         from.getPiece().makeDeeplyEqualTo(old);
 
         handleDestination(backUp, to, sit, from);
-    }
-
-    /**
-     * Does exactly the same as above method but also updates piece to point to
-     * new piece in square from. Thus piece will still point to same piece after
-     * reverting promotion unlike above method.
-     *
-     * @param backUp backUp of situation before move was made.
-     * @param sit current game situation.
-     * @param from square that piece was situated on before movement.
-     * @param moved piece that was moved.
-     */
-//    public static Piece undoMove(ChessBoard backUp, GameSituation sit, Square from, Piece moved) {
-//        Square to = sit.getChessBoard().getSquare(moved.getColumn(), moved.getRow());
-//        sit.decrementCountOfCurrentBoardSituation();
-//        sit.updateHashForUndoingMove(backUp, from, to);
-//
-//        if (!to.containsAPiece()) {
-//            System.out.println("Square that piece was moved to contains no pieces!");
-//        }
-//
-//        Piece old = backUp.getSquare(from.getColumn(), from.getRow()).getPiece();
-//        if (moved == null || old == null || from.equals(new Square(6, 1))) {
-//            System.out.println("old: " + old + "cur: " + moved + " owner " + moved.getOwner() + " from: " + from + " to " + to);
-//            System.out.println("backUp: " + backUp.getSquare(from.getColumn(),
-//                    from.getRow()).getPiece() + " at square: ("
-//                    + from.getColumn() + "," + from.getRow() + ")");
-//            System.out.println("backUp: " + backUp.getSquare(to.getColumn(),
-//                    to.getRow()).getPiece() + " at square: ("
-//                    + to.getColumn() + "," + to.getRow() + ")");
-//            backUp.printTable();
-//            System.out.println("");
-//            sit.getChessBoard().printTable();
-//        }
-//
-//        if (old.getClass() != moved.getClass()) {
-//            revertPromotion(from, sit.getChessBoard(), old);
-//            moved = sit.getChessBoard().getSquare(moved.getColumn(), moved.getRow()).getPiece();
-//        }
-//
-//        from.setPiece(moved);
-//        moved.setColumn(from.getColumn());
-//        moved.setRow(from.getRow());
-//
-//        moved.makeDeeplyEqualTo(old);
-//
-//        handleDestination(backUp, to, sit, from);
-//
-//        return moved;
-//    }
-    private static void revertPromotion(Square from, ChessBoard board, BetterPiece old) {
-        if (old.getClass() != from.getPiece().getClass()) {
-            System.out.println(board.getSquare(from.getColumn(), from.getRow()).getPiece());
-            System.out.println("VDBDFNTGMHYMU;");
-            ChessBoardInitializer.removePieceFromOwner(from.getPiece(), board);
-            ChessBoardInitializer.putPieceOnBoard(board, old.clone());
-            System.out.println(board.getSquare(from.getColumn(), from.getRow()).getPiece());
-        }
     }
 
     private static void handleDestination(ChessBoard backUp, Square to, GameSituation sit, Square from) {
@@ -200,6 +135,14 @@ public class ChessBoardCopier {
         }
     }
 
+    /**
+     * If move was enpassant, reverts taken pawn enpassant back on chessboard.
+     *
+     * @param from square moved from.
+     * @param to square moved to.
+     * @param sit current game situation.
+     * @param backUp backup of chessboard before move.
+     */
     private static void handleEnPassant(Square from, Square to, GameSituation sit, ChessBoard backUp) {
         if (from.getPiece().getKlass() == PAWN && from.getColumn() != to.getColumn()) {
             Square to2 = sit.getChessBoard().getSquare(to.getColumn(), from.getRow());
@@ -209,6 +152,17 @@ public class ChessBoardCopier {
         }
     }
 
+    /**
+     * If move was castling, reverts the rook that was moved back to its old
+     * position on chessboard. If moved piece was king and it was moved 2
+     * squares horizontally, we know it was castled. Thus after moving king back
+     * original location, we also move relevant rook back to original location.
+     *
+     * @param from square moved from.
+     * @param to square moved to.
+     * @param sit current game situation.
+     * @param backUp backup of situation before move.
+     */
     private static void handleCastling(Square from, Square to, GameSituation sit, ChessBoard backUp) {
         if (from.getPiece().getKlass() == KING) {
             if (from.getColumn() - to.getColumn() == -2) {
@@ -237,19 +191,9 @@ public class ChessBoardCopier {
             for (int j = 0; j < 8; j++) {
                 if (cb1.getSquare(i, j).getPiece() == null) {
                     if (cb2.getSquare(i, j).getPiece() != null) {
-                        System.out.println("cb1: " + cb1.getSquare(i, j).getPiece());
-                        System.out.println("cb2: " + cb2.getSquare(i, j).getPiece());
-                        cb1.printTable();
-                        System.out.println("");
-                        cb2.printTable();
                         return false;
                     }
                 } else if (!cb1.getSquare(i, j).getPiece().deepEquals(cb2.getSquare(i, j).getPiece())) {
-                    System.out.println("cb1: " + cb1.getSquare(i, j).getPiece());
-                    System.out.println("cb2: " + cb2.getSquare(i, j).getPiece());
-                    cb1.printTable();
-                    System.out.println("");
-                    cb2.printTable();
                     return false;
                 }
             }
