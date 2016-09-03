@@ -37,6 +37,7 @@ Edellä mainittujen lisäksi, voisin lisätä työhöni ns. [SEE(static exchange
 Lisäksi käyttämäni lineaarinen evaluaatiofunktio on hyvin minimalistinen, joten voisin lisätä siihen erilaisia osatekijöitä, kuten [kuninkaan turvallisuus](https://chessprogramming.wikispaces.com/King+Safety) ja [sotilasrakenne](https://chessprogramming.wikispaces.com/Pawn+Structure). Näistä kuninkaan turvallisuuteen en valitettavasti löytänyt helppoa funktiota ja sotilasrakenne olisi vaatinut tarvittavan hashaustaulun luonnin ja rakenteiden evaluoinnin, jota en itse shakki taidottomana olisi osannut.
 
 ###Lähteet
+
 [Pelitilanteen arviointi](https://chessprogramming.wikispaces.com/Evaluation)
 
 [Suurin määrä mahdollisia siirtoja pelaajalla 218](https://www.chess.com/forum/view/fun-with-chess/what-chess-position-has-the-most-number-of-possible-moves)
@@ -44,3 +45,23 @@ Lisäksi käyttämäni lineaarinen evaluaatiofunktio on hyvin minimalistinen, jo
 [Nappuloiden arvot](https://en.wikipedia.org/wiki/Chess_piece_relative_value)
 
 [Haun tehostusmenetelmät](https://chessprogramming.wikispaces.com/Search)
+
+[Alpha-beta karsinta](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning)
+
+[Evaluaatiofunktio ja minmax](https://chessprogramming.wikispaces.com/Evaluation)
+
+[Mahdolliset siirrot](https://www.chess.com/chessopedia/view/mathematics-and-chess)
+
+[Suurin määrä mahdollisia siirtoja](https://www.chess.com/forum/view/fun-with-chess/what-chess-position-has-the-most-number-of-possible-moves)
+
+[Materiaaliarvo](https://en.wikipedia.org/wiki/Chess_piece_relative_value)
+
+[Iterative deepening](https://en.wikipedia.org/wiki/Iterative_deepening_depth-first_search)
+
+[NegaMax-algoritmi](https://en.wikipedia.org/wiki/Negamax)
+
+[Sijaintikohtaiset arvot](https://chessprogramming.wikispaces.com/Simplified+evaluation+function)
+
+[Principal variation](https://chessprogramming.wikispaces.com/Principal+variation?responseToken=9eebfa4cd8351cf79afdf2a772da9d99)
+
+[Transpositiotaulu](https://en.wikipedia.org/wiki/Transposition_table)
