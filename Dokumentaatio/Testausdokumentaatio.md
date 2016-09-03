@@ -8,7 +8,7 @@ Tekoälyn toiminnan oikeellisuutta olen testannut myös manuaalisesti ja tekoäl
 
 Nämä testit voi toistaa ajamalla ohjelman, valitsemalla halutun pelimoodin ja pelaamalla peliä eteenpäin. Kuningattaren korotuksen testaus näin voi usein vaatia muutamia pelejä, joten suosittelen antamaan tekoälylle hyvin vähän miettimisaikaa. Itse käytin miettimisaikaa 100ms, jolloin en juurikaan joudu odottamaan tekoälyn siirtoa.
 
-###Suorituskykytestaus
+##Suorituskykytestaus
 
 ###Esimerkkipeli, jossa rekursiosyvyydeksi rajoitettu 3 ja aikaraja 1s.
 
@@ -25,5 +25,19 @@ Pelin loppua kohti tekoälyjen välinen aikavaatimusero laskee nollaan, kunnes p
 
 Kokonaisuudessaan valkoinen käytti siirtoihinsa keskimäärin 256 ms ja musta 291 ms. Tämä kuulostaa järkevältä, sillä musta onnistui kaappaamaan hallinnan valkoiselta jo varsin alussa ja hallitsi peliä pitkään noin vuorolle 40. Lisäksi mustalla on myös yksi hammusiirto, joka liene aiheutunut transpositiotaulun eksponentiaalisesta muistivaatimuksesta.
 
-###Vuoroihin kuluneen ajan keskiarvon kehitys yli 10 peli, rekursiosyvyys 3, aikaraja 1s
 
+Tämän testin voi toistaa muuttamalla AILogic luokan final int plies kenttään arvon 3 eli maksimirekursiosyvyydeksi 3 ja pelaamalla sitten normaalisti AI vs AI moodia kahdella tekoälyllä, joilla on oletus aikarajoitus.
+
+###Siirtoihin kuluneen ajan keskiarvon kehitys keskiarvona 10 tekoälyjen välisestä pelistä, rekursiosyvyys 3, aikaraja 1s.
+
+![Siirtoihin keskimäärin käytettyn ajan kehitys pelin aikana](https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Siirtoon%20k%C3%A4ytetty%20keskim%C3%A4%C3%A4r%C3%A4inen%20aika.jpg)
+
+Lisäksi näistä 10 pelistä on mainittava, että neljä peliä loppui ennen vuoroa 50. Nämä pelit loppuivat kaikki vuoron 40 tienoilla ja näistä valkoinen voitti kaksi, musta voitti yhden ja yksi päättyi tasapeliin saman tilanteen toistuessa kolmannen kerran. 
+
+Kuvaajasta näemme helposti alaspäin laskevan trendin eli siirtojen laskemiseen kuluu vähemmän aikaa laudalla olevien nappuloiden vähentyessä. Tähän toisaalta vaikuttaa myös dynaamiseen muistiin tallentuvat pelitilanteiden arvot. Hieman yllättäen valkoisen siirtoihin käyttämä aika on kuitenkin aina suurempi kuin mustan, eikä pelaajien välinen ero vähene juurikaan ajan kuluessa. Valkoinen ylipäätään hallitsi useimmiten peliä ja näytti siltä, että ensimmäiseksi siirtäminen antoi valkoiselle todella suuren eron. Käyttäessäni aikarajoitusta ilman rajoitusta rekursiosyvyydelle en kuitenkaan huomannut samanlaista ilmiötä. Periaatteessa tämä on loogista, sillä samalla rekursiosyvyydellä molemmilla pelaajilla on aina saman verran tietoa käytössä, jolloin valkoinen pystyy useimmiten säilyttämään pelin alussa luodun edun (. Toisaalta, kun laskentaa on rajoitettu vain ajalla, on häviöllä olevalla pelaajalla vähemmän mahdollisia siirtoja ja näin ylimmällä pelipuun tasolla on vähemmän solmuja. Ylimmän tason solmut toisaalta vaikuttavat kaikkein eniten haun aikavaativuuteen ja näin saman tasoisten tekoälyjen pelatessa vastakkain saa häviöllä oleva tekoäly "tasoitusta". Tätä en tullut aikaisemmin ajatelleeksi, kun ihmettelin miksi tekoälyjen peleillä on tapana venyä, jos valkoinen ei voita ennen vuoroa 50.
+
+Tässä havaitaan melko suuria eroja aikaisempaan esimerkkipeliin, jota analysoin tarkemmin. Esimerkiksi edellisessä pelissä musta onnistui poikkeuksellisesti saamaan hallinnan ensimmäisen 40 vuoron aikana, mitä ei tapahtunut yhdessäkään pelissä materiaalisesti, vaikka yhdessä pelissä musta onnistui matittamaan valkoisen ovelalla kuningattaren siirtelyllä. Valitsemani esimerkkipeli ei siis tainnut osua aivan kohdalleen, mutta toisaalta se on hyvä esimerkki siitä, etteivät tekoälyni siirrot ole täysin ennalta kirjoitettuja edes samanlaista tekoälyä vastaan.
+
+Tämän testin voi toistaa muuttamalla AILogic luokan final int plies kenttään arvon 3 eli maksimirekursiosyvyydeksi 3 ja pelaamalla sitten normaalisti AI vs AI moodia kahdella tekoälyllä, joilla on oletus aikarajoitus. Lisäksi tulee käynnistää ohjelma aina uudestaan jokaisen pelin jälkeen, jottei play again-valinta vaikuttaisi siirtojen aikavaativuuteen.
+
+Tässä vielä linkki suorituskyvyn kehitykseen ohjelmaa rakennettaessa: [suorituskyvyn kehitys](https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Suorituskykytestaus.md).
