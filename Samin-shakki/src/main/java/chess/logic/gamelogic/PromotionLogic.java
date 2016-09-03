@@ -17,7 +17,7 @@ public class PromotionLogic {
                 sit.updateHashForPromotion(
                         sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow()));
                 piece.setKlass(QUEEN);
-                System.out.println("Pawn was promoted111111111111");
+//                System.out.println("Pawn was promoted111111111111");
             }
         }
     }

@@ -36,7 +36,7 @@ public class ChessBoardCopierTest {
 
     @Before
     public void setUp() {
-        init.initialize(sit.getChessBoard());
+        sit.reset();
     }
 
     @Test

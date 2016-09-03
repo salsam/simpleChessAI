@@ -78,12 +78,12 @@ public class ZobristHasher {
     private boolean kingCanCastle(ChessBoard board, Square sq) {
         Set kingPossibleMoves = board.getMovementLogic().possibleMoves(sq.getPiece(), board);
 
-        if (sq.getColumn() > 1
-                && kingPossibleMoves.contains(board.getSquare(sq.getColumn() - 2, sq.getRow()))) {
-            return true;
-        } else if (sq.getColumn() < 6
-                && kingPossibleMoves.contains(board.getSquare(sq.getColumn() + 2, sq.getRow()))) {
-            return true;
+        if (sq.getColumn() == 4) {
+            if (kingPossibleMoves.contains(board.getSquare(sq.getColumn() - 2, sq.getRow()))) {
+                return true;
+            } else if (kingPossibleMoves.contains(board.getSquare(sq.getColumn() + 2, sq.getRow()))) {
+                return true;
+            }
         }
         return false;
     }

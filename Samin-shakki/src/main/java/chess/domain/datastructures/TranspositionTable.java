@@ -26,14 +26,14 @@ public class TranspositionTable {
     }
 
     public void put(TranspositionKey key, TranspositionEntry entry) {
-        if (table.size() > 100000) {
-            for (TranspositionKey k : table.keySet()) {
-                if (!k.isSaved()) {
-                    table.remove(k);
-                    break;
-                }
-            }
-        }
+//        if (table.size() > 100000) {
+//            for (TranspositionKey k : table.keySet()) {
+//                if (!k.isSaved()) {
+//                    table.remove(k);
+//                    break;
+//                }
+//            }
+//        }
         if (!table.containsKey(key)) {
             table.put(key, entry);
         } else if (table.get(key).getHeight() < entry.getHeight()) {

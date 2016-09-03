@@ -124,6 +124,7 @@ public class MovementLogic {
      * @param sit situation before move.
      */
     public void move(BetterPiece piece, Square target, GameSituation sit) {
+
         switch (piece.getKlass()) {
             case BISHOP:
                 bishopMover.move(piece, target, sit);
@@ -137,8 +138,6 @@ public class MovementLogic {
                 queenMover.move(piece, target, sit);
             case ROOK:
                 rookMover.move(piece, target, sit);
-            default:
-                break;
         }
 
         sit.incrementCountOfCurrentBoardSituation();

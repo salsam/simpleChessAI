@@ -90,10 +90,9 @@ public abstract class PieceMover {
      * @param sit situation being changed.
      */
     public void move(BetterPiece piece, Square target, GameSituation sit) {
-        if (piece == null) {
-            return;
-        }
-        Square t = sit.getChessBoard().getSquare(target.getColumn(), target.getRow());
+//        if (piece == null) {
+//            return;
+//        }
 
         Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
         sit.updateHashForMoving(from, target);

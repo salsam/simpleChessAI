@@ -74,7 +74,7 @@ public class BetterPiece extends Piece {
             return false;
         }
 
-        return this.movedTwoSquaresLastTurn == other.isHasBeenMoved();
+        return this.movedTwoSquaresLastTurn == other.isMovedTwoSquaresLastTurn();
     }
 
     public void makeDeeplyEqualTo(BetterPiece piece) {

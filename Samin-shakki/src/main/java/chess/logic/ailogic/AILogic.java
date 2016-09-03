@@ -14,6 +14,7 @@ import chess.domain.datastructures.MyArrayList;
 import chess.domain.datastructures.Pair;
 import chess.domain.datastructures.TranspositionEntry;
 import chess.domain.datastructures.TranspositionKey;
+import chess.domain.datastructures.TranspositionTable;
 import chess.domain.datastructures.Type;
 import chess.domain.pieces.BetterPiece;
 import java.util.Random;
@@ -58,7 +59,7 @@ public class AILogic {
     private Move[] principalMoves;
     private Move[] killerCandidates;
     private Move[][] killerMoves;
-//    private TranspositionTable transpositionTable;
+    private TranspositionTable transpositionTable;
     private long sum = 0;
     private int count = 0;
 
@@ -73,7 +74,7 @@ public class AILogic {
         random = new Random();
         searchDepth = 3;
         timeLimit = 1000;
-//        transpositionTable = new TranspositionTable();
+        transpositionTable = new TranspositionTable();
     }
 
     public int[] getBestValues() {
@@ -139,31 +140,31 @@ public class AILogic {
             return -123456789;
         }
 
-//        TranspositionKey key = new TranspositionKey(maxingPlayer, sit.getBoardHash());
-//
-//        if (transpositionTable.containsKey(key, height)) {
-//            TranspositionEntry entry = transpositionTable.get(key);
-//            key.setSaved(true);
-//            switch (entry.getType()) {
-//                case EXACT:
-//                    return entry.getValue();
-//
-//                case ALPHA:
-//                    alpha = Math.max(alpha, entry.getValue());
-//                    break;
-//
-//                case BETA:
-//                    beta = Math.min(beta, entry.getValue());
-//                    break;
-//            }
-//            if (alpha >= beta) {
-//                return entry.getValue();
-//            }
-//        }
+        TranspositionKey key = new TranspositionKey(maxingPlayer, sit.getBoardHash());
+
+        if (transpositionTable.containsKey(key, height)) {
+            TranspositionEntry entry = transpositionTable.get(key);
+            key.setSaved(true);
+            switch (entry.getType()) {
+                case EXACT:
+                    return entry.getValue();
+
+                case ALPHA:
+                    alpha = Math.max(alpha, entry.getValue());
+                    break;
+
+                case BETA:
+                    beta = Math.min(beta, entry.getValue());
+                    break;
+            }
+            if (alpha >= beta) {
+                return entry.getValue();
+            }
+        }
         if (height == 0) {
             int value = evaluateGameSituation(sit, maxingPlayer);
             sit.setContinues(true);
-//            transpositionTable.put(key, new TranspositionEntry(height, value, Type.EXACT));
+            transpositionTable.put(key, new TranspositionEntry(height, value, Type.EXACT));
             return value;
         }
         return tryAllPossibleMoves(height, ogAlpha, alpha, maxingPlayer, beta);
@@ -281,23 +282,23 @@ public class AILogic {
             return alpha;
         }
 
-        if (searchDepth >= 5 && height < 3 && piece.getPieceCode().equals("wp2")) {
-            System.out.println("searchdepth: " + searchDepth + " height: " + height);
-            System.out.println(piece + " from (" + piece.getColumn() + ","
-                    + piece.getRow() + ") to ("
-                    + possibility.getColumn() + "," + possibility.getRow() + ")");
-
-            sit.getChessBoard().printTable();
-        }
+//        if (searchDepth >= 5 && height < 3 && piece.getPieceCode().equals("wp2")) {
+//            System.out.println("searchdepth: " + searchDepth + " height: " + height);
+//            System.out.println(piece + " from (" + piece.getColumn() + ","
+//                    + piece.getRow() + ") to ("
+//                    + possibility.getColumn() + "," + possibility.getRow() + ")");
+//
+//            sit.getChessBoard().printTable();
+//        }
         ml.move(piece, possibility, sit);
-        if (searchDepth >= 5 && height < 3 && piece.getPieceCode().equals("wp2")) {
-            System.out.println("searchdepth: " + searchDepth + " height: " + height);
-            System.out.println(piece + " from (" + from.getColumn() + ","
-                    + from.getRow() + ") to ("
-                    + possibility.getColumn() + "," + possibility.getRow() + ")");
-
-            sit.getChessBoard().printTable();
-        }
+//        if (searchDepth >= 5 && height < 3 && piece.getPieceCode().equals("wp2")) {
+//            System.out.println("searchdepth: " + searchDepth + " height: " + height);
+//            System.out.println(piece + " from (" + from.getColumn() + ","
+//                    + from.getRow() + ") to ("
+//                    + possibility.getColumn() + "," + possibility.getRow() + ")");
+//
+//            sit.getChessBoard().printTable();
+//        }
 
         if (!possibility.containsAPiece()
                 || !backUp.getSquare(from.getColumn(), from.getRow()).containsAPiece()) {
@@ -470,7 +471,7 @@ public class AILogic {
         } else {
             entry.setType(Type.EXACT);
         }
-//        transpositionTable.put(key, entry);
+        transpositionTable.put(key, entry);
     }
 
     /**
@@ -504,7 +505,7 @@ public class AILogic {
     public void findBestMoves(GameSituation situation) {
         start = System.currentTimeMillis();
         sit = situation;
-//        transpositionTable.makePairsUnsaved();
+        transpositionTable.makePairsUnsaved();
         ml = sit.getChessBoard().getMovementLogic();
         salvageLastPrincipalVariation();
         int i = 1;
@@ -512,7 +513,7 @@ public class AILogic {
             searchDepth = i;
             negaMax(i, -123456789, 123456789, situation.whoseTurn());
             lastPlies++;
-            if (Math.abs(bestValues[i]) > 20000) {
+            if (System.currentTimeMillis() - start >= timeLimit || Math.abs(bestValues[i]) > 20000) {
                 break;
             }
             i++;

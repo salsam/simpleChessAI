@@ -23,7 +23,7 @@ public class PieceMoverTest {
 
     private BetterPiece piece;
     private BetterPiece pawn;
-    private static ChessBoard board;
+    private ChessBoard board;
     private static ChessBoardInitializer init;
     private static GameSituation sit;
 
@@ -34,12 +34,12 @@ public class PieceMoverTest {
     public static void setUpClass() {
         init = new EmptyBoardInitializer();
         sit = new GameSituation(init, new MovementLogic());
-        board = sit.getChessBoard();
     }
 
     @Before
     public void setUp() {
-        init.initialize(board);
+        sit.reset();
+        board = sit.getChessBoard();
         piece = new BetterPiece(QUEEN, 3, 4, Player.WHITE, "wq");
         pawn = new BetterPiece(PAWN, 3, 6, Player.BLACK, "bp");
         putPieceOnBoard(board, pawn);
@@ -82,6 +82,7 @@ public class PieceMoverTest {
         ChessBoard comp = new ChessBoard(new MovementLogic());
         putPieceOnBoard(comp, piece);
         putPieceOnBoard(comp, pawn);
+
         assertEquals(sit.getHasher().hash(comp), sit.getBoardHash());
     }
 
@@ -90,6 +91,7 @@ public class PieceMoverTest {
         board.getMovementLogic().move(piece, board.getSquare(3, 6), sit);
         ChessBoard comp = new ChessBoard(new MovementLogic());
         putPieceOnBoard(comp, piece);
+
         assertEquals(sit.getHasher().hash(comp), sit.getBoardHash());
     }
 }

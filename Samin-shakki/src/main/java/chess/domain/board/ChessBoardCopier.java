@@ -106,18 +106,19 @@ public class ChessBoardCopier {
         sit.updateHashForUndoingMove(backUp, from, to);
 
         BetterPiece old = backUp.getSquare(from.getColumn(), from.getRow()).getPiece();
-        from.setPiece(to.getPiece());
 
-        if (old.getKlass() == PAWN && from.getPiece().getKlass() == QUEEN) {
-            sit.updateHashForUndoingPromotion(from);
-        }
-        from.getPiece().makeDeeplyEqualTo(old);
-
-        if (from.getPiece() == null || old == null) {
+        if (to.getPiece() == null || old == null) {
             System.out.println("old: " + old);
-            System.out.println(" cur: " + from.getPiece());
+            System.out.println(" cur: " + to.getPiece());
             System.out.println(" from: " + from + " to " + to);
         }
+
+        if (old.getKlass() == PAWN && to.getPiece().getKlass() == QUEEN) {
+            sit.updateHashForUndoingPromotion(to);
+        }
+
+        from.setPiece(to.getPiece());
+        from.getPiece().makeDeeplyEqualTo(old);
 
         handleDestination(backUp, to, sit, from);
     }
