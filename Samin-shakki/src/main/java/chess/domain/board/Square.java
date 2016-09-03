@@ -19,7 +19,7 @@ public class Square {
     /**
      * Piece that is situated on this square, null if there's no piece.
      */
-    private BetterPiece piece;
+    private Piece piece;
 
     /**
      * Creates a new square with given row and column.Field piece will be null
@@ -41,11 +41,11 @@ public class Square {
         return row;
     }
 
-    public BetterPiece getPiece() {
+    public Piece getPiece() {
         return piece;
     }
 
-    public void setPiece(BetterPiece piece) {
+    public void setPiece(Piece piece) {
         this.piece = piece;
     }
 

@@ -1,6 +1,6 @@
 package chess.domain.board.betterpiece;
 
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import chess.domain.board.Player;
 import static chess.domain.board.Klass.QUEEN;
 import org.junit.Before;
@@ -13,24 +13,24 @@ import static org.junit.Assert.*;
  */
 public class QueenTest {
 
-    private BetterPiece queen;
+    private Piece queen;
 
     public QueenTest() {
     }
 
     @Before
     public void setUp() {
-        queen = new BetterPiece(QUEEN, 2, 3, Player.BLACK, "bq");
+        queen = new Piece(QUEEN, 2, 3, Player.BLACK, "bq");
     }
 
     @Test
     public void queensAreEqualIfSamePieceCode() {
-        assertTrue(queen.equals(new BetterPiece(QUEEN, 7, 6, Player.WHITE, "bq")));
+        assertTrue(queen.equals(new Piece(QUEEN, 7, 6, Player.WHITE, "bq")));
     }
 
     @Test
     public void queensAreNotEqualIfDifferentPieceCode() {
-        assertFalse(queen.equals(new BetterPiece(QUEEN, 2, 3, Player.BLACK, "bq1")));
+        assertFalse(queen.equals(new Piece(QUEEN, 2, 3, Player.BLACK, "bq1")));
     }
 
     @Test

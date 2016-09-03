@@ -10,7 +10,7 @@ import chess.domain.board.ChessBoard;
 import java.util.Set;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 
 /**
  * This class is responsible for all rook-related movement logic.
@@ -31,7 +31,7 @@ public class RookMover extends PieceMover {
      * @param target square this rook is moving to.
      */
     @Override
-    public void move(BetterPiece piece, Square target, GameSituation sit) {
+    public void move(Piece piece, Square target, GameSituation sit) {
         piece.setHasBeenMoved(true);
         super.move(piece, target, sit);
     }
@@ -43,7 +43,7 @@ public class RookMover extends PieceMover {
      * @return list containing all squares this rook threatens
      */
     @Override
-    public Set<Square> threatenedSquares(BetterPiece piece, ChessBoard board) {
+    public Set<Square> threatenedSquares(Piece piece, ChessBoard board) {
         Set<Square> possibilities = new MyHashSet<>();
         addHorizontalPossibilities(board.getSquare(piece.getColumn(), piece.getRow()), board, possibilities);
         addVerticalPossibilities(board.getSquare(piece.getColumn(), piece.getRow()), board, possibilities);

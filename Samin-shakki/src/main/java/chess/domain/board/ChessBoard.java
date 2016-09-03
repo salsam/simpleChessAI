@@ -24,11 +24,11 @@ public class ChessBoard {
     /**
      * List of all pieces that white owns.
      */
-    private List<BetterPiece> whitePieces;
+    private List<Piece> whitePieces;
     /**
      * List of all pieces that black owns.
      */
-    private List<BetterPiece> blackPieces;
+    private List<Piece> blackPieces;
     /**
      * Set containing all squares that black threatens.
      */
@@ -44,7 +44,7 @@ public class ChessBoard {
     /**
      * Map containing positions of both kings.
      */
-    private Map<Player, BetterPiece> kings;
+    private Map<Player, Piece> kings;
 
     /**
      * Creates a new chessboard with given movement logic.
@@ -100,7 +100,7 @@ public class ChessBoard {
      *
      * @return map with references from each player to their king.
      */
-    public Map<Player, BetterPiece> getKings() {
+    public Map<Player, Piece> getKings() {
         return this.kings;
     }
 
@@ -126,7 +126,7 @@ public class ChessBoard {
      * @param player player whose pieces you want.
      * @return list containing all pieces owned by the player.
      */
-    public List<BetterPiece> getPieces(Player player) {
+    public List<Piece> getPieces(Player player) {
         if (player == Player.WHITE) {
             return whitePieces;
         } else {
@@ -134,11 +134,11 @@ public class ChessBoard {
         }
     }
 
-    public void setBlackPieces(List<BetterPiece> blackPieces) {
+    public void setBlackPieces(List<Piece> blackPieces) {
         this.blackPieces = blackPieces;
     }
 
-    public void setWhitePieces(List<BetterPiece> whitePieces) {
+    public void setWhitePieces(List<Piece> whitePieces) {
         this.whitePieces = whitePieces;
     }
 

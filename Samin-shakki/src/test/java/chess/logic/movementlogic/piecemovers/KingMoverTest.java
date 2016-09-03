@@ -5,7 +5,7 @@ import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
 import chess.domain.board.SquareTest;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import static chess.domain.board.Klass.BISHOP;
 import static chess.domain.board.Klass.KING;
 import static chess.domain.board.Klass.QUEEN;
@@ -27,7 +27,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class KingMoverTest {
 
-    private BetterPiece king;
+    private Piece king;
     private static GameSituation sit;
     private static ChessBoard board;
     private static ChessBoardInitializer init;
@@ -47,7 +47,7 @@ public class KingMoverTest {
     @Before
     public void setUp() {
         init.initialize(board);
-        king = new BetterPiece(KING, 2, 3, Player.WHITE, "wk");
+        king = new Piece(KING, 2, 3, Player.WHITE, "wk");
         putPieceOnBoard(board, king);
     }
 
@@ -86,7 +86,7 @@ public class KingMoverTest {
     @Test
     public void kingCannotMoveOutOfBoard() {
         init.initialize(board);
-        king = new BetterPiece(KING, 0, 0, Player.WHITE, "wk");
+        king = new Piece(KING, 0, 0, Player.WHITE, "wk");
         putPieceOnBoard(board, king);
 
         assertFalse(kingMover.possibleMoves(king, board).contains(new Square(-1, 0)));
@@ -97,7 +97,7 @@ public class KingMoverTest {
     public void kingCannotMoveToThreatenedSquare() {
         init.initialize(board);
         putPieceOnBoard(board, king);
-        BetterPiece opposingQueen = new BetterPiece(QUEEN, 3, 5, Player.BLACK, "bq");
+        Piece opposingQueen = new Piece(QUEEN, 3, 5, Player.BLACK, "bq");
         putPieceOnBoard(board, opposingQueen);
         board.updateThreatenedSquares(Player.BLACK);
 
@@ -108,15 +108,15 @@ public class KingMoverTest {
 
     @Test
     public void kingCanTakeOpposingUnprotectedPieceThatChecksIt() {
-        putPieceOnBoard(board, new BetterPiece(QUEEN, 2, 4, Player.BLACK, "bq"));
+        putPieceOnBoard(board, new Piece(QUEEN, 2, 4, Player.BLACK, "bq"));
         board.updateThreatenedSquares(Player.BLACK);
         assertTrue(kingMover.possibleMoves(king, board).contains(board.getSquare(2, 4)));
     }
 
     @Test
     public void kingCannotTakeProtectedPieces() {
-        putPieceOnBoard(board, new BetterPiece(QUEEN, 2, 4, Player.BLACK, "bq"));
-        putPieceOnBoard(board, new BetterPiece(BISHOP, 3, 5, Player.BLACK, "bb"));
+        putPieceOnBoard(board, new Piece(QUEEN, 2, 4, Player.BLACK, "bq"));
+        putPieceOnBoard(board, new Piece(BISHOP, 3, 5, Player.BLACK, "bb"));
         board.updateThreatenedSquares(Player.BLACK);
 
         assertFalse(kingMover.possibleMoves(king, board).contains(board.getSquare(2, 4)));
@@ -124,24 +124,24 @@ public class KingMoverTest {
 
     @Test
     public void kingCanCastleKingSideIfAllRequirementsAreMet() {
-        BetterPiece blackKing = new BetterPiece(KING, 4, 7, Player.BLACK, "bk");
+        Piece blackKing = new Piece(KING, 4, 7, Player.BLACK, "bk");
         putPieceOnBoard(board, blackKing);
-        putPieceOnBoard(board, new BetterPiece(ROOK, 7, 7, Player.BLACK, "br"));
+        putPieceOnBoard(board, new Piece(ROOK, 7, 7, Player.BLACK, "br"));
         assertTrue(kingMover.possibleMoves(blackKing, board).contains(board.getSquare(6, 7)));
     }
 
     @Test
     public void kingCanCastleQueenSideIfAllRequirementsAreMet() {
-        BetterPiece blackKing = new BetterPiece(KING, 4, 7, Player.BLACK, "bk");
+        Piece blackKing = new Piece(KING, 4, 7, Player.BLACK, "bk");
         putPieceOnBoard(board, blackKing);
-        putPieceOnBoard(board, new BetterPiece(ROOK, 0, 7, Player.BLACK, "br"));
+        putPieceOnBoard(board, new Piece(ROOK, 0, 7, Player.BLACK, "br"));
         assertTrue(kingMover.possibleMoves(blackKing, board).contains(board.getSquare(2, 7)));
     }
 
     @Test
     public void whenCastlingKingSideChosenRookIsAlsoMovedToCorrectSquare() {
-        BetterPiece blackKing = new BetterPiece(KING, 4, 7, Player.BLACK, "bk");
-        BetterPiece blackRook = new BetterPiece(ROOK, 7, 7, Player.BLACK, "br");
+        Piece blackKing = new Piece(KING, 4, 7, Player.BLACK, "bk");
+        Piece blackRook = new Piece(ROOK, 7, 7, Player.BLACK, "br");
         putPieceOnBoard(board, blackKing);
         putPieceOnBoard(board, blackRook);
         kingMover.move(blackKing, board.getSquare(6, 7), sit);
@@ -150,8 +150,8 @@ public class KingMoverTest {
 
     @Test
     public void whenCastlingQueenSideChosenRookIsAlsoMovedToCorrectSquare() {
-        BetterPiece blackKing = new BetterPiece(KING, 4, 7, Player.BLACK, "bk");
-        BetterPiece blackRook = new BetterPiece(ROOK, 0, 7, Player.BLACK, "br");
+        Piece blackKing = new Piece(KING, 4, 7, Player.BLACK, "bk");
+        Piece blackRook = new Piece(ROOK, 0, 7, Player.BLACK, "br");
         putPieceOnBoard(board, blackKing);
         putPieceOnBoard(board, blackRook);
         kingMover.move(blackKing, board.getSquare(2, 7), sit);
@@ -161,8 +161,8 @@ public class KingMoverTest {
     @Test
     public void hashUpdatedCorrectlyWhenCastlingKingside() {
         init.initialize(board);
-        BetterPiece wk = new BetterPiece(KING, 3, 0, Player.WHITE, "wk");
-        BetterPiece wr = new BetterPiece(ROOK, 0, 0, Player.WHITE, "wr");
+        Piece wk = new Piece(KING, 3, 0, Player.WHITE, "wk");
+        Piece wr = new Piece(ROOK, 0, 0, Player.WHITE, "wr");
         putPieceOnBoard(board, wk);
         putPieceOnBoard(board, wr);
 

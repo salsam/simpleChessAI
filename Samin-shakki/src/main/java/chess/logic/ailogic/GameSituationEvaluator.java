@@ -1,7 +1,7 @@
 package chess.logic.ailogic;
 
 import chess.domain.board.Klass;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import chess.domain.GameSituation;
 import chess.domain.board.Player;
 import static chess.domain.board.Player.getOpponent;
@@ -96,7 +96,7 @@ public class GameSituationEvaluator {
         positionalValues.put(ROOK, rookValues);
     }
 
-    private static int getPositionalValue(BetterPiece piece) {
+    private static int getPositionalValue(Piece piece) {
         if (piece.getOwner() == Player.BLACK) {
             return positionalValues.get(piece.getKlass())[piece.getRow()][piece.getColumn()];
         }

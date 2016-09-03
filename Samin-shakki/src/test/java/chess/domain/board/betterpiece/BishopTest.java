@@ -1,6 +1,6 @@
 package chess.domain.board.betterpiece;
 
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import chess.domain.board.Player;
 import static chess.domain.board.Klass.BISHOP;
 import static chess.domain.board.Klass.KING;
@@ -16,14 +16,14 @@ import org.junit.Test;
  */
 public class BishopTest {
 
-    private BetterPiece bishop;
+    private Piece bishop;
 
     public BishopTest() {
     }
 
     @Before
     public void setUp() {
-        bishop = new BetterPiece(BISHOP, 2, 3, Player.BLACK, "bp");
+        bishop = new Piece(BISHOP, 2, 3, Player.BLACK, "bp");
     }
 
     @Test
@@ -33,17 +33,17 @@ public class BishopTest {
 
     @Test
     public void bishopsAreNotEqualToKingsEvenWithSamePieceCode() {
-        assertFalse(bishop.deepEquals(new BetterPiece(KING, 2, 3, Player.BLACK, "bp")));
+        assertFalse(bishop.deepEquals(new Piece(KING, 2, 3, Player.BLACK, "bp")));
     }
 
     @Test
     public void bishopsAreEqualIfSamePieceCode() {
-        assertTrue(bishop.equals(new BetterPiece(BISHOP, 1, 1, Player.WHITE, "bp")));
+        assertTrue(bishop.equals(new Piece(BISHOP, 1, 1, Player.WHITE, "bp")));
     }
 
     @Test
     public void bishopsAreNotEqualIfDifferentPieceCode() {
-        assertFalse(bishop.equals(new BetterPiece(BISHOP, 2, 3, Player.BLACK, "bp1")));
+        assertFalse(bishop.equals(new Piece(BISHOP, 2, 3, Player.BLACK, "bp1")));
     }
 
     @Test

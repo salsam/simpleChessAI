@@ -9,7 +9,7 @@ import chess.domain.board.ChessBoard;
 import java.util.Set;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 
 /**
  * This class is responsible for all queen-related movement logic.
@@ -31,7 +31,7 @@ public class QueenMover extends PieceMover {
      * @return list containing all squares this queen threatens
      */
     @Override
-    public Set<Square> threatenedSquares(BetterPiece piece, ChessBoard board) {
+    public Set<Square> threatenedSquares(Piece piece, ChessBoard board) {
         Set<Square> possibilities = new MyHashSet<>();
         addDiagonalPossibilities(board.getSquare(piece.getColumn(), piece.getRow()), board, possibilities);
         addHorizontalPossibilities(board.getSquare(piece.getColumn(), piece.getRow()), board, possibilities);

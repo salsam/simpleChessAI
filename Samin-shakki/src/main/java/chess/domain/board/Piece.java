@@ -8,7 +8,7 @@ import java.util.Objects;
  *
  * @author sami
  */
-public class BetterPiece {
+public class Piece {
 
     private Klass klass;
     private int column;
@@ -19,7 +19,7 @@ public class BetterPiece {
     private boolean hasBeenMoved;
     private boolean movedTwoSquaresLastTurn;
 
-    public BetterPiece(Klass klass, int column, int row, Player owner, String pieceCode) {
+    public Piece(Klass klass, int column, int row, Player owner, String pieceCode) {
         this.klass = klass;
         this.column = column;
         this.row = row;
@@ -97,7 +97,7 @@ public class BetterPiece {
      * @param other chess peice compared to.
      * @return true if this piece is deeply equal to other one. Else false.
      */
-    public boolean deepEquals(BetterPiece other) {
+    public boolean deepEquals(Piece other) {
         if (other == null) {
             return false;
         }
@@ -137,7 +137,7 @@ public class BetterPiece {
      *
      * @param other piece that this will become identical with.
      */
-    public void makeDeeplyEqualTo(BetterPiece other) {
+    public void makeDeeplyEqualTo(Piece other) {
         klass = other.getKlass();
         column = other.getColumn();
         row = other.getRow();
@@ -166,7 +166,7 @@ public class BetterPiece {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final BetterPiece other = (BetterPiece) obj;
+        final Piece other = (Piece) obj;
         if (!Objects.equals(this.pieceCode, other.pieceCode)) {
             return false;
         }
@@ -174,8 +174,8 @@ public class BetterPiece {
     }
 
     @Override
-    public BetterPiece clone() {
-        BetterPiece ret = new BetterPiece(klass, column, row, owner, pieceCode);
+    public Piece clone() {
+        Piece ret = new Piece(klass, column, row, owner, pieceCode);
         ret.setTaken(taken);
         ret.setHasBeenMoved(hasBeenMoved);
         ret.setMovedTwoSquaresLastTurn(movedTwoSquaresLastTurn);

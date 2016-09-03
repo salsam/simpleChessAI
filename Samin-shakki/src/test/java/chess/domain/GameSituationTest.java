@@ -6,7 +6,7 @@ import static chess.domain.board.ChessBoardCopier.chessBoardsAreDeeplyEqual;
 import static chess.domain.board.ChessBoardCopier.copy;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import chess.logic.chessboardinitializers.EmptyBoardInitializer;
 import static chess.domain.board.Klass.KING;
 import static chess.domain.board.Klass.PAWN;
@@ -38,7 +38,7 @@ public class GameSituationTest {
     public void setUp() {
         game = new GameSituation(new EmptyBoardInitializer(), new MovementLogic());
         ChessBoard board = game.getChessBoard();
-        putPieceOnBoard(board, new BetterPiece(KING, 0, 0, Player.WHITE, "wk"));
+        putPieceOnBoard(board, new Piece(KING, 0, 0, Player.WHITE, "wk"));
     }
 
     @Test
@@ -52,8 +52,8 @@ public class GameSituationTest {
 
     @Test
     public void playersPawnsBecomeNoLongerCapturableEnPassantOnPlayersNextTurn() {
-        BetterPiece whitePawn = new BetterPiece(PAWN, 4, 4, Player.WHITE, "wp");
-        BetterPiece blackPawn = new BetterPiece(PAWN, 4, 6, Player.BLACK, "bp");
+        Piece whitePawn = new Piece(PAWN, 4, 4, Player.WHITE, "wp");
+        Piece blackPawn = new Piece(PAWN, 4, 6, Player.BLACK, "bp");
         ChessBoard board = game.getChessBoard();
         putPieceOnBoard(board, whitePawn);
         putPieceOnBoard(board, blackPawn);
@@ -150,8 +150,8 @@ public class GameSituationTest {
     @Test
     public void reHashBoardChangesHashIfBoardSituationChanged() {
         long oldHash = game.getBoardHash();
-        BetterPiece whitePawn = new BetterPiece(PAWN, 4, 4, Player.WHITE, "wp");
-        BetterPiece blackPawn = new BetterPiece(PAWN, 4, 6, Player.BLACK, "bp");
+        Piece whitePawn = new Piece(PAWN, 4, 4, Player.WHITE, "wp");
+        Piece blackPawn = new Piece(PAWN, 4, 6, Player.BLACK, "bp");
         ChessBoard board = game.getChessBoard();
         putPieceOnBoard(board, whitePawn);
         putPieceOnBoard(board, blackPawn);
@@ -162,8 +162,8 @@ public class GameSituationTest {
     @Test
     public void boardHashCorrectAfterReHashing() {
         game.reset();
-        BetterPiece whitePawn = new BetterPiece(PAWN, 4, 4, Player.WHITE, "wp");
-        BetterPiece blackPawn = new BetterPiece(PAWN, 4, 6, Player.BLACK, "bp");
+        Piece whitePawn = new Piece(PAWN, 4, 4, Player.WHITE, "wp");
+        Piece blackPawn = new Piece(PAWN, 4, 6, Player.BLACK, "bp");
         ChessBoard board = game.getChessBoard();
         ChessBoard comp = new ChessBoard(new MovementLogic());
         putPieceOnBoard(board, whitePawn);
@@ -182,7 +182,7 @@ public class GameSituationTest {
         game.updateHashForMoving(from, to);
         long updatedHash = game.getBoardHash();
         MovementLogic ml = game.getChessBoard().getMovementLogic();
-        BetterPiece wk = from.getPiece();
+        Piece wk = from.getPiece();
         ml.move(wk, to, game);
         game.reHashBoard(true);
         assertEquals(game.getBoardHash(), updatedHash);

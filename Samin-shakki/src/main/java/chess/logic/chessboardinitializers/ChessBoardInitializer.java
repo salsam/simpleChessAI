@@ -2,7 +2,7 @@ package chess.logic.chessboardinitializers;
 
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Square;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import static chess.domain.board.Klass.KING;
 
 /**
@@ -31,7 +31,7 @@ public abstract class ChessBoardInitializer {
      */
     public static void addPieceToOwner(Square target, ChessBoard chessBoard) {
         if (target.getPiece() != null) {
-            BetterPiece piece = target.getPiece();
+            Piece piece = target.getPiece();
             if (piece.getKlass() == KING) {
                 chessBoard.getKings().put(piece.getOwner(), piece);
             }
@@ -45,7 +45,7 @@ public abstract class ChessBoardInitializer {
      * @param piece The piece you want to remove.
      * @param chessBoard ChessBoard where piece will be removed from
      */
-    public static void removePieceFromOwner(BetterPiece piece, ChessBoard chessBoard) {
+    public static void removePieceFromOwner(Piece piece, ChessBoard chessBoard) {
         chessBoard.getPieces(piece.getOwner()).remove(piece);
     }
 
@@ -67,7 +67,7 @@ public abstract class ChessBoardInitializer {
      * @param board board Piece will be placed on.
      * @param piece piece Piece to be placed.
      */
-    public static void putPieceOnBoard(ChessBoard board, BetterPiece piece) {
+    public static void putPieceOnBoard(ChessBoard board, Piece piece) {
         if (board.withinTable(piece.getColumn(), piece.getRow())) {
             board.getSquare(piece.getColumn(), piece.getRow()).setPiece(piece);
             addPieceToOwner(board.getSquare(piece.getColumn(), piece.getRow()), board);

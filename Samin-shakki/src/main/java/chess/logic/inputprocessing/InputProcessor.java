@@ -7,7 +7,7 @@ import chess.domain.board.Square;
 import chess.domain.GameSituation;
 import chess.domain.Move;
 import static chess.domain.board.ChessBoardCopier.undoMove;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import chess.logic.ailogic.AILogic;
 import java.util.Map;
 import java.util.Set;
@@ -35,7 +35,7 @@ public class InputProcessor {
     /**
      * Piece that has been chosen for movement.
      */
-    private BetterPiece chosen;
+    private Piece chosen;
     /**
      * Squares that chosen piece can move to.
      */
@@ -52,11 +52,11 @@ public class InputProcessor {
         this.ais[1] = new AILogic();
     }
 
-    public BetterPiece getChosen() {
+    public Piece getChosen() {
         return chosen;
     }
 
-    public void setChosen(BetterPiece chosen) {
+    public void setChosen(Piece chosen) {
         this.chosen = chosen;
     }
 

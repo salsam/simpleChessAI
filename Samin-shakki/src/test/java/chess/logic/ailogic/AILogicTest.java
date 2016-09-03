@@ -5,7 +5,7 @@ import chess.domain.Move;
 import static chess.domain.board.ChessBoardCopier.copy;
 import chess.domain.board.*;
 import static chess.domain.board.ChessBoardCopier.chessBoardsAreDeeplyEqual;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import static chess.domain.board.Klass.*;
 import static chess.logic.ailogic.GameSituationEvaluator.evaluateGameSituation;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
@@ -43,7 +43,7 @@ public class AILogicTest {
 
     @Test
     public void findBestMoveChoosesAMove() {
-        BetterPiece pawn = new BetterPiece(PAWN, 1, 7, Player.WHITE, "wp1");
+        Piece pawn = new Piece(PAWN, 1, 7, Player.WHITE, "wp1");
         putPieceOnBoard(sit.getChessBoard(), pawn);
         sit.reHashBoard(true);
         ai.findBestMoves(sit);
@@ -52,8 +52,8 @@ public class AILogicTest {
 
     @Test
     public void bestMoveCorrectWithOnePiece() {
-        BetterPiece pawn = new BetterPiece(PAWN, 0, 7, Player.WHITE, "wp1");
-        BetterPiece bpawn = new BetterPiece(PAWN, 7, 0, Player.BLACK, "bp1");
+        Piece pawn = new Piece(PAWN, 0, 7, Player.WHITE, "wp1");
+        Piece bpawn = new Piece(PAWN, 7, 0, Player.BLACK, "bp1");
         putPieceOnBoard(sit.getChessBoard(), bpawn);
         putPieceOnBoard(sit.getChessBoard(), pawn);
         sit.reHashBoard(true);
@@ -65,10 +65,10 @@ public class AILogicTest {
 
     @Test
     public void checkMateIsBetterThanTakingKnight() {
-        BetterPiece bk = new BetterPiece(KING, 0, 7, Player.BLACK, "bk");
-        BetterPiece bn = new BetterPiece(KNIGHT, 7, 3, Player.BLACK, "bn");
-        BetterPiece wq = new BetterPiece(QUEEN, 1, 3, Player.WHITE, "wq");
-        BetterPiece wk = new BetterPiece(KING, 2, 5, Player.WHITE, "wk");
+        Piece bk = new Piece(KING, 0, 7, Player.BLACK, "bk");
+        Piece bn = new Piece(KNIGHT, 7, 3, Player.BLACK, "bn");
+        Piece wq = new Piece(QUEEN, 1, 3, Player.WHITE, "wq");
+        Piece wk = new Piece(KING, 2, 5, Player.WHITE, "wk");
 
         putPieceOnBoard(sit.getChessBoard(), wk);
         putPieceOnBoard(sit.getChessBoard(), bk);
@@ -83,9 +83,9 @@ public class AILogicTest {
 
     @Test
     public void aiWillNotInitiateLosingTrades() {
-        BetterPiece bb = new BetterPiece(BISHOP, 0, 1, Player.BLACK, "bb");
-        BetterPiece bn = new BetterPiece(KNIGHT, 1, 0, Player.BLACK, "bn");
-        BetterPiece wq = new BetterPiece(QUEEN, 1, 3, Player.WHITE, "wq");
+        Piece bb = new Piece(BISHOP, 0, 1, Player.BLACK, "bb");
+        Piece bn = new Piece(KNIGHT, 1, 0, Player.BLACK, "bn");
+        Piece wq = new Piece(QUEEN, 1, 3, Player.WHITE, "wq");
 
         putPieceOnBoard(sit.getChessBoard(), bb);
         putPieceOnBoard(sit.getChessBoard(), bn);
@@ -120,8 +120,8 @@ public class AILogicTest {
         ai.findBestMoves(sit);
 
         for (Player player : Player.values()) {
-            for (BetterPiece p : backUp.getPieces(player)) {
-                for (BetterPiece newP : sit.getChessBoard().getPieces(player)) {
+            for (Piece p : backUp.getPieces(player)) {
+                for (Piece newP : sit.getChessBoard().getPieces(player)) {
                     if (p.equals(newP) && p.getKlass() == PAWN) {
                         assertEquals(p.isHasBeenMoved(), newP.isHasBeenMoved());
                     }
@@ -134,7 +134,7 @@ public class AILogicTest {
     @Test
     public void pawnRemainsPawnIfPromotionIsTested() {
         ChessBoard cb = sit.getChessBoard();
-        BetterPiece wp = new BetterPiece(PAWN, 1, 4, Player.WHITE, "wp");
+        Piece wp = new Piece(PAWN, 1, 4, Player.WHITE, "wp");
         putPieceOnBoard(cb, wp);
         MovementLogic ml = cb.getMovementLogic();
         ml.move(wp, cb.getSquare(1, 5), sit);
@@ -142,8 +142,8 @@ public class AILogicTest {
         ai.findBestMoves(sit);
 
         for (Player player : Player.values()) {
-            for (BetterPiece p : backUp.getPieces(player)) {
-                for (BetterPiece newP : sit.getChessBoard().getPieces(player)) {
+            for (Piece p : backUp.getPieces(player)) {
+                for (Piece newP : sit.getChessBoard().getPieces(player)) {
                     if (p.equals(newP)) {
                         assertEquals(PAWN, p.getKlass());
                         assertEquals(p.getKlass(), newP.getKlass());
@@ -159,9 +159,9 @@ public class AILogicTest {
     @Test
     public void pawnRemainsPawnInComplexSituation() {
         ChessBoard cb = sit.getChessBoard();
-        BetterPiece wp = new BetterPiece(PAWN, 1, 4, Player.WHITE, "wp");
-        BetterPiece wq = new BetterPiece(QUEEN, 2, 1, Player.WHITE, "wq1");
-        BetterPiece bk = new BetterPiece(KING, 0, 0, Player.BLACK, "bk");
+        Piece wp = new Piece(PAWN, 1, 4, Player.WHITE, "wp");
+        Piece wq = new Piece(QUEEN, 2, 1, Player.WHITE, "wq1");
+        Piece bk = new Piece(KING, 0, 0, Player.BLACK, "bk");
 
         putPieceOnBoard(cb, bk);
         putPieceOnBoard(cb, wp);
@@ -172,8 +172,8 @@ public class AILogicTest {
         ai.findBestMoves(sit);
 
         for (Player player : Player.values()) {
-            for (BetterPiece p : backUp.getPieces(player)) {
-                for (BetterPiece newP : sit.getChessBoard().getPieces(player)) {
+            for (Piece p : backUp.getPieces(player)) {
+                for (Piece newP : sit.getChessBoard().getPieces(player)) {
                     if (p.equals(newP)) {
                         assertEquals(p.getKlass(), newP.getKlass());
                         assertEquals(p.getColumn(), newP.getColumn());
@@ -188,8 +188,8 @@ public class AILogicTest {
     @Test
     public void negamaxForHeightZeroReturnsValueOfSituation() {
         ChessBoard cb = sit.getChessBoard();
-        BetterPiece wr = new BetterPiece(ROOK, 1, 4, Player.WHITE, "wr");
-        BetterPiece bp = new BetterPiece(PAWN, 5, 6, Player.BLACK, "bp");
+        Piece wr = new Piece(ROOK, 1, 4, Player.WHITE, "wr");
+        Piece bp = new Piece(PAWN, 5, 6, Player.BLACK, "bp");
         putPieceOnBoard(cb, wr);
         putPieceOnBoard(cb, bp);
         sit.reHashBoard(true);
@@ -201,8 +201,8 @@ public class AILogicTest {
     @Test
     public void negamaxReturnsMinus123456789IfTimeLimitIsReached() {
         ChessBoard cb = sit.getChessBoard();
-        BetterPiece wr = new BetterPiece(ROOK, 1, 4, Player.WHITE, "wr");
-        BetterPiece bp = new BetterPiece(PAWN, 5, 6, Player.BLACK, "bp");
+        Piece wr = new Piece(ROOK, 1, 4, Player.WHITE, "wr");
+        Piece bp = new Piece(PAWN, 5, 6, Player.BLACK, "bp");
         putPieceOnBoard(cb, wr);
         putPieceOnBoard(cb, bp);
         sit.reHashBoard(true);
@@ -214,8 +214,8 @@ public class AILogicTest {
     @Test
     public void checkForChangeIncreasesAlphaIfBetterValueFound() {
         ChessBoard cb = sit.getChessBoard();
-        BetterPiece wp = new BetterPiece(PAWN, 1, 4, Player.WHITE, "wp");
-        BetterPiece bp = new BetterPiece(PAWN, 5, 6, Player.BLACK, "bp");
+        Piece wp = new Piece(PAWN, 1, 4, Player.WHITE, "wp");
+        Piece bp = new Piece(PAWN, 5, 6, Player.BLACK, "bp");
         putPieceOnBoard(cb, wp);
         putPieceOnBoard(cb, bp);
         sit.reHashBoard(true);
@@ -231,8 +231,8 @@ public class AILogicTest {
     @Test
     public void alphaIsNotChangedIfWorseValueFound() {
         ChessBoard cb = sit.getChessBoard();
-        BetterPiece wp = new BetterPiece(PAWN, 1, 4, Player.WHITE, "wp");
-        BetterPiece bp = new BetterPiece(PAWN, 5, 6, Player.BLACK, "bp");
+        Piece wp = new Piece(PAWN, 1, 4, Player.WHITE, "wp");
+        Piece bp = new Piece(PAWN, 5, 6, Player.BLACK, "bp");
         putPieceOnBoard(cb, wp);
         putPieceOnBoard(cb, bp);
         sit.reHashBoard(true);
@@ -249,9 +249,9 @@ public class AILogicTest {
     public void moveIsNotEvaluatedIfItIsIllegal() {
         ChessBoard cb = sit.getChessBoard();
         MovementLogic ml = cb.getMovementLogic();
-        BetterPiece wk = new BetterPiece(KING, 1, 0, Player.WHITE, "wk");
-        BetterPiece wb = new BetterPiece(BISHOP, 1, 4, Player.WHITE, "wp");
-        BetterPiece br = new BetterPiece(ROOK, 1, 7, Player.BLACK, "br");
+        Piece wk = new Piece(KING, 1, 0, Player.WHITE, "wk");
+        Piece wb = new Piece(BISHOP, 1, 4, Player.WHITE, "wp");
+        Piece br = new Piece(ROOK, 1, 7, Player.BLACK, "br");
         putPieceOnBoard(cb, wk);
         putPieceOnBoard(cb, wb);
         putPieceOnBoard(cb, br);
@@ -288,8 +288,8 @@ public class AILogicTest {
     @Test
     public void testAMoveReturnsAlphaIfTimeIsUpAndDoesNotChangeBoard() {
         ChessBoard cb = sit.getChessBoard();
-        BetterPiece wr = new BetterPiece(ROOK, 1, 4, Player.WHITE, "wr");
-        BetterPiece bp = new BetterPiece(PAWN, 5, 6, Player.BLACK, "bp");
+        Piece wr = new Piece(ROOK, 1, 4, Player.WHITE, "wr");
+        Piece bp = new Piece(PAWN, 5, 6, Player.BLACK, "bp");
         putPieceOnBoard(cb, wr);
         putPieceOnBoard(cb, bp);
         sit.reHashBoard(true);
@@ -303,8 +303,8 @@ public class AILogicTest {
     @Test
     public void boardDoesNotChangeWhenTestingAMove() {
         ChessBoard cb = sit.getChessBoard();
-        BetterPiece wr = new BetterPiece(ROOK, 1, 4, Player.WHITE, "wr");
-        BetterPiece bp = new BetterPiece(PAWN, 5, 6, Player.BLACK, "bp");
+        Piece wr = new Piece(ROOK, 1, 4, Player.WHITE, "wr");
+        Piece bp = new Piece(PAWN, 5, 6, Player.BLACK, "bp");
         putPieceOnBoard(cb, wr);
         putPieceOnBoard(cb, bp);
         sit.reHashBoard(true);
@@ -318,8 +318,8 @@ public class AILogicTest {
     @Test
     public void testAMoveReturnsValueOfSituationAfterMakingChosenMove() {
         ChessBoard cb = sit.getChessBoard();
-        BetterPiece wr = new BetterPiece(ROOK, 1, 4, Player.WHITE, "wr");
-        BetterPiece bp = new BetterPiece(PAWN, 5, 6, Player.BLACK, "bp");
+        Piece wr = new Piece(ROOK, 1, 4, Player.WHITE, "wr");
+        Piece bp = new Piece(PAWN, 5, 6, Player.BLACK, "bp");
         putPieceOnBoard(cb, wr);
         putPieceOnBoard(cb, bp);
         sit.reHashBoard(true);
@@ -332,8 +332,8 @@ public class AILogicTest {
     @Test
     public void testAMoveRevertsPossiblePromotion() {
         ChessBoard cb = sit.getChessBoard();
-        BetterPiece wp = new BetterPiece(PAWN, 1, 6, Player.WHITE, "wp");
-        BetterPiece bp = new BetterPiece(PAWN, 5, 6, Player.BLACK, "bp");
+        Piece wp = new Piece(PAWN, 1, 6, Player.WHITE, "wp");
+        Piece bp = new Piece(PAWN, 5, 6, Player.BLACK, "bp");
         putPieceOnBoard(cb, wp);
         putPieceOnBoard(cb, bp);
         sit.reHashBoard(true);
@@ -348,8 +348,8 @@ public class AILogicTest {
     @Test
     public void testAMoveRevertsPossiblePromotionEvenIfMovesMadeAfterIt() {
         ChessBoard cb = sit.getChessBoard();
-        BetterPiece wp = new BetterPiece(PAWN, 1, 6, Player.WHITE, "wp");
-        BetterPiece bp = new BetterPiece(PAWN, 5, 6, Player.BLACK, "bp");
+        Piece wp = new Piece(PAWN, 1, 6, Player.WHITE, "wp");
+        Piece bp = new Piece(PAWN, 5, 6, Player.BLACK, "bp");
         putPieceOnBoard(cb, wp);
         putPieceOnBoard(cb, bp);
         sit.reHashBoard(true);
@@ -365,8 +365,8 @@ public class AILogicTest {
     @Test
     public void tryMovingPieceStopsIfTimeLimitReached() {
         ChessBoard cb = sit.getChessBoard();
-        BetterPiece wr = new BetterPiece(ROOK, 1, 4, Player.WHITE, "wr");
-        BetterPiece bp = new BetterPiece(PAWN, 5, 6, Player.BLACK, "bp");
+        Piece wr = new Piece(ROOK, 1, 4, Player.WHITE, "wr");
+        Piece bp = new Piece(PAWN, 5, 6, Player.BLACK, "bp");
         putPieceOnBoard(cb, wr);
         putPieceOnBoard(cb, bp);
         sit.reHashBoard(true);
@@ -379,8 +379,8 @@ public class AILogicTest {
     @Test
     public void tryMovingPieceReturnsHighestValueForSituationAfterMovingPiece() {
         ChessBoard cb = sit.getChessBoard();
-        BetterPiece wr = new BetterPiece(ROOK, 1, 4, Player.WHITE, "wr");
-        BetterPiece bp = new BetterPiece(PAWN, 5, 6, Player.BLACK, "bp");
+        Piece wr = new Piece(ROOK, 1, 4, Player.WHITE, "wr");
+        Piece bp = new Piece(PAWN, 5, 6, Player.BLACK, "bp");
         putPieceOnBoard(cb, wr);
         putPieceOnBoard(cb, bp);
         sit.reHashBoard(true);
@@ -393,8 +393,8 @@ public class AILogicTest {
     @Test
     public void whenMoveDoesNotProduceBetaCutOffItIsSavedAsKillerCandidate() {
         ChessBoard cb = sit.getChessBoard();
-        BetterPiece wp = new BetterPiece(PAWN, 1, 6, Player.WHITE, "wp");
-        BetterPiece bp = new BetterPiece(PAWN, 5, 6, Player.BLACK, "bp");
+        Piece wp = new Piece(PAWN, 1, 6, Player.WHITE, "wp");
+        Piece bp = new Piece(PAWN, 5, 6, Player.BLACK, "bp");
         putPieceOnBoard(cb, wp);
         putPieceOnBoard(cb, bp);
         sit.reHashBoard(true);
@@ -412,8 +412,8 @@ public class AILogicTest {
     @Test
     public void whenMoveDoesProduceBetaCutOffItIsNotSavedAsKillerCandidate() {
         ChessBoard cb = sit.getChessBoard();
-        BetterPiece wp = new BetterPiece(PAWN, 1, 2, Player.WHITE, "wp");
-        BetterPiece bp = new BetterPiece(PAWN, 5, 1, Player.BLACK, "bp");
+        Piece wp = new Piece(PAWN, 1, 2, Player.WHITE, "wp");
+        Piece bp = new Piece(PAWN, 5, 1, Player.BLACK, "bp");
         putPieceOnBoard(cb, wp);
         putPieceOnBoard(cb, bp);
         sit.reHashBoard(true);
@@ -431,14 +431,14 @@ public class AILogicTest {
     public void promotionDoesNotChangeChessBoardSituationInComplexSituation() {
         ChessBoard cb = sit.getChessBoard();
 
-        BetterPiece bk = new BetterPiece(KING, 1, 1, Player.BLACK, "bk");
-        BetterPiece wk = new BetterPiece(KING, 4, 5, Player.WHITE, "wk");
-        BetterPiece bp1 = new BetterPiece(PAWN, 1, 2, Player.BLACK, "bp1");
-        BetterPiece wp1 = new BetterPiece(PAWN, 1, 3, Player.WHITE, "wp1");
-        BetterPiece wn1 = new BetterPiece(KNIGHT, 2, 2, Player.WHITE, "wn1");
-        BetterPiece bp2 = new BetterPiece(PAWN, 5, 5, Player.BLACK, "bp2");
-        BetterPiece wp2 = new BetterPiece(PAWN, 6, 3, Player.WHITE, "wp2");
-        BetterPiece wp3 = new BetterPiece(PAWN, 7, 4, Player.WHITE, "wp3");
+        Piece bk = new Piece(KING, 1, 1, Player.BLACK, "bk");
+        Piece wk = new Piece(KING, 4, 5, Player.WHITE, "wk");
+        Piece bp1 = new Piece(PAWN, 1, 2, Player.BLACK, "bp1");
+        Piece wp1 = new Piece(PAWN, 1, 3, Player.WHITE, "wp1");
+        Piece wn1 = new Piece(KNIGHT, 2, 2, Player.WHITE, "wn1");
+        Piece bp2 = new Piece(PAWN, 5, 5, Player.BLACK, "bp2");
+        Piece wp2 = new Piece(PAWN, 6, 3, Player.WHITE, "wp2");
+        Piece wp3 = new Piece(PAWN, 7, 4, Player.WHITE, "wp3");
 
         bp1.setHasBeenMoved(true);
         bp2.setHasBeenMoved(true);

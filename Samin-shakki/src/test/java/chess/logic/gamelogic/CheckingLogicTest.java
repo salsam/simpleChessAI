@@ -4,7 +4,7 @@ import chess.domain.GameSituation;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.ChessBoardCopier;
 import chess.domain.board.Player;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import static chess.domain.board.Klass.KING;
 import static chess.domain.board.Klass.PAWN;
 import static chess.domain.board.Klass.QUEEN;
@@ -37,7 +37,7 @@ public class CheckingLogicTest {
     @Before
     public void setUp() {
         game.reset();
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(KING, 0, 0, Player.WHITE, "wk"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(KING, 0, 0, Player.WHITE, "wk"));
     }
 
     @Test
@@ -47,7 +47,7 @@ public class CheckingLogicTest {
 
     @Test
     public void checkIfCheckedReturnsTrueIfKingIsChecked() {
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(QUEEN, 1, 1, Player.BLACK, "bq"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(QUEEN, 1, 1, Player.BLACK, "bq"));
         assertTrue(cl.checkIfChecked(Player.WHITE));
     }
 
@@ -58,23 +58,23 @@ public class CheckingLogicTest {
 
     @Test
     public void checkMateTrueIfKingCheckedAndCheckCannotBePrevented() {
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(QUEEN, 1, 1, Player.BLACK, "bq"));
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(KING, 2, 2, Player.BLACK, "bk"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(QUEEN, 1, 1, Player.BLACK, "bq"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(KING, 2, 2, Player.BLACK, "bk"));
         assertTrue(cl.checkMate(Player.WHITE));
     }
 
     @Test
     public void checkMateFalseIfKingCheckedButCheckingPieceCanBeTaken() {
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(QUEEN, 1, 1, Player.BLACK, "bq"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(QUEEN, 1, 1, Player.BLACK, "bq"));
         assertFalse(cl.checkMate(Player.WHITE));
     }
 
     @Test
     public void chessBoardIsNotAffectedByCheckingIfKingIsCheckMated() {
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(QUEEN, 6, 6, Player.BLACK, "bq"));
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(ROOK, 1, 6, Player.BLACK, "br1"));
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(ROOK, 6, 1, Player.BLACK, "br2"));
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(ROOK, 4, 1, Player.WHITE, "wr"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(QUEEN, 6, 6, Player.BLACK, "bq"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(ROOK, 1, 6, Player.BLACK, "br1"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(ROOK, 6, 1, Player.BLACK, "br2"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(ROOK, 4, 1, Player.WHITE, "wr"));
         ChessBoard copy = ChessBoardCopier.copy(game.getChessBoard());
         assertFalse(cl.checkMate(Player.WHITE));
         assertTrue(ChessBoardCopier.chessBoardsAreDeeplyEqual(copy, game.getChessBoard()));
@@ -100,27 +100,27 @@ public class CheckingLogicTest {
 
     @Test
     public void checkMateFalseIfCheckCanBeBlocked() {
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(QUEEN, 6, 6, Player.BLACK, "bq"));
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(ROOK, 1, 6, Player.BLACK, "br1"));
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(ROOK, 6, 1, Player.BLACK, "br2"));
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(ROOK, 4, 1, Player.WHITE, "wr"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(QUEEN, 6, 6, Player.BLACK, "bq"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(ROOK, 1, 6, Player.BLACK, "br1"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(ROOK, 6, 1, Player.BLACK, "br2"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(ROOK, 4, 1, Player.WHITE, "wr"));
         assertFalse(cl.checkMate(Player.WHITE));
     }
 
     @Test
     public void checkMateFalseIfKingCanMoveToUnthreatenedSquare() {
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(PAWN, 1, 1, Player.BLACK, "bp1"));
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(PAWN, 2, 2, Player.BLACK, "bp2"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(PAWN, 1, 1, Player.BLACK, "bp1"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(PAWN, 2, 2, Player.BLACK, "bp2"));
         assertFalse(cl.checkMate(Player.WHITE));
     }
 
     @Test
     public void checkMateFalseInComplexSituationWhereKingThreatenedByProtectedPieceButCanBeAvoided() {
         game = new GameSituation(new BetterChessBoardInitializer(), ml);
-        BetterPiece whiteKing = game.getChessBoard().getKings().get(Player.WHITE);
-        BetterPiece whitePawn = game.getChessBoard().getSquare(5, 1).getPiece();
-        BetterPiece blackPawn1 = game.getChessBoard().getSquare(5, 6).getPiece();
-        BetterPiece blackPawn2 = game.getChessBoard().getSquare(4, 6).getPiece();
+        Piece whiteKing = game.getChessBoard().getKings().get(Player.WHITE);
+        Piece whitePawn = game.getChessBoard().getSquare(5, 1).getPiece();
+        Piece blackPawn1 = game.getChessBoard().getSquare(5, 6).getPiece();
+        Piece blackPawn2 = game.getChessBoard().getSquare(4, 6).getPiece();
 
         ml.move(whitePawn, game.getChessBoard().getSquare(5, 2), game);
         ml.move(blackPawn1, game.getChessBoard().getSquare(5, 4), game);
@@ -134,8 +134,8 @@ public class CheckingLogicTest {
 
     @Test
     public void staleMateTrueIfKingNotCheckedAndThereIsNoLegalMoves() {
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(ROOK, 1, 7, Player.BLACK, "br1"));
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(ROOK, 7, 1, Player.BLACK, "br2"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(ROOK, 1, 7, Player.BLACK, "br1"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(ROOK, 7, 1, Player.BLACK, "br2"));
         game.getChessBoard().updateThreatenedSquares(Player.BLACK);
         assertTrue(cl.stalemate(Player.WHITE));
     }
@@ -147,9 +147,9 @@ public class CheckingLogicTest {
 
     @Test
     public void staleMateFalseIfThereIsSomeOtherPieceThatCanMoveLegally() {
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(ROOK, 1, 7, Player.BLACK, "br1"));
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(ROOK, 7, 1, Player.BLACK, "br2"));
-        putPieceOnBoard(game.getChessBoard(), new BetterPiece(PAWN, 4, 4, Player.WHITE, "wp"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(ROOK, 1, 7, Player.BLACK, "br1"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(ROOK, 7, 1, Player.BLACK, "br2"));
+        putPieceOnBoard(game.getChessBoard(), new Piece(PAWN, 4, 4, Player.WHITE, "wp"));
         game.getChessBoard().updateThreatenedSquares(Player.BLACK);
         assertFalse(cl.stalemate(Player.WHITE));
     }

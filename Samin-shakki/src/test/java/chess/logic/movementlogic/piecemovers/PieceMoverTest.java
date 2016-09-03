@@ -3,7 +3,7 @@ package chess.logic.movementlogic.piecemovers;
 import chess.domain.GameSituation;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import static chess.domain.board.Klass.PAWN;
 import static chess.domain.board.Klass.QUEEN;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
@@ -21,8 +21,8 @@ import static org.junit.Assert.assertEquals;
  */
 public class PieceMoverTest {
 
-    private BetterPiece piece;
-    private BetterPiece pawn;
+    private Piece piece;
+    private Piece pawn;
     private ChessBoard board;
     private static ChessBoardInitializer init;
     private static GameSituation sit;
@@ -40,8 +40,8 @@ public class PieceMoverTest {
     public void setUp() {
         sit.reset();
         board = sit.getChessBoard();
-        piece = new BetterPiece(QUEEN, 3, 4, Player.WHITE, "wq");
-        pawn = new BetterPiece(PAWN, 3, 6, Player.BLACK, "bp");
+        piece = new Piece(QUEEN, 3, 4, Player.WHITE, "wq");
+        pawn = new Piece(PAWN, 3, 6, Player.BLACK, "bp");
         putPieceOnBoard(board, pawn);
         putPieceOnBoard(board, piece);
         sit.reHashBoard(true);

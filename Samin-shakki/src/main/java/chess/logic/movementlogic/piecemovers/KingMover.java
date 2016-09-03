@@ -12,7 +12,7 @@ import chess.domain.board.Player;
 import static chess.domain.board.Player.getOpponent;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import static chess.domain.board.Klass.ROOK;
 
 /**
@@ -38,7 +38,7 @@ public class KingMover extends PieceMover {
      * @param sit situation being changed.
      */
     @Override
-    public void move(BetterPiece piece, Square target, GameSituation sit) {
+    public void move(Piece piece, Square target, GameSituation sit) {
 
         piece.setHasBeenMoved(true);
         RookMover rookMover = new RookMover();
@@ -48,16 +48,16 @@ public class KingMover extends PieceMover {
         super.move(piece, target, sit);
     }
 
-    private void castleIfChosen(BetterPiece king, Square target, GameSituation sit, RookMover rookMover) {
+    private void castleIfChosen(Piece king, Square target, GameSituation sit, RookMover rookMover) {
         if (king.getColumn() - target.getColumn() == 2) {
             sit.decrementCountOfCurrentBoardSituation();
-            BetterPiece rook = sit.getChessBoard().getSquare(0, king.getRow()).getPiece();
+            Piece rook = sit.getChessBoard().getSquare(0, king.getRow()).getPiece();
             rookMover.move(rook,
                     sit.getChessBoard().getSquare(target.getColumn() + 1, target.getRow()), sit);
             sit.reHashBoard(true);
         } else if (king.getColumn() - target.getColumn() == -2) {
             sit.decrementCountOfCurrentBoardSituation();
-            BetterPiece rook = sit.getChessBoard().getSquare(7, king.getRow()).getPiece();
+            Piece rook = sit.getChessBoard().getSquare(7, king.getRow()).getPiece();
             rookMover.move(rook,
                     sit.getChessBoard().getSquare(target.getColumn() - 1, target.getRow()), sit);
             sit.reHashBoard(true);
@@ -72,7 +72,7 @@ public class KingMover extends PieceMover {
      * @return list containing all squares target king threatens
      */
     @Override
-    public Set<Square> threatenedSquares(BetterPiece piece, ChessBoard board) {
+    public Set<Square> threatenedSquares(Piece piece, ChessBoard board) {
         int[] columnChange = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
         int[] rowChange = new int[]{1, 1, 1, 0, 0, -1, -1, -1};
 
@@ -89,7 +89,7 @@ public class KingMover extends PieceMover {
      * @return a list containing all squares target king can legally move to.
      */
     @Override
-    public Set<Square> possibleMoves(BetterPiece piece, ChessBoard board) {
+    public Set<Square> possibleMoves(Piece piece, ChessBoard board) {
         Set<Square> moves = new MyHashSet<>();
         board.updateThreatenedSquares(getOpponent(piece.getOwner()));
 
@@ -108,12 +108,12 @@ public class KingMover extends PieceMover {
         return board.threatenedSquares(getOpponent(player)).contains(target);
     }
 
-    private void addCastling(BetterPiece king, ChessBoard board, Set<Square> possibilities) {
+    private void addCastling(Piece king, ChessBoard board, Set<Square> possibilities) {
         int[] cols = new int[]{0, 7};
         if (!king.isHasBeenMoved()) {
             for (int i = 0; i < 2; i++) {
                 if (board.getSquare(cols[i], king.getRow()).containsAPiece()) {
-                    BetterPiece rook = board.getSquare(cols[i], king.getRow()).getPiece();
+                    Piece rook = board.getSquare(cols[i], king.getRow()).getPiece();
                     if (rook.getKlass() == ROOK && rook.getOwner() == king.getOwner()) {
                         addCastlingIfPossible(king, rook, board, possibilities);
                     }
@@ -122,7 +122,7 @@ public class KingMover extends PieceMover {
         }
     }
 
-    private void addCastlingIfPossible(BetterPiece king, BetterPiece rook, ChessBoard board, Set<Square> possibilities) {
+    private void addCastlingIfPossible(Piece king, Piece rook, ChessBoard board, Set<Square> possibilities) {
         if (!rook.isHasBeenMoved()) {
             if (rook.getColumn() < king.getColumn()) {
                 addPossibilityToCastleRight(king, rook, board, possibilities);
@@ -132,7 +132,7 @@ public class KingMover extends PieceMover {
         }
     }
 
-    private void addPossibilityToCastleLeft(BetterPiece king, BetterPiece rook, ChessBoard board, Set<Square> possibilities) {
+    private void addPossibilityToCastleLeft(Piece king, Piece rook, ChessBoard board, Set<Square> possibilities) {
         if (squaresAreAllEmpty(board, king.getColumn(), rook.getColumn(), king.getRow())) {
             if (squaresAreAllUnthreatened(board, getOpponent(king.getOwner()), king.getColumn(), king.getColumn() + 2, king.getRow())) {
                 possibilities.add(board.getSquare(king.getColumn() + 2, king.getRow()));
@@ -140,7 +140,7 @@ public class KingMover extends PieceMover {
         }
     }
 
-    private void addPossibilityToCastleRight(BetterPiece king, BetterPiece rook, ChessBoard board, Set<Square> possibilities) {
+    private void addPossibilityToCastleRight(Piece king, Piece rook, ChessBoard board, Set<Square> possibilities) {
         if (squaresAreAllEmpty(board, rook.getColumn(), king.getColumn(), king.getRow())) {
             if (squaresAreAllUnthreatened(board, getOpponent(king.getOwner()), king.getColumn() - 2, king.getColumn(), king.getRow())) {
                 possibilities.add(board.getSquare(king.getColumn() - 2, king.getRow()));

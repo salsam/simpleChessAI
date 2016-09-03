@@ -3,7 +3,7 @@ package chess.logic.ailogic;
 import chess.domain.GameSituation;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import static chess.domain.board.Klass.*;
 import static chess.logic.ailogic.GameSituationEvaluator.evaluateGameSituation;
 import chess.logic.chessboardinitializers.BetterChessBoardInitializer;
@@ -54,14 +54,14 @@ public class GameSituationEvaluatorTest {
 
     @Test
     public void gamesituationValuedNormallyWhenOpponentWillBeStaleMatedOnTheirTurn() {
-        BetterPiece queen = new BetterPiece(QUEEN, 1, 1, Player.WHITE, "wp");
+        Piece queen = new Piece(QUEEN, 1, 1, Player.WHITE, "wp");
         putPieceOnBoard(situation.getChessBoard(), queen);
         assertEquals(880 + 230, evaluateGameSituation(situation, Player.WHITE));
     }
 
     @Test
     public void gameSitutionValuedZeroWhenStaleMate() {
-        BetterPiece queen = new BetterPiece(QUEEN, 1, 1, Player.WHITE, "wp");
+        Piece queen = new Piece(QUEEN, 1, 1, Player.WHITE, "wp");
         putPieceOnBoard(situation.getChessBoard(), queen);
         assertEquals(0, evaluateGameSituation(situation, Player.BLACK));
         assertEquals(0, evaluateGameSituation(situation, Player.BLACK));
@@ -69,9 +69,9 @@ public class GameSituationEvaluatorTest {
 
     @Test
     public void gameSituationCanHaveNegativeValue() {
-        BetterPiece brook = new BetterPiece(ROOK, 0, 0, Player.BLACK, "br");
-        BetterPiece bqueen = new BetterPiece(QUEEN, 2, 1, Player.BLACK, "bq");
-        BetterPiece wpawn = new BetterPiece(PAWN, 1, 2, Player.WHITE, "wp");
+        Piece brook = new Piece(ROOK, 0, 0, Player.BLACK, "br");
+        Piece bqueen = new Piece(QUEEN, 2, 1, Player.BLACK, "bq");
+        Piece wpawn = new Piece(PAWN, 1, 2, Player.WHITE, "wp");
 
         putPieceOnBoard(situation.getChessBoard(), wpawn);
         putPieceOnBoard(situation.getChessBoard(), brook);
@@ -82,9 +82,9 @@ public class GameSituationEvaluatorTest {
 
     @Test
     public void takenPiecesAreNotAccountedFor() {
-        BetterPiece brook = new BetterPiece(ROOK, 0, 7, Player.BLACK, "br");
-        BetterPiece bqueen = new BetterPiece(QUEEN, 2, 6, Player.BLACK, "bq");
-        BetterPiece wpawn = new BetterPiece(PAWN, 1, 5, Player.WHITE, "wp");
+        Piece brook = new Piece(ROOK, 0, 7, Player.BLACK, "br");
+        Piece bqueen = new Piece(QUEEN, 2, 6, Player.BLACK, "bq");
+        Piece wpawn = new Piece(PAWN, 1, 5, Player.WHITE, "wp");
 
         putPieceOnBoard(situation.getChessBoard(), wpawn);
         putPieceOnBoard(situation.getChessBoard(), brook);
@@ -97,9 +97,9 @@ public class GameSituationEvaluatorTest {
 
     @Test
     public void checkMateWorth100000000() {
-        BetterPiece wk = new BetterPiece(KING, 0, 7, Player.WHITE, "wk");
-        BetterPiece bk = new BetterPiece(KING, 2, 6, Player.BLACK, "bk");
-        BetterPiece bq = new BetterPiece(QUEEN, 1, 2, Player.BLACK, "bq");
+        Piece wk = new Piece(KING, 0, 7, Player.WHITE, "wk");
+        Piece bk = new Piece(KING, 2, 6, Player.BLACK, "bk");
+        Piece bq = new Piece(QUEEN, 1, 2, Player.BLACK, "bq");
         ChessBoard cb = situation.getChessBoard();
         MovementLogic ml = cb.getMovementLogic();
 
@@ -115,9 +115,9 @@ public class GameSituationEvaluatorTest {
 
     @Test
     public void thirdRepetitionOfBoardSituationIsWorthZeroEvenWhenMated() {
-        BetterPiece wk = new BetterPiece(KING, 0, 7, Player.WHITE, "wk");
-        BetterPiece bk = new BetterPiece(KING, 2, 6, Player.BLACK, "bk");
-        BetterPiece bq = new BetterPiece(QUEEN, 1, 2, Player.BLACK, "bq");
+        Piece wk = new Piece(KING, 0, 7, Player.WHITE, "wk");
+        Piece bk = new Piece(KING, 2, 6, Player.BLACK, "bk");
+        Piece bq = new Piece(QUEEN, 1, 2, Player.BLACK, "bq");
         ChessBoard cb = situation.getChessBoard();
         MovementLogic ml = cb.getMovementLogic();
 
@@ -137,7 +137,7 @@ public class GameSituationEvaluatorTest {
 
     @Test
     public void thirdRepetitionOfBoardSituationIsWorthZero() {
-        BetterPiece wr = new BetterPiece(ROOK, 0, 7, Player.WHITE, "wr");
+        Piece wr = new Piece(ROOK, 0, 7, Player.WHITE, "wr");
         putPieceOnBoard(situation.getChessBoard(), wr);
         situation.reHashBoard(true);
         ChessBoard cb = situation.getChessBoard();
@@ -152,7 +152,7 @@ public class GameSituationEvaluatorTest {
 
     @Test
     public void mobilityValueCorrectForPawn() {
-        BetterPiece wpawn = new BetterPiece(PAWN, 1, 5, Player.WHITE, "wp");
+        Piece wpawn = new Piece(PAWN, 1, 5, Player.WHITE, "wp");
         ChessBoard cb = situation.getChessBoard();
         putPieceOnBoard(cb, wpawn);
         assertEquals(20, GameSituationEvaluator.mobilityValue(situation, Player.WHITE));

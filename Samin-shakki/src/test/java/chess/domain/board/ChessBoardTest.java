@@ -152,8 +152,8 @@ public class ChessBoardTest {
     @Test
     public void whiteThreatenedSquaresWorksInMoreComplexSituation() {
         init.initialize(board);
-        putPieceOnBoard(board, new BetterPiece(QUEEN, 4, 4, Player.WHITE, "wq1"));
-        BetterPiece q = board.getSquare(4, 4).getPiece();
+        putPieceOnBoard(board, new Piece(QUEEN, 4, 4, Player.WHITE, "wq1"));
+        Piece q = board.getSquare(4, 4).getPiece();
         board.updateThreatenedSquares(Player.WHITE);
         for (Square sq : board.getMovementLogic().threatenedSquares(q, board)) {
             assertTrue(board.threatenedSquares(Player.WHITE).contains(sq));
@@ -163,8 +163,8 @@ public class ChessBoardTest {
     @Test
     public void getKingsReturnsMapThatContainsKingLocations() {
         init.initialize(board);
-        BetterPiece whiteKing = board.getKings().get(Player.WHITE);
-        BetterPiece blackKing = board.getKings().get(Player.BLACK);
+        Piece whiteKing = board.getKings().get(Player.WHITE);
+        Piece blackKing = board.getKings().get(Player.BLACK);
         assertEquals(board.getSquare(4, 7), board.getSquare(whiteKing.getColumn(), whiteKing.getRow()));
         assertEquals(board.getSquare(4, 0), board.getSquare(blackKing.getColumn(), blackKing.getRow()));
     }

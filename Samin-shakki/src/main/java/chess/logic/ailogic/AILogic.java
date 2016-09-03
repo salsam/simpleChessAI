@@ -16,7 +16,7 @@ import chess.domain.datastructures.TranspositionEntry;
 import chess.domain.datastructures.TranspositionKey;
 import chess.domain.datastructures.TranspositionTable;
 import chess.domain.datastructures.Type;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import java.util.Random;
 
 /**
@@ -197,7 +197,7 @@ public class AILogic {
         alpha = testKillerMoves(height, maxingPlayer, ogAlpha, alpha, beta, backUp);
 
         for (int loopCount = 0; loopCount < 2; loopCount++) {
-            for (BetterPiece piece : sit.getChessBoard().getPieces(maxingPlayer)) {
+            for (Piece piece : sit.getChessBoard().getPieces(maxingPlayer)) {
                 if (alpha >= beta || System.currentTimeMillis() - start >= timeLimit) {
                     break;
                 }
@@ -232,9 +232,9 @@ public class AILogic {
      * @param from square piece is located in before movement.
      * @return new alpha value of situation.
      */
-    public int tryMovingPiece(int height, int loopCount, BetterPiece piece, Square from, int ogAlpha, int alpha, int beta, Player maxingPlayer, ChessBoard backUp) {
+    public int tryMovingPiece(int height, int loopCount, Piece piece, Square from, int ogAlpha, int alpha, int beta, Player maxingPlayer, ChessBoard backUp) {
 
-        BetterPiece clone = piece.clone();
+        Piece clone = piece.clone();
         for (Square possibility : ml.possibleMoves(piece, sit.getChessBoard())) {
 
             if (!clone.deepEquals(piece)) {
@@ -276,7 +276,7 @@ public class AILogic {
      * @param from square where moved piece is located before move.
      * @return alpha value after testing chosen move.
      */
-    public int testAMove(BetterPiece piece, Square possibility, Square from,
+    public int testAMove(Piece piece, Square possibility, Square from,
             Player maxingPlayer, int height, int ogAlpha, int alpha, int beta, ChessBoard backUp) {
         if (System.currentTimeMillis() - start >= timeLimit) {
             return alpha;
@@ -308,7 +308,7 @@ public class AILogic {
             if (killer == null) {
                 continue;
             }
-            BetterPiece piece = killer.getPiece();
+            Piece piece = killer.getPiece();
             Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
             Square to = killer.getTarget();
 
@@ -337,7 +337,7 @@ public class AILogic {
      */
     private int testPrincipalMove(int height, Player maxingPlayer, int ogAlpha, int alpha, int beta, ChessBoard backUp) {
         if (principalMoves[searchDepth - height] != null) {
-            BetterPiece piece = principalMoves[searchDepth - height].getPiece();
+            Piece piece = principalMoves[searchDepth - height].getPiece();
             Square from = sit.getChessBoard().getSquare(piece.getColumn(), piece.getRow());
             Square to = principalMoves[searchDepth - height].getTarget();
 
@@ -378,7 +378,7 @@ public class AILogic {
      * @param possibility square piece is moved to.
      * @return true if move has been tested already.
      */
-    private boolean moveHasBeenTestedAlready(int height, BetterPiece piece, Square possibility) {
+    private boolean moveHasBeenTestedAlready(int height, Piece piece, Square possibility) {
         Move tested = new Move(piece, possibility);
         for (int i = 0; i < 3; i++) {
             if (tested.equals(killerMoves[searchDepth - height][i])) {
@@ -406,7 +406,7 @@ public class AILogic {
      * @param possibility square that piece was moved to.
      * @return new alpha value.
      */
-    public int checkForChange(BetterPiece piece, Square possibility, int height, Player maxingPlayer, int ogAlpha, int alpha, int beta) {
+    public int checkForChange(Piece piece, Square possibility, int height, Player maxingPlayer, int ogAlpha, int alpha, int beta) {
 
         if (sit.getCheckLogic().checkIfChecked(maxingPlayer)) {
             return alpha;
@@ -448,7 +448,7 @@ public class AILogic {
      * @param piece piece that was moved.
      * @param possibility square piece was moved to.
      */
-    private void keepTrackOfBestMoves(int height, int value, BetterPiece piece, Square possibility) {
+    private void keepTrackOfBestMoves(int height, int value, Piece piece, Square possibility) {
         if (height == searchDepth) {
             if (value > bestValues[height]) {
                 bestMoves.clear();

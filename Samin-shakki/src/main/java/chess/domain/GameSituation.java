@@ -6,7 +6,7 @@ import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashMap;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import static chess.domain.board.Klass.PAWN;
 import chess.logic.ailogic.ZobristHasher;
 import chess.logic.gamelogic.CheckingLogic;

@@ -4,7 +4,7 @@ import chess.domain.datastructures.Pair;
 import static chess.io.ImageLoader.getImage;
 import chess.domain.board.Player;
 import chess.domain.datastructures.MyHashMap;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import static chess.domain.board.Klass.*;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -46,7 +46,7 @@ public class PieceDrawer {
      * @param graphics Graphics object used to draw the image.
      * @param sideLength length of each square's sides.
      */
-    public void draw(BetterPiece piece, Graphics graphics, int sideLength) {
+    public void draw(Piece piece, Graphics graphics, int sideLength) {
         int x = piece.getColumn() * sideLength;
         int y = piece.getRow() * sideLength;
         graphics.drawImage(images.get(new Pair(piece.getKlass(), piece.getOwner())), x, y, sideLength, sideLength, null);

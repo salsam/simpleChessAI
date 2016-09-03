@@ -4,7 +4,7 @@ import chess.domain.GameSituation;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import static chess.domain.board.Klass.PAWN;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
@@ -21,7 +21,7 @@ import org.junit.BeforeClass;
  */
 public class PawnMoverTest {
 
-    private BetterPiece pawn;
+    private Piece pawn;
     private static ChessBoard board;
     private static ChessBoardInitializer init;
     private static GameSituation sit;
@@ -41,7 +41,7 @@ public class PawnMoverTest {
     @Before
     public void setUp() {
         init.initialize(board);
-        pawn = new BetterPiece(PAWN, 2, 6, Player.WHITE, "wp");
+        pawn = new Piece(PAWN, 2, 6, Player.WHITE, "wp");
         putPieceOnBoard(board, pawn);
     }
 
@@ -77,42 +77,42 @@ public class PawnMoverTest {
 
     @Test
     public void pawnCannotMoveTwoStepsAfterMovingOnce() {
-        pawn = new BetterPiece(PAWN, 2, 6, Player.WHITE, "wp");
+        pawn = new Piece(PAWN, 2, 6, Player.WHITE, "wp");
         pawnMover.move(pawn, board.getSquare(2, 5), sit);
         assertFalse(pawnMover.possibleMoves(pawn, board).contains(new Square(2, 3)));
     }
 
     @Test
     public void pawnCanTakeAPieceDiagonallyForwardToRight() {
-        BetterPiece enemyPawn = new BetterPiece(PAWN, 3, 5, Player.BLACK, "ep");
+        Piece enemyPawn = new Piece(PAWN, 3, 5, Player.BLACK, "ep");
         putPieceOnBoard(board, enemyPawn);
         assertTrue(pawnMover.possibleMoves(pawn, board).contains(new Square(3, 5)));
     }
 
     @Test
     public void pawnCanTakeAPieceDiagonallyForwardToLeft() {
-        BetterPiece enemyPawn = new BetterPiece(PAWN, 1, 5, Player.BLACK, "ep");
+        Piece enemyPawn = new Piece(PAWN, 1, 5, Player.BLACK, "ep");
         putPieceOnBoard(board, enemyPawn);
         assertTrue(pawnMover.possibleMoves(pawn, board).contains(new Square(1, 5)));
     }
 
     @Test
     public void pawnCannotTakeOwnPieceDiagonallyForward() {
-        BetterPiece enemyPawn = new BetterPiece(PAWN, 3, 5, Player.WHITE, "ep");
+        Piece enemyPawn = new Piece(PAWN, 3, 5, Player.WHITE, "ep");
         putPieceOnBoard(board, enemyPawn);
         assertFalse(pawnMover.possibleMoves(pawn, board).contains(new Square(3, 5)));
     }
 
     @Test
     public void pawnCannotMoveOverTheEdge() {
-        pawn = new BetterPiece(PAWN, 0, 0, Player.WHITE, "wp");
+        pawn = new Piece(PAWN, 0, 0, Player.WHITE, "wp");
         putPieceOnBoard(board, pawn);
         assertFalse(pawnMover.possibleMoves(pawn, board).contains(new Square(0, -1)));
     }
 
     @Test
     public void pawnCanEnPassantOpposingPawnThatMovedTwoSquaresLastTurn() {
-        BetterPiece opposingPawn = new BetterPiece(PAWN, 3, 4, Player.BLACK, "op");
+        Piece opposingPawn = new Piece(PAWN, 3, 4, Player.BLACK, "op");
         putPieceOnBoard(board, opposingPawn);
         pawnMover.move(opposingPawn, board.getSquare(3, 6), sit);
         assertTrue(pawnMover.possibleMoves(pawn, board).contains(new Square(3, 5)));
@@ -120,7 +120,7 @@ public class PawnMoverTest {
 
     @Test
     public void whenEnPassantingOpposingPawnIsRemovedFromBoard() {
-        BetterPiece opposingPawn = new BetterPiece(PAWN, 3, 4, Player.BLACK, "op");
+        Piece opposingPawn = new Piece(PAWN, 3, 4, Player.BLACK, "op");
         putPieceOnBoard(board, opposingPawn);
         pawnMover.move(opposingPawn, board.getSquare(3, 6), sit);
         pawnMover.move(pawn, board.getSquare(3, 5), sit);
@@ -129,7 +129,7 @@ public class PawnMoverTest {
 
     @Test
     public void whenEnPassantingHashIsUpdatedCorrectly() {
-        BetterPiece opposingPawn = new BetterPiece(PAWN, 3, 4, Player.BLACK, "op");
+        Piece opposingPawn = new Piece(PAWN, 3, 4, Player.BLACK, "op");
         putPieceOnBoard(board, opposingPawn);
         sit.reHashBoard(true);
         pawnMover.move(opposingPawn, board.getSquare(3, 6), sit);

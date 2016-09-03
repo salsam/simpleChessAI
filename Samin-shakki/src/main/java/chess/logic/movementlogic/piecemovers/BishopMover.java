@@ -9,7 +9,7 @@ import chess.domain.board.ChessBoard;
 import java.util.Set;
 import chess.domain.board.Square;
 import chess.domain.datastructures.MyHashSet;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 
 /**
  * This class is responsible of movement calculation of bishops.
@@ -33,7 +33,7 @@ public class BishopMover extends PieceMover {
      * @return list containing all squares this bishop threatens
      */
     @Override
-    public Set<Square> threatenedSquares(BetterPiece bishop, ChessBoard board) {
+    public Set<Square> threatenedSquares(Piece bishop, ChessBoard board) {
         Set<Square> possibilities = new MyHashSet<>();
         addDiagonalPossibilities(board.getSquare(bishop.getColumn(), bishop.getRow()), board, possibilities);
 

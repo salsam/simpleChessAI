@@ -1,7 +1,7 @@
 package chess.domain;
 
 import chess.domain.board.Square;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import java.util.Objects;
 
 /**
@@ -10,19 +10,19 @@ import java.util.Objects;
  */
 public class Move {
 
-    private BetterPiece piece;
+    private Piece piece;
     private Square target;
 
-    public Move(BetterPiece piece, Square target) {
+    public Move(Piece piece, Square target) {
         this.piece = piece;
         this.target = target;
     }
 
-    public BetterPiece getPiece() {
+    public Piece getPiece() {
         return piece;
     }
 
-    public void setPiece(BetterPiece piece) {
+    public void setPiece(Piece piece) {
         this.piece = piece;
     }
 

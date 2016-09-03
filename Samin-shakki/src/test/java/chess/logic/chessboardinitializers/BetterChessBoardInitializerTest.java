@@ -2,7 +2,7 @@ package chess.logic.chessboardinitializers;
 
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import static chess.domain.board.Klass.*;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import chess.logic.movementlogic.MovementLogic;
@@ -39,7 +39,7 @@ public class BetterChessBoardInitializerTest {
         int[] columns = new int[]{0, 1, 2, 3, 4, 5, 6, 7};
         int[] rows = new int[]{1, 6};
 
-        testThatSquaresHavePieceOfCorrectClass(rows, columns, new BetterPiece(PAWN, 0, 1, Player.WHITE, "wp"));
+        testThatSquaresHavePieceOfCorrectClass(rows, columns, new Piece(PAWN, 0, 1, Player.WHITE, "wp"));
     }
 
     @Test
@@ -47,7 +47,7 @@ public class BetterChessBoardInitializerTest {
         int[] columns = new int[]{0, 7, 0, 7};
         int[] rows = new int[]{0, 0, 7, 7};
 
-        testThatSquaresHavePieceOfCorrectClass(rows, columns, new BetterPiece(ROOK, 0, 0, Player.WHITE, "wr"));
+        testThatSquaresHavePieceOfCorrectClass(rows, columns, new Piece(ROOK, 0, 0, Player.WHITE, "wr"));
     }
 
     @Test
@@ -55,7 +55,7 @@ public class BetterChessBoardInitializerTest {
         int[] columns = new int[]{1, 6, 1, 6};
         int[] rows = new int[]{0, 0, 7, 7};
 
-        testThatSquaresHavePieceOfCorrectClass(rows, columns, new BetterPiece(KNIGHT, 1, 0, Player.WHITE, "wn"));
+        testThatSquaresHavePieceOfCorrectClass(rows, columns, new Piece(KNIGHT, 1, 0, Player.WHITE, "wn"));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class BetterChessBoardInitializerTest {
         int[] columns = new int[]{2, 5, 2, 5};
         int[] rows = new int[]{0, 0, 7, 7};
 
-        testThatSquaresHavePieceOfCorrectClass(rows, columns, new BetterPiece(BISHOP, 2, 0, Player.WHITE, "wb"));
+        testThatSquaresHavePieceOfCorrectClass(rows, columns, new Piece(BISHOP, 2, 0, Player.WHITE, "wb"));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class BetterChessBoardInitializerTest {
         int[] columns = new int[]{4, 4};
         int[] rows = new int[]{0, 7};
 
-        testThatSquaresHavePieceOfCorrectClass(rows, columns, new BetterPiece(KING, 4, 0, Player.WHITE, "wk"));
+        testThatSquaresHavePieceOfCorrectClass(rows, columns, new Piece(KING, 4, 0, Player.WHITE, "wk"));
     }
 
     @Test
@@ -79,10 +79,10 @@ public class BetterChessBoardInitializerTest {
         int[] columns = new int[]{3, 3};
         int[] rows = new int[]{0, 7};
 
-        testThatSquaresHavePieceOfCorrectClass(rows, columns, new BetterPiece(QUEEN, 3, 0, Player.WHITE, "wq"));
+        testThatSquaresHavePieceOfCorrectClass(rows, columns, new Piece(QUEEN, 3, 0, Player.WHITE, "wq"));
     }
 
-    private void testThatSquaresHavePieceOfCorrectClass(int[] rows, int[] columns, BetterPiece piece) {
+    private void testThatSquaresHavePieceOfCorrectClass(int[] rows, int[] columns, Piece piece) {
         for (int i = 0; i < rows.length; i++) {
             for (int j = 0; j < columns.length; j++) {
                 assertEquals(piece.getClass(), board.getSquare(columns[i], rows[i]).getPiece().getClass());
@@ -114,7 +114,7 @@ public class BetterChessBoardInitializerTest {
     }
 
     public void putPieceOnBoardPutsCorrectPieceInCorrectSpot() {
-        BetterPiece pawn = new BetterPiece(PAWN, 5, 4, Player.WHITE, "wp");
+        Piece pawn = new Piece(PAWN, 5, 4, Player.WHITE, "wp");
         putPieceOnBoard(board, pawn);
         assertTrue(board.getSquare(5, 4).containsAPiece());
         assertEquals(PAWN, board.getSquare(5, 4).getPiece().getKlass());

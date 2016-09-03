@@ -1,6 +1,6 @@
 package chess.logic.movementlogic;
 
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import chess.domain.GameSituation;
 import chess.logic.movementlogic.piecemovers.*;
 import chess.domain.board.ChessBoard;
@@ -66,7 +66,7 @@ public class MovementLogic {
      * @param board board on which piece is placed
      * @return a set containing all squares given piece threatens on given board
      */
-    public Set<Square> threatenedSquares(BetterPiece piece, ChessBoard board) {
+    public Set<Square> threatenedSquares(Piece piece, ChessBoard board) {
         switch (piece.getKlass()) {
             case BISHOP:
                 return bishopMover.threatenedSquares(piece, board);
@@ -95,7 +95,7 @@ public class MovementLogic {
      * @return a set containing all squares given piece can move to on given
      * board
      */
-    public Set<Square> possibleMoves(BetterPiece piece, ChessBoard board) {
+    public Set<Square> possibleMoves(Piece piece, ChessBoard board) {
         switch (piece.getKlass()) {
             case BISHOP:
                 return bishopMover.possibleMoves(piece, board);
@@ -123,7 +123,7 @@ public class MovementLogic {
      * @param target square where piece will be moved to.
      * @param sit situation before move.
      */
-    public void move(BetterPiece piece, Square target, GameSituation sit) {
+    public void move(Piece piece, Square target, GameSituation sit) {
 
         switch (piece.getKlass()) {
             case BISHOP:

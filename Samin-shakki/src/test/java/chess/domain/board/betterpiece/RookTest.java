@@ -1,6 +1,6 @@
 package chess.domain.board.betterpiece;
 
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import chess.domain.board.Player;
 import static chess.domain.board.Klass.ROOK;
 import org.junit.Before;
@@ -13,24 +13,24 @@ import static org.junit.Assert.*;
  */
 public class RookTest {
 
-    private BetterPiece rook;
+    private Piece rook;
 
     public RookTest() {
     }
 
     @Before
     public void setUp() {
-        rook = new BetterPiece(ROOK, 7, 5, Player.WHITE, "wr");
+        rook = new Piece(ROOK, 7, 5, Player.WHITE, "wr");
     }
 
     @Test
     public void rooksAreEqualIfSamePieceCode() {
-        assertTrue(rook.equals(new BetterPiece(ROOK, 4, 5, Player.BLACK, "wr")));
+        assertTrue(rook.equals(new Piece(ROOK, 4, 5, Player.BLACK, "wr")));
     }
 
     @Test
     public void rooksAreNotEqualIfDifferentPieceCode() {
-        assertFalse(rook.equals(new BetterPiece(ROOK, 7, 5, Player.WHITE, "wr1")));
+        assertFalse(rook.equals(new Piece(ROOK, 7, 5, Player.WHITE, "wr1")));
     }
 
     @Test

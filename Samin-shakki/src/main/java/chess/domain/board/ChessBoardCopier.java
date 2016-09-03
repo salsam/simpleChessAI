@@ -74,7 +74,7 @@ public class ChessBoardCopier {
     private static void makePieceListsEqual(ChessBoard board, ChessBoard chessboard) {
         for (Player player : Player.values()) {
             board.getPieces(player).clear();
-            for (BetterPiece playersPiece : chessboard.getPieces(player)) {
+            for (Piece playersPiece : chessboard.getPieces(player)) {
                 ChessBoardInitializer.putPieceOnBoard(board, playersPiece.clone());
             }
         }
@@ -101,7 +101,7 @@ public class ChessBoardCopier {
      * @param to square that moved piece moved to.
      */
     public static void undoMove(ChessBoard backUp, GameSituation sit, Square from, Square to) {
-        BetterPiece old = backUp.getSquare(from.getColumn(), from.getRow()).getPiece();
+        Piece old = backUp.getSquare(from.getColumn(), from.getRow()).getPiece();
         sit.decrementCountOfCurrentBoardSituation();
         if (old.getKlass() == PAWN && to.getPiece().getKlass() == QUEEN) {
             sit.updateHashForUndoingPromotion(to);
@@ -115,7 +115,7 @@ public class ChessBoardCopier {
     }
 
     private static void handleDestination(ChessBoard backUp, Square to, GameSituation sit, Square from) {
-        BetterPiece taken = backUp.getSquare(to.getColumn(), to.getRow()).getPiece();
+        Piece taken = backUp.getSquare(to.getColumn(), to.getRow()).getPiece();
         if (taken != null) {
             putTakenPieceBackOnBoard(sit.getChessBoard(), taken, to);
         } else {
@@ -125,8 +125,8 @@ public class ChessBoardCopier {
         }
     }
 
-    private static void putTakenPieceBackOnBoard(ChessBoard board, BetterPiece taken, Square to) {
-        for (BetterPiece piece : board.getPieces(taken.getOwner())) {
+    private static void putTakenPieceBackOnBoard(ChessBoard board, Piece taken, Square to) {
+        for (Piece piece : board.getPieces(taken.getOwner())) {
             if (piece.getPieceCode().equals(taken.getPieceCode())) {
                 piece.makeDeeplyEqualTo(taken);
                 board.getSquare(taken.getColumn(), taken.getRow()).setPiece(piece);
@@ -146,7 +146,7 @@ public class ChessBoardCopier {
     private static void handleEnPassant(Square from, Square to, GameSituation sit, ChessBoard backUp) {
         if (from.getPiece().getKlass() == PAWN && from.getColumn() != to.getColumn()) {
             Square to2 = sit.getChessBoard().getSquare(to.getColumn(), from.getRow());
-            BetterPiece taken = backUp.getSquare(to2.getColumn(), to2.getRow()).getPiece();
+            Piece taken = backUp.getSquare(to2.getColumn(), to2.getRow()).getPiece();
             putTakenPieceBackOnBoard(sit.getChessBoard(), taken, to2);
             sit.reHashBoard(false);
         }

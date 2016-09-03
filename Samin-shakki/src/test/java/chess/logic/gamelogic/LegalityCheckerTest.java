@@ -3,7 +3,7 @@ package chess.logic.gamelogic;
 import chess.logic.movementlogic.MovementLogic;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import static chess.domain.board.Klass.PAWN;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
 import org.junit.Before;
@@ -35,13 +35,13 @@ public class LegalityCheckerTest {
 
     @Test
     public void checkPlayerOwnsAPieceOnTargetSquareReturnsFalseIfTargetSquareContainsOpposingPiece() {
-        putPieceOnBoard(board, new BetterPiece(PAWN, 2, 2, Player.WHITE, "wp"));
+        putPieceOnBoard(board, new Piece(PAWN, 2, 2, Player.WHITE, "wp"));
         assertFalse(checker.checkPlayerOwnsPieceOnTargetSquare(Player.BLACK, 2, 2));
     }
 
     @Test
     public void checkPlayerOwnsAPieceOnTargetSquareReturnsTrueIfTargetSquareContainsOwnPiece() {
-        putPieceOnBoard(board, new BetterPiece(PAWN, 2, 2, Player.WHITE, "wp"));
+        putPieceOnBoard(board, new Piece(PAWN, 2, 2, Player.WHITE, "wp"));
         assertTrue(checker.checkPlayerOwnsPieceOnTargetSquare(Player.WHITE, 2, 2));
     }
 }

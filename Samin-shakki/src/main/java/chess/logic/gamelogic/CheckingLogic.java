@@ -7,7 +7,7 @@ import static chess.domain.board.Player.getOpponent;
 import chess.domain.board.ChessBoardCopier;
 import static chess.domain.board.ChessBoardCopier.undoMove;
 import chess.domain.board.Square;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 
 /**
  * This class is responsible for checking if king is checked, checkmated or
@@ -51,7 +51,7 @@ public class CheckingLogic {
      * @return true if player's king is threatened by opposing piece
      */
     public boolean checkIfChecked(Player player) {
-        BetterPiece playersKing = game.getChessBoard().getKings().get(player);
+        Piece playersKing = game.getChessBoard().getKings().get(player);
         if (playersKing == null) {
             return false;
         }
@@ -67,7 +67,7 @@ public class CheckingLogic {
      */
     public boolean checkMate(Player player) {
         ChessBoard backUp = ChessBoardCopier.copy(game.getChessBoard());
-        for (BetterPiece piece : game.getChessBoard().getPieces(player)) {
+        for (Piece piece : game.getChessBoard().getPieces(player)) {
             if (piece.isTaken()) {
                 continue;
             }

@@ -4,7 +4,7 @@ import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
 import chess.domain.board.Square;
 import chess.domain.board.SquareTest;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 import static chess.domain.board.Klass.KNIGHT;
 import chess.logic.chessboardinitializers.ChessBoardInitializer;
 import static chess.logic.chessboardinitializers.ChessBoardInitializer.putPieceOnBoard;
@@ -21,7 +21,7 @@ import static org.junit.Assert.assertFalse;
  */
 public class KnightMoverTest {
 
-    private BetterPiece knight;
+    private Piece knight;
     private static KnightMover knightMover;
     private static ChessBoard board;
     private static ChessBoardInitializer init;
@@ -39,7 +39,7 @@ public class KnightMoverTest {
     @Before
     public void setUp() {
         init.initialize(board);
-        knight = new BetterPiece(KNIGHT, 4, 4, Player.WHITE, "wn");
+        knight = new Piece(KNIGHT, 4, 4, Player.WHITE, "wn");
         putPieceOnBoard(board, knight);
     }
 
@@ -58,7 +58,7 @@ public class KnightMoverTest {
 
     @Test
     public void knightCannotMoveOverTheEdge() {
-        knight = new BetterPiece(KNIGHT, 0, 0, Player.WHITE, "wn");
+        knight = new Piece(KNIGHT, 0, 0, Player.WHITE, "wn");
         putPieceOnBoard(board, knight);
         assertFalse(knightMover.possibleMoves(knight, board).contains(new Square(-1, -2)));
         assertFalse(knightMover.possibleMoves(knight, board).contains(new Square(1, -2)));

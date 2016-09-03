@@ -2,7 +2,7 @@ package chess.logic.gamelogic;
 
 import chess.domain.board.ChessBoard;
 import chess.domain.board.Player;
-import chess.domain.board.BetterPiece;
+import chess.domain.board.Piece;
 
 /**
  * This class provides methods to check if player owns targeted piece, whether
@@ -70,7 +70,7 @@ public class LegalityChecker {
      * @return input if input corresponds a possible square. Else empty string
      * "".
      */
-    public boolean checkThatMovementIsLegal(BetterPiece piece, int column, int row) {
+    public boolean checkThatMovementIsLegal(Piece piece, int column, int row) {
         return board.getMovementLogic().possibleMoves(piece, board).contains(board.getSquare(column, row));
     }
 }

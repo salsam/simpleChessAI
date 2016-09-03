@@ -88,7 +88,7 @@ public class ChessBoardCopierTest {
         init.initialize(sit.getChessBoard());
         ChessBoard copy = ChessBoardCopier.copy(sit.getChessBoard());
 
-        BetterPiece queen = new BetterPiece(QUEEN, 4, 4, Player.BLACK, "bp1");
+        Piece queen = new Piece(QUEEN, 4, 4, Player.BLACK, "bp1");
         putPieceOnBoard(sit.getChessBoard(), queen);
 
         assertTrue(sit.getChessBoard().getSquare(4, 4).containsAPiece());
@@ -134,8 +134,8 @@ public class ChessBoardCopierTest {
         ChessBoard cb = sit.getChessBoard();
         empty.initialize(cb);
 
-        BetterPiece wk = new BetterPiece(KING, 3, 0, Player.WHITE, "wk");
-        BetterPiece wr = new BetterPiece(ROOK, 0, 0, Player.WHITE, "wr");
+        Piece wk = new Piece(KING, 3, 0, Player.WHITE, "wk");
+        Piece wr = new Piece(ROOK, 0, 0, Player.WHITE, "wr");
         putPieceOnBoard(cb, wk);
         putPieceOnBoard(cb, wr);
         sit.reHashBoard(true);
@@ -155,8 +155,8 @@ public class ChessBoardCopierTest {
         ChessBoard cb = sit.getChessBoard();
         empty.initialize(cb);
 
-        BetterPiece wk = new BetterPiece(KING, 3, 0, Player.WHITE, "wk");
-        BetterPiece wr = new BetterPiece(ROOK, 0, 0, Player.WHITE, "wr");
+        Piece wk = new Piece(KING, 3, 0, Player.WHITE, "wk");
+        Piece wr = new Piece(ROOK, 0, 0, Player.WHITE, "wr");
         putPieceOnBoard(cb, wk);
         putPieceOnBoard(cb, wr);
         sit.reHashBoard(true);
@@ -177,8 +177,8 @@ public class ChessBoardCopierTest {
     public void undoMoveReturnsBoardToSituationBeforeEnpassant() {
         ChessBoard cb = sit.getChessBoard();
         MovementLogic ml = cb.getMovementLogic();
-        BetterPiece pawn = new BetterPiece(PAWN, 2, 5, Player.WHITE, "wp");
-        BetterPiece opposingPawn = new BetterPiece(PAWN, 3, 3, Player.BLACK, "op");
+        Piece pawn = new Piece(PAWN, 2, 5, Player.WHITE, "wp");
+        Piece opposingPawn = new Piece(PAWN, 3, 3, Player.BLACK, "op");
 
         putPieceOnBoard(cb, pawn);
         putPieceOnBoard(cb, opposingPawn);
@@ -195,8 +195,8 @@ public class ChessBoardCopierTest {
     public void undoMoveReturnsHashToSituationBeforeEnpassant() {
         ChessBoard cb = sit.getChessBoard();
         MovementLogic ml = cb.getMovementLogic();
-        BetterPiece pawn = new BetterPiece(PAWN, 2, 5, Player.WHITE, "wp");
-        BetterPiece opposingPawn = new BetterPiece(PAWN, 3, 3, Player.BLACK, "op");
+        Piece pawn = new Piece(PAWN, 2, 5, Player.WHITE, "wp");
+        Piece opposingPawn = new Piece(PAWN, 3, 3, Player.BLACK, "op");
 
         putPieceOnBoard(cb, pawn);
         putPieceOnBoard(cb, opposingPawn);
@@ -218,8 +218,8 @@ public class ChessBoardCopierTest {
         ChessBoard cb = sit.getChessBoard();
         emptier.initialize(cb);
         MovementLogic ml = cb.getMovementLogic();
-        BetterPiece pawn = new BetterPiece(PAWN, 2, 1, Player.WHITE, "wp");
-        BetterPiece opposingPawn = new BetterPiece(PAWN, 3, 5, Player.BLACK, "op");
+        Piece pawn = new Piece(PAWN, 2, 1, Player.WHITE, "wp");
+        Piece opposingPawn = new Piece(PAWN, 3, 5, Player.BLACK, "op");
 
         putPieceOnBoard(cb, pawn);
         putPieceOnBoard(cb, opposingPawn);
@@ -230,7 +230,7 @@ public class ChessBoardCopierTest {
         ChessBoardCopier.undoMove(backup, sit, cb.getSquare(2, 1), cb.getSquare(2, 0));
         assertTrue(cb.getSquare(2, 1).containsAPiece());
         assertEquals(PAWN, cb.getSquare(2, 1).getPiece().getKlass());
-        for (BetterPiece p : cb.getPieces(Player.WHITE)) {
+        for (Piece p : cb.getPieces(Player.WHITE)) {
             assertNotEquals(QUEEN, p.getKlass());
         }
     }
