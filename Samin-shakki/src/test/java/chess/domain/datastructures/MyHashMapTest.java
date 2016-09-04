@@ -34,7 +34,7 @@ public class MyHashMapTest {
     }
 
     @Test
-    public void containsVallueFalseWhenEmpty() {
+    public void containsValueFalseWhenEmpty() {
         assertFalse(mhm.containsValue(1));
     }
 

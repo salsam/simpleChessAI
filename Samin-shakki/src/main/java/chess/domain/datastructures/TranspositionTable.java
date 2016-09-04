@@ -16,7 +16,7 @@ public class TranspositionTable {
         table = new MyHashMap();
     }
 
-    public boolean containsKey(TranspositionKey key, int height) {
+    public boolean containsRelevantKey(TranspositionKey key, int height) {
         if (!table.containsKey(key)) {
             return false;
         }
@@ -29,21 +29,19 @@ public class TranspositionTable {
 
     /**
      * Puts the given key and entry associated with it to HashMap. For each key
-     * only one result with highest depth is saved. If memory cap is reached,
-     * removes a random entry to make space for the one being added.
+     * only one result with highest depth is saved to save memory and provide
+     * better evaluation. There is no memory cap for this table so in the long
+     * run this table will take up exponential amount of memory space. If I had
+     * time, I would've added my own implementation for heap and used it keep
+     * keys sorted by search depth. Thus I could remove results from shallower
+     * searches first. Saved-field in keys would've been used to make all keys
+     * deletable after a search was completed and if entry is used it would be
+     * set unremovable for current search.
      *
      * @param key key representing chessboard situation at time of search.
      * @param entry entry representing the result of said search.
      */
     public void put(TranspositionKey key, TranspositionEntry entry) {
-//        if (table.size() > 100000) {
-//            for (TranspositionKey k : table.keySet()) {
-//                if (!k.isSaved()) {
-//                    table.remove(k);
-//                    break;
-//                }
-//            }
-//        }
         if (!table.containsKey(key)) {
             table.put(key, entry);
         } else if (table.get(key).getHeight() < entry.getHeight()) {

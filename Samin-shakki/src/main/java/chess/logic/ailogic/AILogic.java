@@ -140,7 +140,7 @@ public class AILogic {
 
         TranspositionKey key = new TranspositionKey(maxingPlayer, sit.getBoardHash());
 
-        if (transpositionTable.containsKey(key, height)) {
+        if (transpositionTable.containsRelevantKey(key, height)) {
             TranspositionEntry entry = transpositionTable.get(key);
             key.setSaved(true);
             switch (entry.getType()) {

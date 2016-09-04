@@ -54,6 +54,11 @@ public class MyArrayListTest {
     }
 
     @Test
+    public void addReturnsTrueWhenElementIsAdded() {
+        assertTrue(test.add(42));
+    }
+
+    @Test
     public void listContainsAddedElements() {
         test.add(42);
         test.add(7);
@@ -70,6 +75,13 @@ public class MyArrayListTest {
         test.add(-273);
         assertFalse(test.contains(314));
         assertFalse(test.contains(3.14));
+    }
+
+    @Test
+    public void getReturnsNullIfParameterLArgerTahnSize() {
+        test.add(42);
+        assertEquals(null, test.get(1));
+        assertEquals(null, test.get(42));
     }
 
     @Test
@@ -195,6 +207,52 @@ public class MyArrayListTest {
         }
 
         assertEquals(465, sum);
+    }
+
+    @Test
+    public void removeIndexRemovesObjectAtGivenIndex() {
+        test.add(42);
+        test.add(101);
+        test.add(-273);
+
+        test.remove(2);
+        assertEquals(null, test.get(2));
+        test.remove(0);
+        assertEquals(101, test.get(0));
+    }
+
+    @Test
+    public void removeIndexReturnsRemovedObject() {
+        test.add(42);
+        test.add(101);
+        test.add(-273);
+
+        assertEquals(-273, test.remove(2));
+        assertEquals(42, test.remove(0));
+    }
+
+    @Test
+    public void removeIndexReturnsNullIfNoObjectAtGivenIndex() {
+        assertEquals(null, test.remove(2));
+    }
+
+    @Test
+    public void removeIndexDoesNotDecrementSizeWhenNothingIsRemoved() {
+        test.remove(1);
+        assertEquals(0, test.size());
+    }
+
+    @Test
+    public void sizeGoesDownWhenObjectIsRemovedFromIndex() {
+        test.add(42);
+        test.add(101);
+        test.add(-273);
+
+        assertEquals(3, test.size());
+        test.remove(2);
+        assertEquals(2, test.size());
+        test.remove(0);
+        assertEquals(1, test.size());
     }
 
 }

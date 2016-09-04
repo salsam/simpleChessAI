@@ -458,7 +458,7 @@ public class AILogicTest {
         sit.reHashBoard(true);
 
         ChessBoard bu = copy(cb);
-        ai.setTimeLimit(10000);
+        ai.setTimeLimit(1000);
         ai.setStart(System.currentTimeMillis());
         ai.findBestMoves(sit);
         assertTrue(chessBoardsAreDeeplyEqual(cb, bu));

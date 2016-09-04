@@ -10,19 +10,4 @@ package chess.domain.datastructures;
  */
 public enum Type {
     ALPHA, EXACT, BETA;
-
-    /**
-     * Returns the opposite type of search result.
-     *
-     * @param type type of which opposite we are searching for.
-     * @return opposite type.
-     */
-    public static Type getOppositeType(Type type) {
-        if (type == ALPHA) {
-            return BETA;
-        } else if (type == BETA) {
-            return ALPHA;
-        }
-        return EXACT;
-    }
 }
