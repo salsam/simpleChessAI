@@ -2,7 +2,7 @@
 
 ###Toiminnan manuaalinen testaus
 
-olen testannut manuaalisesti ohjelmannan toimintaa kaikissa kolmessa moodissa (pelaaja vs pelaaja, pelaaja vs tekoäly ja tekoäly vs tekoäly) katsomalla siirtojen toimivan oikein. Erityistapauksina olen testannut, ettei laudan tilanne muutu testattaessa shakkausta, matitusta tai tekoälyn seuraavaa siirtoa. Lisäksi toisena erityistapauksena sotilaan korotus kuningattareksi toimii oikein, eikä edellämainituissa erityistapauksissakaan aihauta ongelmia.
+olen testannut manuaalisesti ohjelmannan toimintaa kaikissa kolmessa moodissa (pelaaja vs pelaaja, pelaaja vs tekoäly ja tekoäly vs tekoäly) katsomalla siirtojen toimivan oikein. Erityistapauksina olen testannut, ettei laudan tilanne muutu testattaessa shakkausta, matitusta tai tekoälyn seuraavaa siirtoa. Lisäksi toisena erityistapauksena sotilaan korotus kuningattareksi toimii oikein, eikä edellämainituissa erityistapauksissakaan aihauta ongelmia. Tekoälyjen välisen pelin yksikkötestaus osoittautui hankalaksi, sillä siinä tulee ottaa huomioon todella monta asiaa kuten vaadittava aikaraja, rekursiosyvyys ja tekoälyyn valmiiksi tallentunut data. Näin luotinkin tekoälyn toiminnassa useimmiten omaan näkemykseen siitä, onko tekoälyn siirroissa järkeä.
 
 Tekoälyn toiminnan oikeellisuutta olen testannut myös manuaalisesti ja tekoälyn siirrot näyttävät yleensä toimivan odotettavasti eli sekunnin aikarajalla tekoäly pääsee rekursiotasolle 3-5 eikä näin tee shakkia taitamattoman mielestä tyhmiä siirtoja. Välillä loppupelissä tekoälyn heikkous kuitenkin näkyy, sillä käytän työssä runsaasti dynaamista muistia, jolloin pelin loppupuolella dynaamiseen muistiin kertyneet tiedot alkavat hidastaa tekoälyä. Näin laittamani debugviesti, joka ilmoittaa saavutetun rekursiosyvyyden tippuu aluksi 3-5:stä 2-3:een ja lopulta 1-2 aivan pelin loppupuolella.
 
@@ -10,7 +10,9 @@ Nämä testit voi toistaa ajamalla ohjelman, valitsemalla halutun pelimoodin ja 
 
 ##Suorituskykytestaus
 
-Seuraavissa testeissä laitan kaksi tekoälyä pelaamaan vastakkain annetuilla ehdoilla. Tekoälyt laitetaan pelaamaan vastakkain ajamalla ohjelma, klikkaamalla painiketta new Ai vs Ai game ja valitsemalla halutut aikarajat. Lisäksi testeissä muutetaan AILogic luokassa määriteltyä rekursiosyvyyden ylärajaa muuttujassa private final int plies. Kuvaajissa siirron vuoronumerolla tarkoitetaan sitä kuinka mones kyseisen pelaajan siirto on kyseessä. Näin esimerkiksi vuoronumero 3 tarkoittaa pelaajan kolmatta siirtoa. Kuten edelliset testit, on myös nämä testit suoritettu halpisläppärillä ja tehokkaalla pöytäkoneella saadut ajat voivat tippua jopa kymmenesosaan.
+Seuraavissa testeissä laitan kaksi tekoälyä pelaamaan vastakkain annetuilla ehdoilla. Tekoälyt laitetaan pelaamaan vastakkain ajamalla ohjelma, klikkaamalla painiketta new Ai vs Ai game ja valitsemalla halutut aikarajat. Lisäksi testeissä muutetaan AILogic luokassa määriteltyä rekursiosyvyyden ylärajaa muuttujassa private final int plies. Kuvaajissa siirron vuoronumerolla tarkoitetaan sitä kuinka mones kyseisen pelaajan siirto on kyseessä. Näin esimerkiksi vuoronumero 3 tarkoittaa pelaajan kolmatta siirtoa. Kuten edelliset testit, on myös nämä testit suoritettu halpisläppärillä ja tehokkaalla pöytäkoneella saadut ajat voivat tippua jopa kymmenesosaan. 
+
+Viimeistellessä ohjelmani poistin siitä turhat tulosteet ja näiden mukana myös suorituskyky tulosteen. Mikäli haluat ohjelman tulostavan sinulle halutut arvot, joudut valitettavasti lisäämään luokkaan AILogic muuttujat count ja sum. Näin lisäät findBestMove() metodiin luupin jälkeen count++, sum+=System.currentTimeMillis()-start kirjataksesi ylös siirtojen määrän ja niihin kulutetun ajan. Tulostaaksesi keskiarvon tähän mennessä tehdyistä siirroista joudut lisäämään vielä rivin System.out.println("Keskiarvo: " + sum/count + " Siirtonumero: " + count);. 
 
 ###Esimerkkipeli, jossa rekursiosyvyydeksi rajoitettu 3 ja aikaraja 1s.
 
@@ -27,9 +29,6 @@ Pelin loppua kohti tekoälyjen välinen aikavaatimusero laskee nollaan, kunnes p
 
 Kokonaisuudessaan valkoinen käytti siirtoihinsa keskimäärin 256 ms ja musta 291 ms. Tämä kuulostaa järkevältä, sillä musta onnistui kaappaamaan hallinnan valkoiselta jo varsin alussa ja hallitsi peliä pitkään noin vuorolle 40. Lisäksi mustalla on myös yksi hammusiirto, joka liene aiheutunut transpositiotaulun eksponentiaalisesta muistivaatimuksesta.
 
-
-Tämän testin voi toistaa muuttamalla AILogic luokan final int plies kenttään arvon 3 eli maksimirekursiosyvyydeksi 3 ja pelaamalla sitten normaalisti AI vs AI moodia kahdella tekoälyllä, joilla on oletus aikarajoitus.
-
 ###Siirtoihin kuluneen ajan keskiarvon kehitys keskiarvona 10 tekoälyjen välisestä pelistä, rekursiosyvyys 3, aikaraja 1s.
 
 ![Siirtoihin keskimäärin käytettyn ajan kehitys pelin aikana](https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Siirtoon%20k%C3%A4ytetty%20keskim%C3%A4%C3%A4r%C3%A4inen%20aika.jpg)
@@ -39,7 +38,5 @@ Lisäksi näistä 10 pelistä on mainittava, että neljä peliä loppui ennen vu
 Kuvaajasta näemme helposti alaspäin laskevan trendin eli siirtojen laskemiseen kuluu vähemmän aikaa laudalla olevien nappuloiden vähentyessä. Tähän toisaalta vaikuttaa myös dynaamiseen muistiin tallentuvat pelitilanteiden arvot. Hieman yllättäen valkoisen siirtoihin käyttämä aika on kuitenkin aina suurempi kuin mustan, eikä pelaajien välinen ero vähene juurikaan ajan kuluessa. Valkoinen ylipäätään hallitsi useimmiten peliä ja näytti siltä, että ensimmäiseksi siirtäminen antoi valkoiselle todella suuren eron. Käyttäessäni aikarajoitusta ilman rajoitusta rekursiosyvyydelle en kuitenkaan huomannut samanlaista ilmiötä. Periaatteessa tämä on loogista, sillä samalla rekursiosyvyydellä molemmilla pelaajilla on aina saman verran tietoa käytössä, jolloin valkoinen pystyy useimmiten säilyttämään pelin alussa luodun edun (. Toisaalta, kun laskentaa on rajoitettu vain ajalla, on häviöllä olevalla pelaajalla vähemmän mahdollisia siirtoja ja näin ylimmällä pelipuun tasolla on vähemmän solmuja. Ylimmän tason solmut toisaalta vaikuttavat kaikkein eniten haun aikavaativuuteen ja näin saman tasoisten tekoälyjen pelatessa vastakkain saa häviöllä oleva tekoäly "tasoitusta". Tätä en tullut aikaisemmin ajatelleeksi, kun ihmettelin miksi tekoälyjen peleillä on tapana venyä, jos valkoinen ei voita ennen vuoroa 50.
 
 Tässä havaitaan melko suuria eroja aikaisempaan esimerkkipeliin, jota analysoin tarkemmin. Esimerkiksi edellisessä pelissä musta onnistui poikkeuksellisesti saamaan hallinnan ensimmäisen 40 vuoron aikana, mitä ei tapahtunut yhdessäkään pelissä materiaalisesti, vaikka yhdessä pelissä musta onnistui matittamaan valkoisen ovelalla kuningattaren siirtelyllä. Valitsemani esimerkkipeli ei siis tainnut osua aivan kohdalleen, mutta toisaalta se on hyvä esimerkki siitä, etteivät tekoälyni siirrot ole täysin ennalta kirjoitettuja edes samanlaista tekoälyä vastaan.
-
-Tämän testin voi toistaa muuttamalla AILogic luokan final int plies kenttään arvon 3 eli maksimirekursiosyvyydeksi 3 ja pelaamalla sitten normaalisti AI vs AI moodia kahdella tekoälyllä, joilla on oletus aikarajoitus. Lisäksi tulee käynnistää ohjelma aina uudestaan jokaisen pelin jälkeen, jottei play again-valinta vaikuttaisi siirtojen aikavaativuuteen.
 
 Tässä vielä linkki suorituskyvyn kehitykseen ohjelmaa rakennettaessa: [suorituskyvyn kehitys](https://github.com/salsam/simpleChessAI/blob/master/Dokumentaatio/Suorituskykytestaus.md).
