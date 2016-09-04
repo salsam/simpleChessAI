@@ -126,6 +126,12 @@ public class AILogic {
      * infinity. If leaf isn't reached yet, method will recurse forward by
      * calling helper method tryAllPossibleMoves.
      *
+     * If transposition table already contains results of at least as deep
+     * search, we can use those results to speed up search. If results are of
+     * type alpha, we know our search will find values of at least that value.
+     * For beta the opposite holds true and if type is exact, we can immediately
+     * return the value.
+     *
      * @param height Height from leaf nodes.
      * @param alpha current alpha value.
      * @param maxingPlayer player whose best move is being figured out
@@ -135,7 +141,7 @@ public class AILogic {
     public int negaMax(int height, int alpha, int beta, Player maxingPlayer) {
         int ogAlpha = alpha;
         if (System.currentTimeMillis() - start >= timeLimit) {
-            return -123456789;
+            return -123456790;
         }
 
         TranspositionKey key = new TranspositionKey(maxingPlayer, sit.getBoardHash());
